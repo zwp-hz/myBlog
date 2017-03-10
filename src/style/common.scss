@@ -1,0 +1,91 @@
+@media (max-width: 1250px){
+    .container { max-width: 960px!important; }
+}
+
+@media (max-width: 992px){
+    .footer { position: relative !important; height: auto !important; }
+    .blog_title { height: 470px !important; }
+    #index { margin-bottom: 0 !important; }
+}
+
+@media (max-width: 900px){
+    .container { max-width: 740px !important; }
+}
+
+@media (max-width: 800px){
+    .container { max-width: 600px !important; }
+}
+
+@media (max-width: 700px){
+    .container { max-width: 468px !important; }
+}
+
+@media (max-width: 550px){
+    .blog_title { height: 333px !important; }
+    .container { max-width: 300px !important; }
+}
+
+body, ul, li, ol, li, dl, dt, dd, form, h1, h2, h3, h4, p, div, hr, tabel, tr, td, select, option, br, span, img, a, label, form, input, textarea, em, i, strong, b {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+body { position: relative; font-size: 14px; font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif !important; }
+img { border: 0 none; vertical-align: top;}
+a { text-decoration: none !important; outline: none; hide-focus: expression(this.hideFocus=true) }
+li { list-style: none; vertical-align:top;}
+input{ font-size: 0.14rem; border: 0; background: none; float: left; outline: none; }
+::-webkit-input-placeholder { color: #999; }
+.clear{ zoom: 1;}
+.clear:after { content: "\20"; clear: both; display: block;}
+.fl{ float:left;}
+.fr{ float:right;}
+
+.container { padding: 0 !important; }
+
+/* 元件 */
+.u-submit_btn {
+	
+}
+
+.u_a_blue,.u_a_gray,.u_a_btn,.u_show {
+    transition: all .3s ease-in-out;
+}
+
+.u_a_blue:hover {
+    color: #47c9e5 !important;
+}
+
+.u_a_gray:hover {
+    color: #403f3f !important;
+}
+
+.u_a_btn:hover {
+    background: #47c9e5 !important;
+}
+
+.u_show:hover {
+    opacity: 1 !important;
+}
+
+/* 布局 */
+.g-overflow-hidden {
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
+}
+
+.g-c-center {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center; 
+    justify-content: center;
+}
+
+.g-r-center {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
