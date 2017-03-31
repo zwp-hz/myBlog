@@ -1,9 +1,9 @@
 <template>
-  	<div class="footer">
+  	<div id="footer">
         <div class="container">
             <div class="about_me col-sm-12 col-md-4">
                 <img src="../../images/logo_white.png" alt="" />
-                <p>思想（且不论好坏与否）——行为——习惯，这就是人生的规律。 —— 特赖因
+                <p>思想（且不论好坏与否）——行为——习惯，这就是人 生的规律。 —— 特赖因
 科学家不是依赖于个人的思想，而是综合了几千人的智慧，所有的人想一个问题，并且每人做它的部分工作，添加到正建立起来的伟大知识大厦之中。 —— 卢瑟福</p>
             </div>
             <div class="recent_posts col-sm-12 col-md-4">
@@ -40,6 +40,7 @@
 <script>
 "use strict";
 export default {
+    props: ["footerStatus"],
     data () {
         return {
         	articleList: [],
@@ -47,7 +48,8 @@ export default {
         }
     },
     created(){
-        let imgHost = this.$store.state.imgHost,
+        let imgHost = this.$store.state.IMGHOST,
+            that = this,
             articleList = [
                 {
                     title: "node webpack vue2",

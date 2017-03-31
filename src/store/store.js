@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 // 创建一个对象来保存应用启动时的初始状态
 const state = {
-  imgHost: "http://omdiu1qhf.bkt.clouddn.com/"
+	APIHOST: "http://localhost:8989/",
+  	IMGHOST: "http://omdiu1qhf.bkt.clouddn.com/"
 }
 
 // 整合初始状态和变更函数，我们就得到了我们所需的 store

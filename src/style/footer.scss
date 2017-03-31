@@ -1,14 +1,15 @@
-.footer {
+#footer {
 	position: fixed;
 	bottom: 0;
-	z-index: 0;
+	z-index: -1;
 	width: 100%;
-	padding: 100px 0;
 	height: 560px;
+	overflow: hidden;
 	color: #e3e3e3;
 	background: #262626;
 	.container {
 		margin: 0 auto;
+		padding: 100px 0 !important;
 		.about_me {
 			img { width: 150px; }
 			p { 

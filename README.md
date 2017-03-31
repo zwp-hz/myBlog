@@ -8,6 +8,6 @@ npm run dev
 npm run build
 
 # 接口服务启动  localhost:8989
-npm run start
+npm run server
 
 ```
