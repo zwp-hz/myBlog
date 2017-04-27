@@ -1,5 +1,6 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
+const copyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: './src/main.js',
@@ -21,6 +22,10 @@ module.exports = {
         }
       },
       {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
@@ -31,6 +36,11 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new copyWebpackPlugin([
+      {from: __dirname + '/src/images', to: __dirname + '/dist/images'}
+    ])
+  ],
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.common.js'

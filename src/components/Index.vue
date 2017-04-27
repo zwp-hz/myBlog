@@ -1,85 +1,102 @@
 <template>
-    <div id="index">
-        <blogHeader :headerStatus="headerStatus"></blogHeader>
-        <div id="indexBg"></div>
-        <div id="main">
-            <div class="container"></div>
+    <div id="index" :style="!loadingStatus ? 'margin-bottom: 0;' : ''">
+        <div class="loading g-r-center" v-if="!loadingStatus">
+            <div class="item-loader-container">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
         </div>
-        <blogFooter :footerStatus="footerStatus"></blogFooter>
+        <blogHeader :headerStatus="headerStatus"></blogHeader>
+        <div id="indexBg" ref="indexBg"></div>
+        <div id="main" :style="!loadingStatus ? 'height: 100vh; overflow-y: hidden;' : ''">
+            <div class="container">
+                <ul class="categories g-r-center">
+                    <li @click="categoriesName = '全部'"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === '全部'}" :to="{path: '/'}">全部</router-link></li>
+                    <li @click="categoriesName = list.name" v-for="list in categories"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === list.name}" :to="{path: '/', query: {categories: encodeURIComponent(list.name)}}">{{list.name}}</router-link></li>
+                </ul>
+                <div class="content">
+                    <leftBox :categoriesName="categoriesName"></leftBox>
+                    <rightBox :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
+                </div>
+            </div>
+        </div>
+        <blogFooter :tags="tags"></blogFooter>
     </div>
 </template>
 
 <script>
 "use strict";
-import blogHeader from './layout/header.vue'
-import blogFooter from './layout/footer.vue'
+import blogHeader   from './layout/header.vue'
+import blogFooter   from './layout/footer.vue'
+import leftBox     from './layout/leftBox.vue'
+import rightBox     from './layout/rightBox.vue'
 
 export default {
-    data() {
-        return {
-            msg: '',
-            tags: ["node"," webpack","vue2"],
-            headerStatus: false,
-            footerStatus: false
-        }
-    },
-    created() {
+    mounted() {
         let that = this,
             apiHost = this.$store.state.APIHOST;
 
         //获取必应图片
         that.$http.jsonp(apiHost + 'api/bing').then((res) => {
             if (res.body.code === 0) {
-                document.getElementById("indexBg").style.backgroundImage = 'url("'+ res.body.data[0] +'?imageView2/1/q/100/w/'+ document.documentElement.clientWidth +'")';
+                let $img = new Image(),
+                    ulr = res.body.data[0] +'?imageView2/1/q/90/w/'+ document.documentElement.clientWidth;
+                    
+                    that.$refs.indexBg.style.backgroundImage = 'url("'+ ulr +'")';
+                    that.loadingStatus = true;
             }
         },(res) => console.log(res));
 
         //获取分类列表
         that.$http.jsonp(apiHost + 'api/getCategoryList').then((res) => {
-            console.log(res.body)
+            if (res.body.code == 0) {
+                this.categories = res.body.data;
+            }
         });
 
         window.onscroll = window.onload = () => {
-            let scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
+            let scrollTop = document.documentElement.scrollTop||document.body.scrollTop,
+                clientHeight = document.documentElement.clientHeight,
+                scrollHeight = document.documentElement.scrollHeight;
 
-            document.getElementById("indexBg").style.top = scrollTop + "px";
+            this.scrollTop = scrollTop;
+            console.log(this.scrollTop)
+
+            if(scrollHeight - scrollTop - clientHeight > 560) {
+                 that.$refs.indexBg.style.top = scrollTop + "px";
+            } else {
+                 that.$refs.indexBg.style.top = scrollHeight - clientHeight - 560 + "px"; 
+            }
+
+            this.rightBoxStatus = (scrollTop >= 445 ? true : false);
 
             that.headerStatus = scrollTop > 0 ? true : false;
         }
     },
+    data() {
+        return {
+            loadingStatus: false,
+            msg: '',
+            tags: [],
+            headerStatus: false,
+            rightBoxStatus: false,
+            scrollTop: null,
+            article: [],
+            categories: [],
+            categoriesName: (typeof this.$route.query.categories === "undefined" ? "全部" : decodeURIComponent(this.$route.query.categories))
+        }
+    },
     components: {
-        "blogHeader": blogHeader,
-        "blogFooter": blogFooter
+        blogHeader,
+        blogFooter,
+        leftBox,
+        rightBox
     }
 }
 </script>
 
-<style lang="scss" rel="stylesheet/scss" scoped>
-#index {
-    position: relative;
-    margin-bottom: 560px;
-    #main {
-        position: relative;
-        z-index: 100;
-        width: 100%;
-        padding-top: 400px;
-        .container {
-            z-index: 10;
-            width: 100%;
-            height: 2000px;
-            background-color: rgba(255,255,255,.8);
-            border-radius: 20px;
-            box-shadow: 4px 4px 10px;
-        }
-    }
-    #indexBg {
-        position: absolute;
-        width: 100%;
-        height: 100vh;
-        background-color: #fff;
-        background-position: 50% 50%;
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-}
+<style lang="scss" scoped>
+    @import "../style/index";
 </style>
