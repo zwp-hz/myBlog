@@ -30,7 +30,7 @@
 "use strict";
 import blogHeader   from './layout/header.vue'
 import blogFooter   from './layout/footer.vue'
-import leftBox     from './layout/leftBox.vue'
+import leftBox      from './layout/leftBox.vue'
 import rightBox     from './layout/rightBox.vue'
 
 export default {
@@ -57,20 +57,20 @@ export default {
         });
 
         window.onscroll = window.onload = () => {
-            let scrollTop = document.documentElement.scrollTop||document.body.scrollTop,
+
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
                 clientHeight = document.documentElement.clientHeight,
                 scrollHeight = document.documentElement.scrollHeight;
 
             this.scrollTop = scrollTop;
-            console.log(this.scrollTop)
 
-            if(scrollHeight - scrollTop - clientHeight > 560) {
+            if(scrollHeight - scrollTop - clientHeight > 560 || clientHeight === scrollHeight) {
                  that.$refs.indexBg.style.top = scrollTop + "px";
+                 this.rightBoxStatus = false;
             } else {
-                 that.$refs.indexBg.style.top = scrollHeight - clientHeight - 560 + "px"; 
+                 that.$refs.indexBg.style.top = scrollHeight - clientHeight - 560 + "px";
+                 this.rightBoxStatus = true;
             }
-
-            this.rightBoxStatus = (scrollTop >= 445 ? true : false);
 
             that.headerStatus = scrollTop > 0 ? true : false;
         }

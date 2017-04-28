@@ -5,10 +5,9 @@
             <a v-else class="logo" href="javaScritp:void(0);"><img src="../../images/logo_black.png" /></a>
   			<nav class="g-r-center">
   				<ul class="menuList clearfix">
-		  			<li><a href="javaScritp:void(0);">首頁</a></li>
+		  			<li><router-link :to="{path: '/'}">首頁</router-link></li>
 		  			<li><a href="javaScritp:void(0);">生活</a></li>
-		  			<li><a href="javaScritp:void(0);">个人信息</a></li>
-		  			<li><a href="javaScritp:void(0);">联系</a></li>
+		  			<li><router-link :to="{path: 'author'}">个人信息</router-link></li>
 		  		</ul>
 		  		<a @click="search_status = !search_status" href="javaScritp:void(0);" class="glyphicon glyphicon-search searchBtn"></a>
   			</nav>

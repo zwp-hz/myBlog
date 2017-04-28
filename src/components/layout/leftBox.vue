@@ -43,7 +43,7 @@
 <script>
 "use strict";
 import hotArticle   from './hotArticle.vue'
-import tags   from './tags.vue'
+import tags         from './tags.vue'
 
 export default {
     props: ["categoriesName"],

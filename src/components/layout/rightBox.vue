@@ -1,5 +1,5 @@
 <template>
-  	<div id="rightBox" class="col-lg-3 col-md-4 col-sm-12">
+  	<div ref="rightBox" id="rightBox" class="col-lg-3 col-md-4 col-sm-12">
         <div class="weather">
             <img src="../../images/weather_bg.png" alt="" />
             <img class="weatherIcon" v-if="key == 0 ? getDayStatus(weatherInfo.time) : !getDayStatus(weatherInfo.time) " v-for="(item,key) in weatherInfo.type" :src="'../dist/images/'+(key==0 ? item.pinyin : 'night_' + item.pinyin)+'.png'" />
@@ -28,7 +28,7 @@
 <script>
 "use strict";
 import hotArticle   from './hotArticle.vue'
-import tags   from './tags.vue'
+import tags         from './tags.vue'
 
 export default {
     props: ["rightBoxStatus","scrollTop"],
@@ -44,8 +44,6 @@ export default {
                 setInterval(() => {
                     that.weatherInfo.time = that.weatherInfo.time + 1000;
                 },1000)
-                
-                console.log(res.body.data)
             }
         })
     },
@@ -81,8 +79,13 @@ export default {
     },
     watch: {
     	searchCnt(val) {
-    		
-    	}
+
+    	},
+        scrollTop(val) {
+            if (val > 445 && !this.rightBoxStatus) {
+                this.$refs.rightBox.style.top = val - 420 + "px";
+            }
+        }
     },
     components: {
         hotArticle,
@@ -102,9 +105,9 @@ export default {
             .weatherIcon {
                 position: absolute;
                 top: 5%;
-                left: 0;
+                left: 2.2%;
                 z-index: 100;
-                width: 22%;
+                width: 21.45%;
             }
             .elseInfo {
                 position: absolute;

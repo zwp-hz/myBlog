@@ -38,7 +38,9 @@ module.exports = {
   },
   plugins: [
     new copyWebpackPlugin([
-      {from: __dirname + '/src/images', to: __dirname + '/dist/images'}
+      {from: __dirname + '/src/images', to: __dirname + '/dist/images'},
+      {from: __dirname + '/src/public', to: __dirname + '/dist/public'},
+      {from: __dirname + '/fonts', to: __dirname + '/dist/fonts'}
     ])
   ],
   resolve: {
