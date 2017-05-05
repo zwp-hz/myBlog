@@ -16,7 +16,7 @@
             <div class="container g-r-center">
                 <input @keyup.enter="searchStart" v-model="searchCnt" type="search" placeholder="搜点什么呢" />
                 <a @click="searchStart" href="javaScritp:void(0);" class="glyphicon glyphicon-search searchBtn"></a>
-                <a @click="search_status = !search_status" href="javaScritp:void(0);" class="glyphicon removeBtn">×<a>
+                <a @click="search_status = !search_status" href="javaScritp:void(0);" class="glyphicon removeBtn">×</a>
             </div>
         </div>
   	</div>

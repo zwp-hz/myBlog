@@ -64,7 +64,15 @@ router.get('/api/getTagsList', (req,res) => {
 
 //获取文章列表
 router.get('/api/getArticlesList', (req,res) => {
-	db.Article.find((err, doc) => {
+	let data = {};
+
+	if (req.param("type") === "hot") {
+		data = {limit: 3}
+	} else {
+
+	}
+
+	db.Article.find({},null,data,(err, doc) => {
 		if (doc) {
 			return res.status(200).jsonp({code: 0,data: doc,message: "成功"}).end();
 	    }else {
@@ -93,6 +101,7 @@ let getWeatherInfo = (ip, cb) => {
 				  	},(error, response, data) => {
 				  		if (!error && response && response.statusCode == 200) {
 
+				  			//中文转换拼音
 				  			for (var i in weatherJson) {
 				  				weatherJson[i] = data.match(weatherJson[i]);
 				  				

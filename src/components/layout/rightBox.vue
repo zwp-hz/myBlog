@@ -9,9 +9,9 @@
                 <span v-if="key == 0 ? getDayStatus(weatherInfo.time) : !getDayStatus(weatherInfo.time) " v-for="(item,key) in weatherInfo.type">{{ item.name }}</span>
             </div>
             <p class="g-r-center date">
-                <span>{{ weatherInfo.time | dateFormat('YY') }}</span>
                 <span>{{ weatherInfo.time | dateFormat('MM') }}</span>
                 <span>{{ weatherInfo.time | dateFormat('DD') }}</span>
+                <span>{{ weatherInfo.time | dateFormat('W') }}</span>
             </p>
         </div>
         <div class="box clear">
@@ -84,6 +84,8 @@ export default {
         scrollTop(val) {
             if (val > 445 && !this.rightBoxStatus) {
                 this.$refs.rightBox.style.top = val - 420 + "px";
+            } else {
+                this.$refs.rightBox.style.top = 0;
             }
         }
     },
@@ -98,6 +100,7 @@ export default {
     #rightBox {
         position: relative;
         display: block;
+        margin-bottom: 20px;
         .weather {
             position: relative;
             margin-bottom: 20px;

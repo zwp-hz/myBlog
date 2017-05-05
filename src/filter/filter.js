@@ -9,13 +9,14 @@ export function dateFormat (timeSpan,format) {
 
   let date = new Date(timeSpan);
   let o = {
-    "M+": date.getMonth() + 1, //month
-    "D+": date.getDate(), //day
-    "h+": date.getHours(), //hour
-    "m+": date.getMinutes(), //minute
-    "s+": date.getSeconds(), //second
-    "q+": Math.floor((date.getMonth() + 3) / 3), //quarter
-    "S": date.getMilliseconds() //millisecond
+    "M+": date.getMonth() + 1, //月
+    "D+": date.getDate(), //天
+    "W": "日一二三四五六".charAt(date.getDay()), //星期
+    "h+": date.getHours(), //时
+    "m+": date.getMinutes(), //分
+    "s+": date.getSeconds(), //秒
+    "q+": Math.floor((date.getMonth() + 3) / 3), //季节
+    "S": date.getMilliseconds() //毫秒
   };
   if (/(Y+)/.test(format))
     format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));

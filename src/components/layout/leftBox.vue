@@ -1,32 +1,34 @@
 <template>
-  	<div id="leftBox" class="col-lg-9 col-md-8 col-sm-12">
-        <div class="articleList">
-            <article class="u_transition post-content-container" v-for="list in article">
-                <img v-if="list.images_src.length === 1" :src="list.images_src"/>
-                <div v-else class="swiper-container">
-                    <swiper :options="swiperOption" ref="mySwiper">
-                        <swiper-slide v-for="banner in list.images_src">
-                            <img :src="banner" />
-                        </swiper-slide>
-                    </swiper>
-                    <div class="swiper-pagination swiper-pagination-bullets"></div>
-                </div>
-                <div class="box">
-                    <h2><a class="u_transition u_hover_blue" href="javaScript:void(0);">{{list.title}}</a></h2>
-                    <strong>{{list.content}}</strong>
-                    <p>
-                        <router-link class="article_categories" v-for="(categories,index) in list.categories" :to="{path: ''}">
-                            {{index > 0 ? '，':''}}{{categories}}
-                        </router-link>
-                        <router-link class="review u_transition u_hover_blue_bg":to="{path: ''}">
-                            <i class="glyphicon glyphicon-comment"></i>
-                            {{list.review}}
-                        </router-link>
-                        <time class="g-c-center">
-                            <span><i class="glyphicon glyphicon-time"></i>{{Date.parse(list.creation_at) | dateFormat('YYYY-MM-DD')}}</span>
-                            <span><i class="glyphicon glyphicon-eye-open"></i>{{list.browsing}}</span>
-                        </time>
-                    </p>
+  	<div id="leftBox" ref="leftBox" class="col-lg-9 col-md-8 col-sm-12">
+        <div class="articleList" :style="'height:' + Math.max.apply( Math, articleHeight) + 'px;'">
+            <article v-for="(item,index) in article" v-if="item.status" :style="'top:'+position[index].top+'px;left:'+position[index].left+'px;'">
+                <div class="u_transition post-content-container">
+                    <img v-if="item.images_src.length === 1" :src="item.images_src"/>
+                    <div v-else class="swiper-container">
+                        <swiper :options="swiperOption" ref="mySwiper">
+                            <swiper-slide v-for="banner in item.images_src">
+                                <img :src="banner" />
+                            </swiper-slide>
+                        </swiper>
+                        <div class="swiper-pagination swiper-pagination-bullets"></div>
+                    </div>
+                    <div class="box">
+                        <h2><a class="u_transition u_hover_blue" href="javaScript:void(0);">{{item.title}}</a></h2>
+                        <strong>{{item.content}}</strong>
+                        <p>
+                            <router-link class="article_categories" v-for="(categories,index) in item.categories" :to="{path: ''}">
+                                {{index > 0 ? '，':''}}{{categories}}
+                            </router-link>
+                            <router-link class="review u_transition u_hover_blue_bg":to="{path: ''}">
+                                <i class="glyphicon glyphicon-comment"></i>
+                                {{item.review}}
+                            </router-link>
+                            <time class="g-c-center">
+                                <span><i class="glyphicon glyphicon-time"></i>{{Date.parse(item.creation_at) | dateFormat('YYYY-MM-DD')}}</span>
+                                <span><i class="glyphicon glyphicon-eye-open"></i>{{item.browsing}}</span>
+                            </time>
+                        </p>
+                    </div>
                 </div>
             </article>
         </div>
@@ -48,25 +50,61 @@ import tags         from './tags.vue'
 export default {
     props: ["categoriesName"],
     mounted() {
-       let that = this,
+       let  that = this,
             imgHost = this.$store.state.IMGHOST,
             apiHost = this.$store.state.APIHOST;
 
         //获取文章列表
         that.$http.jsonp(apiHost + 'api/getArticlesList').then((res) => {
+            let imgWidth = Math.round((that.$refs.leftBox.offsetWidth - 60) / 2),
+                number = 0;
+
             if (res.body.code == 0) {
-                for (var i of res.body.data) {
-                    i.images_src.forEach( ( item, j ) => {
-                        i.images_src[j] = imgHost + item + '?imageView2/1/q/90/w/428';
+                let data = res.body.data;
+
+                for (var i in data) {
+                    let x = i;
+
+                    data[i].status = false;
+                    data[i].images_src.forEach( ( item, j ) => {
+                        let $img = new Image(),
+                            src = imgHost + item + '?imageView2/2/w/' + imgWidth + '/interlace/1&v=1';
+
+                        if (j === 0) {
+                            data[i].images_src[j] = $img.src = src;
+
+                            //设置文章块参数
+                            $img.onload = () => {
+                                let length = that.articleHeight.length;
+                                data[x].status = true;
+
+                                if (length < 2) {
+                                    that.position[x] = number % 2 === 0 ? {top: 0, left: 0} : {top: 0, left: imgWidth + 15} ;
+                                    that.articleHeight.push($img.height + 279);
+
+                                } else {
+                                    that.position[x] = {top: Math.min.apply(Math,that.articleHeight),left: that.articleHeight[0] > that.articleHeight[1] ? imgWidth + 15 : 0};
+
+                                    that.articleHeight[(that.articleHeight[0] > that.articleHeight[1] ? 1 : 0)] += $img.height + 279;
+                                }
+
+                                number ++;
+                            }
+                        } else {
+                            data[i].images_src[j] = src;
+                        } 
                     });
                 }
-                that.article = res.body.data;
+ 
+                that.article = data;
             }
         }); 
     },
     data () {
         return {
             article: [],
+            articleHeight: [],
+            position: {},
             swiperOption: {
                 effect : 'coverflow',
                 initialSlide: 0,
@@ -94,27 +132,24 @@ export default {
 
 <style lang="scss">
     .articleList {
-        -webkit-column-count: 2;
-        column-count: 2;
-        -moz-column-width: 300px;
-        -webkit-column-width: 300px;
-        column-width: 300px;
-        -moz-column-gap: 1em;
-        -webkit-column-gap: 1em;
-        column-gap: 1em;
+        position: relative;
+        width: 100%;
         article {
-            break-inside: avoid;
-            margin-bottom: 1em;
+            position: absolute;
+            width: 50%;
+            padding-right: 15px;
             img {
                 width: 100%;
             }
             .box {
+                height: 264px;
                 padding-top: 20px;
+                overflow-y: hidden;
                 background-color: #fff;
                 h2, strong {
                     width: 100%;
-                    padding-left: 13%;
-                    padding-right: 13%;
+                    height: 58px;
+                    padding: 0 13%;
                     display: -webkit-box;
                     text-overflow: ellipsis;
                     overflow: hidden;
@@ -123,8 +158,7 @@ export default {
                 }
                 h2 {
                     font-size: 28px;
-                    margin-top: 12px;
-                    margin-bottom: 14px;
+                    margin: 12px 0 14px;
                     line-height: 100%!important;
                     -webkit-line-clamp: 2;
                     a {

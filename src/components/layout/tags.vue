@@ -1,8 +1,8 @@
 <template>
     <div class="tags col-xs-12">
         <h3>tags</h3>
-        <router-link class="fl u_transition u_hover_blue_bg" v-for="tag in tags" :to="{}">
-            {{tag.name}}
+        <router-link class="fl u_transition u_hover_blue_bg" v-for="item in tags" :to="{}">
+            {{item.name}}
         </router-link>
     </div>
 </template>

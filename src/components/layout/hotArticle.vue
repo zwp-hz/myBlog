@@ -1,22 +1,22 @@
 <template>
     <div class="recent_posts col-xs-12">
         <h3>最新动态</h3>
-        <div class="article clear" v-for="list in articleList">
+        <div class="article clear" v-for="item in articleList">
             <router-link class="images fl" :to="{}">
-                <img :src="list.images_src[0]" alt="" />
-                <span>{{list.review}}</span>
+                <img :src="item.images_src[0]" alt="" />
+                <span>{{item.review}}</span>
                 <b class="backImg u_transition u_hover_show"><i class="glyphicon glyphicon-link"></i></b>
             </router-link>
             <div class="rl">
                 <div class="categories">
-                    <span v-for="(categories,index) in list.categories">
+                    <span v-for="(categories,index) in item.categories">
                         {{index > 0 ? '，':''}}
                         <router-link class="u_transition u_hover_gray" :to="{}">
                             {{categories}}
                         </router-link>
                     </span>
                 </div>
-                <router-link class="title u_transition u_hover_blue" :to="{}">{{list.title}}</router-link>
+                <router-link class="title u_transition u_hover_blue" :to="{}">{{item.title}}</router-link>
             </div>
         </div>
     </div>
@@ -31,7 +31,7 @@ export default {
             that = this;
 
         //获取热门文章
-        that.$http.jsonp(apiHost + 'api/getArticlesList').then((res) => {
+        that.$http.jsonp(apiHost + 'api/getArticlesList?type=hot').then((res) => {
             if (res.body.code == 0) {
                 for (var i of res.body.data) {
                     i.images_src.forEach( ( item, j ) => {
@@ -42,7 +42,7 @@ export default {
             }
         });
     },
-    data () {
+    data() {
         return {
         	articleList: []
         }

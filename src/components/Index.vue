@@ -14,7 +14,7 @@
             <div class="container">
                 <ul class="categories g-r-center">
                     <li @click="categoriesName = '全部'"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === '全部'}" :to="{path: '/'}">全部</router-link></li>
-                    <li @click="categoriesName = list.name" v-for="list in categories"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === list.name}" :to="{path: '/', query: {categories: encodeURIComponent(list.name)}}">{{list.name}}</router-link></li>
+                    <li @click="categoriesName = item.name" v-for="item in categories"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === item.name}" :to="{path: '/', query: {categories: encodeURIComponent(item.name)}}">{{item.name}}</router-link></li>
                 </ul>
                 <div class="content">
                     <leftBox :categoriesName="categoriesName"></leftBox>
@@ -42,7 +42,7 @@ export default {
         that.$http.jsonp(apiHost + 'api/bing').then((res) => {
             if (res.body.code === 0) {
                 let $img = new Image(),
-                    ulr = res.body.data[0] +'?imageView2/1/q/90/w/'+ document.documentElement.clientWidth;
+                    ulr = res.body.data[0] +'?imageView2/1/q/90/interlace/1/w/'+ document.documentElement.clientWidth;
                     
                     that.$refs.indexBg.style.backgroundImage = 'url("'+ ulr +'")';
                     that.loadingStatus = true;

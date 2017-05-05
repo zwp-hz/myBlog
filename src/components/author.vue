@@ -18,21 +18,16 @@ export default {
 
             that.headerStatus = scrollTop > 0 ? true : false;
         }
+
         skrollr.init({
             forceHeight: false
         })
-        
     },
     data () {
         return {
         	headerStatus: false
         }
     },
-    // created() {
-    //     skrollr.init({
-    //         forceHeight: false
-    //     })
-    // },
     components: {
         blogHeader
     }
