@@ -11,3 +11,8 @@ npm run build
 npm run server
 
 ```
+
+
+<!-- 备注 -->
+encodeURIComponent()   	中文编码
+decodeURIComponent()	中文解码

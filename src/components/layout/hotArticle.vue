@@ -3,7 +3,7 @@
         <h3>最新动态</h3>
         <div class="article clear" v-for="item in articleList">
             <router-link class="images fl" :to="{}">
-                <img :src="item.images_src[0]" alt="" />
+                <img :src="item.images_src[0]" alt="" @error="imgError()" />
                 <span>{{item.review}}</span>
                 <b class="backImg u_transition u_hover_show"><i class="glyphicon glyphicon-link"></i></b>
             </router-link>
@@ -33,18 +33,25 @@ export default {
         //获取热门文章
         that.$http.jsonp(apiHost + 'api/getArticlesList?type=hot').then((res) => {
             if (res.body.code == 0) {
-                for (var i of res.body.data) {
+                for (var i of res.body.data.data) {
                     i.images_src.forEach( ( item, j ) => {
                         i.images_src[j] = imgHost + item + "?imageView2/1/w/150/h/150/interlace1/q/90";
                     });
                 }
-                that.articleList = res.body.data;
+                that.articleList = res.body.data.data;
             }
         });
     },
     data() {
         return {
         	articleList: []
+        }
+    },
+    methods: {
+        imgError() {
+            var img = event.srcElement;
+            img.src = "../dist/images/image_error_tag.png";
+            img.onerror = null;
         }
     }
 }

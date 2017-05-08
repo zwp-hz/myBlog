@@ -1,16 +1,17 @@
 <template>
   	<div id="leftBox" ref="leftBox" class="col-lg-9 col-md-8 col-sm-12">
-        <div class="articleList" :style="'height:' + Math.max.apply( Math, articleHeight) + 'px;'">
+        <div class="articleList" :style="'height:' + Math.max.apply( Math, (articleHeight.length >= 1 ? articleHeight : [0])) + 'px;'">
             <article v-for="(item,index) in article" v-if="item.status" :style="'top:'+position[index].top+'px;left:'+position[index].left+'px;'">
                 <div class="u_transition post-content-container">
-                    <img v-if="item.images_src.length === 1" :src="item.images_src"/>
+                    <img v-if="item.images_src.length === 1" :src="item.images_src" @error="imgError();"/>
                     <div v-else class="swiper-container">
-                        <swiper :options="swiperOption" ref="mySwiper">
+                        <swiper :options="swiperOption[index]" ref="mySwiper">
                             <swiper-slide v-for="banner in item.images_src">
-                                <img :src="banner" />
+                                <img class="swiper-lazy" :data-src="banner" @error="imgError();"/>
+                                <div class="swiper-lazy-preloader"></div>
                             </swiper-slide>
                         </swiper>
-                        <div class="swiper-pagination swiper-pagination-bullets"></div>
+                        <div :class="'swiper-pagination swiper-pagination'+index+' swiper-pagination-bullets'"></div>
                     </div>
                     <div class="box">
                         <h2><a class="u_transition u_hover_blue" href="javaScript:void(0);">{{item.title}}</a></h2>
@@ -32,100 +33,115 @@
                 </div>
             </article>
         </div>
-        <div class="pagination g-c-center">
-            <ul class="page-numbers g-c-center">
-                <li><span class="page-numbers current">1</span></li>
-                <li><a class="page-numbers u_transition u_hover_blue" href="javaScript:void(0);">2</a></li>
-                <li><a class="next page-numbers u_transition u_hover_blue" href="javaScript:void(0);">Next</a></li>
-            </ul>
-        </div>
+        <paging :page="page" :pageNum="pageNum"></paging>
   	</div>
 </template>
 
 <script>
 "use strict";
-import hotArticle   from './hotArticle.vue'
-import tags         from './tags.vue'
+import paging       from './paging.vue'
 
 export default {
     props: ["categoriesName"],
     mounted() {
-       let  that = this,
-            imgHost = this.$store.state.IMGHOST,
-            apiHost = this.$store.state.APIHOST;
-
         //获取文章列表
-        that.$http.jsonp(apiHost + 'api/getArticlesList').then((res) => {
-            let imgWidth = Math.round((that.$refs.leftBox.offsetWidth - 60) / 2),
-                number = 0;
-
-            if (res.body.code == 0) {
-                let data = res.body.data;
-
-                for (var i in data) {
-                    let x = i;
-
-                    data[i].status = false;
-                    data[i].images_src.forEach( ( item, j ) => {
-                        let $img = new Image(),
-                            src = imgHost + item + '?imageView2/2/w/' + imgWidth + '/interlace/1&v=1';
-
-                        if (j === 0) {
-                            data[i].images_src[j] = $img.src = src;
-
-                            //设置文章块参数
-                            $img.onload = () => {
-                                let length = that.articleHeight.length;
-                                data[x].status = true;
-
-                                if (length < 2) {
-                                    that.position[x] = number % 2 === 0 ? {top: 0, left: 0} : {top: 0, left: imgWidth + 15} ;
-                                    that.articleHeight.push($img.height + 279);
-
-                                } else {
-                                    that.position[x] = {top: Math.min.apply(Math,that.articleHeight),left: that.articleHeight[0] > that.articleHeight[1] ? imgWidth + 15 : 0};
-
-                                    that.articleHeight[(that.articleHeight[0] > that.articleHeight[1] ? 1 : 0)] += $img.height + 279;
-                                }
-
-                                number ++;
-                            }
-                        } else {
-                            data[i].images_src[j] = src;
-                        } 
-                    });
-                }
- 
-                that.article = data;
-            }
-        }); 
+        this.getArticlesList(1);
     },
-    data () {
+    data() {
         return {
+            page: null,
+            pageNum: null,
             article: [],
             articleHeight: [],
             position: {},
-            swiperOption: {
-                effect : 'coverflow',
-                initialSlide: 0,
-                loop: true,
-                pagination: '.swiper-pagination'
-            }
+            swiperOption: {}
         }
     },
     methods: {
-        searchStart() {
-            console.log(this.searchCnt)
+        getArticlesList(page) {
+            let that = this,
+                imgHost = this.$store.state.IMGHOST,
+                apiHost = this.$store.state.APIHOST;
+
+            that.articleHeight = [];
+
+            that.$http.jsonp(apiHost + 'api/getArticlesList?page='+page+'&categories='+that.categoriesName).then((res) => {
+                let imgWidth = Math.round((that.$refs.leftBox.offsetWidth - 60) / 2),
+                    number = 0;
+
+                if (res.body.code == 0) {
+                    let data = res.body.data;
+
+                    that.page = data.current_page;
+                    that.pageNum = data.last_page;
+
+                    for (var i in data.data) {
+                        let x = i;
+
+                        data.data[i].status = false;
+                        data.data[i].images_src.forEach( ( item, j ) => {
+                            let $img = new Image(),
+                                src = imgHost + item + '?imageView2/2/w/' + imgWidth + '/interlace/1&v=1';
+
+                            if (j === 0) {
+                                data.data[i].images_src[j] = $img.src = src;
+
+                                
+                                $img.onload = () => {
+                                    setArticleLocation("load");
+                                }
+
+                                $img.onerror = (image) => {
+                                    setArticleLocation("error");
+                                }
+
+                                //设置文章定位
+                                function setArticleLocation(type) {
+                                    let length = that.articleHeight.length;
+                                    data.data[x].status = true;
+
+                                    if (length < 2) {
+                                        that.position[x] = number % 2 === 0 ? {top: 0, left: 0} : {top: 0, left: imgWidth + 15} ;
+                                        that.articleHeight.push((type === "error" ? Number(imgWidth / 2) : $img.height) + 279);
+                                    } else {
+                                        that.position[x] = {top: Math.min.apply(Math,that.articleHeight),left: that.articleHeight[0] > that.articleHeight[1] ? imgWidth + 15 : 0};
+
+                                        that.articleHeight[(that.articleHeight[0] > that.articleHeight[1] ? 1 : 0)] += (type === "error" ? Number(imgWidth / 2) : $img.height) + 279;
+                                    }
+
+                                    number ++;
+                                }
+                            } else {
+                                data.data[i].images_src[j] = src;
+
+                                //swiper插件   同个页面多个滑动  动态配置
+                                that.swiperOption[i] = {
+                                    effect : 'coverflow',
+                                    initialSlide: 0,
+                                    lazyLoading : true,
+                                    pagination: '.swiper-pagination' + i
+                                }
+                            } 
+                        });
+                    }
+     
+                    that.article = data.data;
+                }
+            });
+        },
+        imgError() {
+            var img = event.srcElement;
+            img.src = "../dist/images/image_error.png";
+            img.onerror = null;
         }
     },
     watch: {
-    	searchCnt(val) {
-    		
+    	categoriesName(val) {
+    		this.getArticlesList(1);
     	}
     },
     components: {
-        hotArticle,
-        tags
+        paging
     }
 }
 </script>
@@ -209,36 +225,6 @@ export default {
                             color: #fff;
                         }
                     }
-                }
-            }
-        }
-    }
-
-    .pagination {
-        width: 100%;
-        ul {
-            display: -webkit-box;
-            margin: 0 auto;
-            list-style: none;
-            background-color: #f4f4f4;
-            padding: 5px 4px;
-            border-radius: 30px;
-            border-width: 0px;
-            li {
-                margin: 0 2px;
-                span,a {
-                    display: block;
-                    height: 40px;
-                    width: 40px;
-                    text-align: center;
-                    line-height: 40px;
-                    color: #8d8d8d;
-                    cursor: pointer;
-                }
-                span {
-                    background-color: #47c9e5;
-                    border-radius: 30px;
-                    color: #fff;
                 }
             }
         }

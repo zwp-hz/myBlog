@@ -64,19 +64,37 @@ router.get('/api/getTagsList', (req,res) => {
 
 //获取文章列表
 router.get('/api/getArticlesList', (req,res) => {
-	let data = {};
+	let per_page = 10, countNum = 0,
+		criteria = {}, fields = {}, options = {limit: per_page},
+		categories = req.param("categories"),
+		page = req.param("page");
 
+	/**
+	  * @type 	hot: "最新更改文章", categories: "文章类目"
+	 */
 	if (req.param("type") === "hot") {
-		data = {limit: 3}
+		fields = {title: 1,images_src: 1,categories: 1,review: 1};
+		options = {sort: {'update_at': -1},limit: 3};
+	} else if (categories && categories != "全部") {
+		criteria = {categories: {$in: [categories]}};
+		options.skip = (page - 1) * per_page;
 	} else {
-
+		options.skip = (page - 1) * per_page;
 	}
 
-	db.Article.find({},null,data,(err, doc) => {
+	db.Article.count(criteria,(err, doc) => {
+		countNum = doc;
+	})
+
+	db.Article.find(criteria,fields,options,(err, doc) => {
 		if (doc) {
-			return res.status(200).jsonp({code: 0,data: doc,message: "成功"}).end();
+			return res.status(200).jsonp({code: 0,data: {
+				current_page: page,
+				data: doc,
+				last_page: Math.ceil(countNum / per_page)
+			},message: "成功"}).end();
 	    }else {
-	    	return res.status(500).jsonp({code: 1,data: [],message: "请求有误"}).end();
+	    	return res.status(500).jsonp({code: 1,data: [],message: "请求有误"}).end();                                                                                                                                                                                                                                                                                                                                       
 	    }
 	})
 })
