@@ -17,8 +17,8 @@
         <div class="box clear">
             <hotArticle></hotArticle>
             <div class="searchBox col-xs-12 g-r-center">
-                <input type="search" placeholder="搜点什么呢" name="" />
-                <a href="javaScript:void(0);" class="glyphicon glyphicon-search"></a>
+                <input @keyup.enter="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" name="" />
+                <a @click="search" href="javaScript:void(0);" class="glyphicon glyphicon-search"></a>
             </div>
             <tags></tags>
         </div>
@@ -51,12 +51,13 @@ export default {
         return {
             weatherInfo: {
                 type: []
-            }
+            },
+            searchCnt: ""
         }
     },
     methods: {
-        searchStart() {
-            console.log(this.searchCnt)
+        search() {
+            this.$emit('searchCnt', this.searchCnt);
         },
         getDayStatus(time) {
             let date = new Date(time),
@@ -78,12 +79,15 @@ export default {
         }
     },
     watch: {
-    	searchCnt(val) {
-
-    	},
         scrollTop(val) {
-            if (val > 445 && !this.rightBoxStatus) {
-                this.$refs.rightBox.style.top = val - 420 + "px";
+            if (val > 445) {
+                let clientHeight = document.documentElement.clientHeight,   //内容可视区域的高度
+                    scrollHeight = document.documentElement.scrollHeight;   //滚动条高度
+
+                if (!this.rightBoxStatus) 
+                    this.$refs.rightBox.style.top = val - 420 + "px";
+                else
+                    this.$refs.rightBox.style.top = scrollHeight - clientHeight - 980 + "px";
             } else {
                 this.$refs.rightBox.style.top = 0;
             }

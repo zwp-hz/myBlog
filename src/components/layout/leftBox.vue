@@ -33,19 +33,35 @@
                 </div>
             </article>
         </div>
-        <paging :page="page" :pageNum="pageNum"></paging>
+        <!-- 分页 -->
+        <div v-if="pageNum != 0" class="pagination g-c-center">
+            <ul class="page-numbers g-c-center">
+                <li v-for="(item,index) in pageNum" @click="getArticlesList(index+1,'NoFirst')">
+                    <span v-if="index + 1 == page" class="page-numbers current">{{index+1}}</span>
+                    <router-link v-else class="page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: index+1}}" >{{index+1}}</router-link>
+                </li>
+                <li v-if="pageNum > page" @click="getArticlesList(Number(page)+1,'NoFirst')">
+                    <router-link class="next page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: Number(page)+1}}">Next</router-link>
+                </li>
+            </ul>
+        </div>
   	</div>
 </template>
 
 <script>
 "use strict";
-import paging       from './paging.vue'
 
 export default {
-    props: ["categoriesName"],
+    props: ["searchData","categoriesName"],
     mounted() {
         //获取文章列表
-        this.getArticlesList(1);
+        let page = this.$route.query.page ? Number(this.$route.query.page) : 1;
+
+        if (this.$route.query.searchCnt) {
+            this.getArticlesList(page,"",decodeURIComponent(this.$route.query.searchCnt));
+        } else {
+            this.getArticlesList(page);
+        }
     },
     data() {
         return {
@@ -58,18 +74,25 @@ export default {
         }
     },
     methods: {
-        getArticlesList(page) {
+        /** 获取文章类别
+          * @data   page: 分页, type: {hot: '最新动态'}, searchCnt: 搜索内容
+         */
+        getArticlesList(page,type,searchCnt) {
             let that = this,
                 imgHost = this.$store.state.IMGHOST,
                 apiHost = this.$store.state.APIHOST;
 
             that.articleHeight = [];
 
-            that.$http.jsonp(apiHost + 'api/getArticlesList?page='+page+'&categories='+that.categoriesName).then((res) => {
+            that.$http.jsonp(apiHost + 'api/getArticlesList?page='+page+'&categories='+that.categoriesName+(searchCnt?'&searchCnt='+searchCnt:'')).then((res) => {
                 let imgWidth = Math.round((that.$refs.leftBox.offsetWidth - 60) / 2),
                     number = 0;
 
                 if (res.body.code == 0) {
+
+                    if (type == "NoFirst" || searchCnt)
+                        document.getElementsByTagName('body')[0].scrollTop = 320;
+
                     let data = res.body.data;
 
                     that.page = data.current_page;
@@ -85,13 +108,12 @@ export default {
 
                             if (j === 0) {
                                 data.data[i].images_src[j] = $img.src = src;
-
                                 
                                 $img.onload = () => {
                                     setArticleLocation("load");
                                 }
 
-                                $img.onerror = (image) => {
+                                $img.onerror = () => {
                                     setArticleLocation("error");
                                 }
 
@@ -101,7 +123,7 @@ export default {
                                     data.data[x].status = true;
 
                                     if (length < 2) {
-                                        that.position[x] = number % 2 === 0 ? {top: 0, left: 0} : {top: 0, left: imgWidth + 15} ;
+                                        that.position[x] = number % 2 === 0 ? {top: 0, left: 0} : {top: 0, left: imgWidth + 15};
                                         that.articleHeight.push((type === "error" ? Number(imgWidth / 2) : $img.height) + 279);
                                     } else {
                                         that.position[x] = {top: Math.min.apply(Math,that.articleHeight),left: that.articleHeight[0] > that.articleHeight[1] ? imgWidth + 15 : 0};
@@ -138,10 +160,10 @@ export default {
     watch: {
     	categoriesName(val) {
     		this.getArticlesList(1);
-    	}
-    },
-    components: {
-        paging
+    	},
+        searchData(val) {
+            this.getArticlesList(1,"",val.content);
+        }
     }
 }
 </script>
@@ -154,6 +176,10 @@ export default {
             position: absolute;
             width: 50%;
             padding-right: 15px;
+            transition: all 1s;
+            -moz-transition: all 1s;  /* Firefox 4 */
+            -webkit-transition: all 1s;   /* Safari 和 Chrome */
+            -o-transition: all 1s;    /* Opera */
             img {
                 width: 100%;
             }
@@ -225,6 +251,42 @@ export default {
                             color: #fff;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    .swiper-wrapper {
+        display: -webkit-box;
+        -webkit-box-pack:center;
+        -webkit-box-align:center;
+    }
+
+    .pagination {
+        width: 100%;
+        ul {
+            display: -webkit-box;
+            margin: 0 auto;
+            list-style: none;
+            background-color: #f4f4f4;
+            padding: 5px 4px;
+            border-radius: 30px;
+            border-width: 0px;
+            li {
+                margin: 0 2px;
+                span,a {
+                    display: block;
+                    height: 40px;
+                    width: 40px;
+                    text-align: center;
+                    line-height: 40px;
+                    color: #8d8d8d;
+                    cursor: pointer;
+                }
+                span {
+                    background-color: #47c9e5;
+                    border-radius: 30px;
+                    color: #fff;
                 }
             }
         }

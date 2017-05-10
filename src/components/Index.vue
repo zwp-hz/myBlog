@@ -1,5 +1,6 @@
 <template>
     <div id="index" :style="!loadingStatus ? 'margin-bottom: 0;' : ''">
+        <!-- loading -->
         <div class="loading g-r-center" v-if="!loadingStatus">
             <div class="item-loader-container">
                 <div class="la-square-jelly-box la-2x">
@@ -8,7 +9,7 @@
                 </div>
             </div>
         </div>
-        <blogHeader :headerStatus="headerStatus"></blogHeader>
+        <blogHeader v-on:searchCnt="searchList" :headerStatus="headerStatus"></blogHeader>
         <div id="indexBg" ref="indexBg"></div>
         <div id="main" :style="!loadingStatus ? 'height: 100vh; overflow-y: hidden;' : ''">
             <div class="container">
@@ -17,8 +18,8 @@
                     <li @click="categoriesName = item.name" v-for="item in categories"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === item.name}" :to="{path: '/', query: {categories: encodeURIComponent(item.name)}}">{{item.name}}</router-link></li>
                 </ul>
                 <div class="content">
-                    <leftBox :categoriesName="categoriesName"></leftBox>
-                    <rightBox :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
+                    <leftBox :searchData="searchData" :categoriesName="categoriesName"></leftBox>
+                    <rightBox v-on:searchCnt="searchList" :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
                 </div>
             </div>
         </div>
@@ -59,8 +60,8 @@ export default {
         window.onscroll = window.onload = () => {
 
             let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
-                clientHeight = document.documentElement.clientHeight,
-                scrollHeight = document.documentElement.scrollHeight;
+                clientHeight = document.documentElement.clientHeight,   //内容可视区域的高度
+                scrollHeight = document.documentElement.scrollHeight;   //滚动条高度
 
             this.scrollTop = scrollTop;
 
@@ -77,6 +78,7 @@ export default {
     },
     data() {
         return {
+            searchData: {},
             loadingStatus: false,
             msg: '',
             tags: [],
@@ -86,6 +88,22 @@ export default {
             article: [],
             categories: [],
             categoriesName: (typeof this.$route.query.categories === "undefined" ? "全部" : decodeURIComponent(this.$route.query.categories))
+        }
+    },
+    methods: {
+        searchList(text) {
+            let data = {page: 1};
+            if (this.$route.query.categories)
+                data.categories = decodeURIComponent(this.$route.query.categories)
+            if (text)
+                data.searchCnt = encodeURIComponent(text)
+
+            this.$router.push( {path: '/', query: data} );
+
+            this.searchData = {
+                date: Date.parse(new Date()),
+                content: text
+            };
         }
     },
     components: {

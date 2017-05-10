@@ -65,9 +65,11 @@ router.get('/api/getTagsList', (req,res) => {
 //获取文章列表
 router.get('/api/getArticlesList', (req,res) => {
 	let per_page = 10, countNum = 0,
-		criteria = {}, fields = {}, options = {limit: per_page},
+		criteria = {}, fields = {}, options = {sort: {'browsing': -1},limit: per_page},
 		categories = req.param("categories"),
-		page = req.param("page");
+		searchCnt = req.param("searchCnt"),
+		reg = new RegExp(searchCnt, 'i'),
+		page = Number(req.param("page"));
 
 	/**
 	  * @type 	hot: "最新更改文章", categories: "文章类目"
@@ -82,20 +84,29 @@ router.get('/api/getArticlesList', (req,res) => {
 		options.skip = (page - 1) * per_page;
 	}
 
-	db.Article.count(criteria,(err, doc) => {
-		countNum = doc;
-	})
+	if (searchCnt) {
+		criteria.$or = [
+			{title: {$regex: reg}},
+			{categories: {$in: [searchCnt]}}
+		];
+	}
 
-	db.Article.find(criteria,fields,options,(err, doc) => {
-		if (doc) {
-			return res.status(200).jsonp({code: 0,data: {
-				current_page: page,
-				data: doc,
-				last_page: Math.ceil(countNum / per_page)
-			},message: "成功"}).end();
-	    }else {
-	    	return res.status(500).jsonp({code: 1,data: [],message: "请求有误"}).end();                                                                                                                                                                                                                                                                                                                                       
-	    }
+	//获取文章
+	db.Article.count(criteria,(err, doc) => {
+		//文章总数
+		countNum = doc;
+
+		db.Article.find(criteria,fields,options,(error, data) => {
+			if (data) {
+				return res.status(200).jsonp({code: 0,data: {
+					current_page: page,
+					data: data,
+					last_page: Math.ceil(countNum / per_page)
+				},message: "成功"}).end();
+		    }else {
+		    	return res.status(500).jsonp({code: 1,data: [],message: "请求有误"}).end();                                                                                                                                                                                                                                                                                                                                       
+		    }
+		})
 	})
 })
 

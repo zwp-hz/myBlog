@@ -14,8 +14,8 @@
   		</div>
         <div class="header-search" :class="{ search_show: search_status, fixed: headerStatus }">
             <div class="container g-r-center">
-                <input @keyup.enter="searchStart" v-model="searchCnt" type="search" placeholder="搜点什么呢" />
-                <a @click="searchStart" href="javaScritp:void(0);" class="glyphicon glyphicon-search searchBtn"></a>
+                <input @keyup.enter="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" />
+                <a @click="search" href="javaScritp:void(0);" class="glyphicon glyphicon-search searchBtn"></a>
                 <a @click="search_status = !search_status" href="javaScritp:void(0);" class="glyphicon removeBtn">×</a>
             </div>
         </div>
@@ -33,14 +33,9 @@ export default {
         }
     },
     methods: {
-        searchStart() {
-            console.log(this.searchCnt)
+        search() {
+            this.$emit('searchCnt', this.searchCnt);
         }
-    },
-    watch: {
-    	searchCnt(val) {
-    		
-    	}
     }
 }
 </script>
