@@ -29,10 +29,12 @@
 
 <script>
 "use strict";
+import { mapActions }   from 'vuex'
 import blogHeader   from './layout/header.vue'
 import blogFooter   from './layout/footer.vue'
 import leftBox      from './layout/leftBox.vue'
 import rightBox     from './layout/rightBox.vue'
+
 
 export default {
     mounted() {
@@ -75,6 +77,9 @@ export default {
 
             that.headerStatus = scrollTop > 0 ? true : false;
         }
+
+        // this.$store.dispatch("increment",1)
+        
     },
     data() {
         return {

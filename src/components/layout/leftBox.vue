@@ -1,7 +1,8 @@
 <template>
   	<div id="leftBox" ref="leftBox" class="col-lg-9 col-md-8 col-sm-12">
-        <div class="articleList" :style="'height:' + Math.max.apply( Math, (articleHeight.length >= 1 ? articleHeight : [0])) + 'px;'">
-            <article v-for="(item,index) in article" v-if="item.status" :style="'top:'+position[index].top+'px;left:'+position[index].left+'px;'">
+        <div :class="imgLoadStatus?'articleList loadSucceed':'articleList'" :style="'height:'+Math.max.apply(Math,(articleHeight.length>=1?articleHeight:[0]))+'px;'">
+            <!-- 文章 -->
+            <article v-for="(item,index) in article" :style="imgLoadStatus?('top:'+position[index].top+'px;left:'+position[index].left+'px;z-index:'+(10-index)+';'):'top:0;left:0;z-index:'+(10-index)+';'">
                 <div class="u_transition post-content-container">
                     <img v-if="item.images_src.length === 1" :src="item.images_src" @error="imgError();"/>
                     <div v-else class="swiper-container">
@@ -34,14 +35,17 @@
             </article>
         </div>
         <!-- 分页 -->
-        <div v-if="pageNum != 0" class="pagination g-c-center">
+        <div v-if="pageNum > 1 && imgLoadStatus" class="pagination g-c-center">
             <ul class="page-numbers g-c-center">
+                <li v-if="page > 1" @click="getArticlesList(Number(page)-1,'NoFirst')">
+                    <router-link class="next page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: Number(page)-1}}">上一页</router-link>
+                </li>
                 <li v-for="(item,index) in pageNum" @click="getArticlesList(index+1,'NoFirst')">
                     <span v-if="index + 1 == page" class="page-numbers current">{{index+1}}</span>
                     <router-link v-else class="page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: index+1}}" >{{index+1}}</router-link>
                 </li>
                 <li v-if="pageNum > page" @click="getArticlesList(Number(page)+1,'NoFirst')">
-                    <router-link class="next page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: Number(page)+1}}">Next</router-link>
+                    <router-link class="next page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: Number(page)+1}}">下一页</router-link>
                 </li>
             </ul>
         </div>
@@ -67,6 +71,7 @@ export default {
         return {
             page: null,
             pageNum: null,
+            imgLoadStatus: false,
             article: [],
             articleHeight: [],
             position: {},
@@ -83,6 +88,8 @@ export default {
                 apiHost = this.$store.state.APIHOST;
 
             that.articleHeight = [];
+            that.position = [];
+            that.imgLoadStatus = false;
 
             that.$http.jsonp(apiHost + 'api/getArticlesList?page='+page+'&categories='+that.categoriesName+(searchCnt?'&searchCnt='+searchCnt:'')).then((res) => {
                 let imgWidth = Math.round((that.$refs.leftBox.offsetWidth - 60) / 2),
@@ -101,7 +108,7 @@ export default {
                     for (var i in data.data) {
                         let x = i;
 
-                        data.data[i].status = false;
+                        data.data[i].index = Number(i);
                         data.data[i].images_src.forEach( ( item, j ) => {
                             let $img = new Image(),
                                 src = imgHost + item + '?imageView2/2/w/' + imgWidth + '/interlace/1&v=1';
@@ -110,25 +117,39 @@ export default {
                                 data.data[i].images_src[j] = $img.src = src;
                                 
                                 $img.onload = () => {
-                                    setArticleLocation("load");
+                                    setArticleLocation("load",event);
                                 }
 
                                 $img.onerror = () => {
-                                    setArticleLocation("error");
+                                    setArticleLocation("error",event);
                                 }
 
-                                //设置文章定位
-                                function setArticleLocation(type) {
-                                    let length = that.articleHeight.length;
-                                    data.data[x].status = true;
+                                function setArticleLocation(type,event) {
+                                    var imgSrc = event.srcElement.src;
 
-                                    if (length < 2) {
-                                        that.position[x] = number % 2 === 0 ? {top: 0, left: 0} : {top: 0, left: imgWidth + 15};
-                                        that.articleHeight.push((type === "error" ? Number(imgWidth / 2) : $img.height) + 279);
-                                    } else {
-                                        that.position[x] = {top: Math.min.apply(Math,that.articleHeight),left: that.articleHeight[0] > that.articleHeight[1] ? imgWidth + 15 : 0};
+                                    //记录每张图片高度
+                                    for (var x in data.data) {
+                                        if (imgSrc === data.data[x].images_src[0]) {
+                                            that.position[x] = {height: (type==="error" ? Number(imgWidth / 2) : $img.height) + 279}
+                                            break;
+                                        }
+                                    }
 
-                                        that.articleHeight[(that.articleHeight[0] > that.articleHeight[1] ? 1 : 0)] += (type === "error" ? Number(imgWidth / 2) : $img.height) + 279;
+                                    //设置定位信息
+                                    if (number >= data.data.length-1) {
+                                        for (var y in that.position) {
+                                            if (y <= 1) {
+                                                that.position[y].left = y % 2 === 0 ? 0 : imgWidth + 15;
+                                                that.position[y].top = 0;
+                                                that.articleHeight.push(that.position[y].height);
+                                            } else {
+                                                that.position[y].top = Math.min.apply(Math,that.articleHeight);
+                                                that.position[y].left = that.articleHeight[0] > that.articleHeight[1] ? imgWidth + 15 : 0;
+                                                that.articleHeight[(that.articleHeight[0] > that.articleHeight[1] ? 1 : 0)] += that.position[y].height;
+                                            }
+                                        }
+
+                                        that.imgLoadStatus = true;
                                     }
 
                                     number ++;
@@ -172,14 +193,21 @@ export default {
     .articleList {
         position: relative;
         width: 100%;
+        opacity: 0;
+        &.loadSucceed {
+            opacity: 1;
+            article {
+                transition: all 1s ease;
+                -moz-transition: all 1s ease;  /* Firefox 4 */
+                -webkit-transition: all 1s ease;   /* Safari 和 Chrome */
+                -o-transition: all 1s ease;    /* Opera */
+            }
+            
+        }
         article {
             position: absolute;
             width: 50%;
             padding-right: 15px;
-            transition: all 1s;
-            -moz-transition: all 1s;  /* Firefox 4 */
-            -webkit-transition: all 1s;   /* Safari 和 Chrome */
-            -o-transition: all 1s;    /* Opera */
             img {
                 width: 100%;
             }
@@ -282,6 +310,9 @@ export default {
                     line-height: 40px;
                     color: #8d8d8d;
                     cursor: pointer;
+                }
+                a.next {
+                    width: 60px;
                 }
                 span {
                     background-color: #47c9e5;
