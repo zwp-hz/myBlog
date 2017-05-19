@@ -1,7 +1,9 @@
 <template>
   	<div id="leftBox" ref="leftBox" class="col-lg-9 col-md-8 col-sm-12">
+        <!-- loading -->
+        <loadIng :loadingStatus="imgLoadStatus"></loadIng>
+        <!-- 文章 -->
         <div :class="imgLoadStatus?'articleList loadSucceed':'articleList'" :style="'height:'+Math.max.apply(Math,(articleHeight.length>=1?articleHeight:[0]))+'px;'">
-            <!-- 文章 -->
             <article v-for="(item,index) in article" :style="imgLoadStatus?('top:'+position[index].top+'px;left:'+position[index].left+'px;z-index:'+(10-index)+';'):'top:0;left:0;z-index:'+(10-index)+';'">
                 <div class="u_transition post-content-container">
                     <img v-if="item.images_src.length === 1" :src="item.images_src" @error="imgError();"/>
@@ -54,6 +56,7 @@
 
 <script>
 "use strict";
+import loadIng   from './loadIng.vue'
 
 export default {
     props: ["searchData","categoriesName"],
@@ -185,6 +188,9 @@ export default {
         searchData(val) {
             this.getArticlesList(1,"",val.content);
         }
+    },
+    components: {
+        loadIng
     }
 }
 </script>

@@ -1,17 +1,11 @@
 <template>
-    <div id="index" :style="!loadingStatus ? 'margin-bottom: 0;' : ''">
-        <!-- loading -->
-        <div class="loading g-r-center" v-if="!loadingStatus">
-            <div class="item-loader-container">
-                <div class="la-square-jelly-box la-2x">
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
+    <div id="index">
+        <!-- header -->
         <blogHeader v-on:searchCnt="searchList" :headerStatus="headerStatus"></blogHeader>
+        <!-- indexBg -->
         <div id="indexBg" ref="indexBg"></div>
-        <div id="main" :style="!loadingStatus ? 'height: 100vh; overflow-y: hidden;' : ''">
+        <!-- main -->
+        <div id="main">
             <div class="container">
                 <ul class="categories g-r-center">
                     <li @click="categoriesName = '全部'"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === '全部'}" :to="{path: '/'}">全部</router-link></li>
@@ -23,6 +17,7 @@
                 </div>
             </div>
         </div>
+        <!-- tags -->
         <blogFooter :tags="tags"></blogFooter>
     </div>
 </template>
@@ -48,7 +43,6 @@ export default {
                     ulr = res.body.data[0] +'?imageView2/1/q/90/interlace/1/w/'+ document.documentElement.clientWidth;
                     
                     that.$refs.indexBg.style.backgroundImage = 'url("'+ ulr +'")';
-                    that.loadingStatus = true;
             }
         },(res) => console.log(res));
 
@@ -84,7 +78,6 @@ export default {
     data() {
         return {
             searchData: {},
-            loadingStatus: false,
             msg: '',
             tags: [],
             headerStatus: false,

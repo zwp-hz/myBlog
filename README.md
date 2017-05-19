@@ -16,3 +16,7 @@ npm run server
 <!-- 备注 -->
 encodeURIComponent()   	中文编码
 decodeURIComponent()	中文解码
+
+搜索页
+详情页
+个人信息页
