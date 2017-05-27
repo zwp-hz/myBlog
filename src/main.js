@@ -28,7 +28,7 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
 
-// router.afterEach(to =>{document.title = to.meta.title})
+router.afterEach(to =>{document.title = to.meta.title})
 
 const app = new Vue({
 	store,

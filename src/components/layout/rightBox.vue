@@ -15,12 +15,12 @@
             </p>
         </div>
         <div class="box clear">
-            <hotArticle></hotArticle>
+            <hotArticle v-on:searchCnt="searchList"></hotArticle>
             <div class="searchBox col-xs-12 g-r-center">
                 <input @keyup.enter="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" name="" />
                 <a @click="search" href="javaScript:void(0);" class="glyphicon glyphicon-search"></a>
             </div>
-            <tags></tags>
+            <tags v-on:searchCnt="searchList"></tags>
         </div>
   	</div>
 </template>
@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         search() {
-            this.$emit('searchCnt', this.searchCnt);
+            this.$emit('searchCnt', {type: "_s", text: this.searchCnt});
         },
         getDayStatus(time) {
             let date = new Date(time),
@@ -76,6 +76,9 @@ export default {
             }
 
             return status;
+        },
+        searchList(text) {
+            this.$emit('searchCnt', text);
         }
     },
     watch: {
@@ -100,7 +103,14 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style type="scss">
+    .box .article{
+        color: #fff;
+        border-bottom: 1px solid #ccc !important;
+    }
+</style>
+
+<style lang="scss" scoped>
     #rightBox {
         position: relative;
         display: block;
@@ -146,14 +156,11 @@ export default {
                 font-size: 30px;
             }
         }
+
         .box {
             padding-top: 10px;
             border-radius: 10px;
             background-color: rgba(0,0,0,.3);
-            .article {
-                color: #fff;
-                border-bottom: 1px solid #ccc !important;
-            }
         }
 
         .searchBox {

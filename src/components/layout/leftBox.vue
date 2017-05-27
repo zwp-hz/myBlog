@@ -3,10 +3,12 @@
         <!-- loading -->
         <loadIng :loadingStatus="imgLoadStatus"></loadIng>
         <!-- 文章 -->
-        <div :class="imgLoadStatus?'articleList loadSucceed':'articleList'" :style="'height:'+Math.max.apply(Math,(articleHeight.length>=1?articleHeight:[0]))+'px;'">
+        <div v-if="article.length >= 1" :class="imgLoadStatus?'articleList loadSucceed':'articleList'" :style="'height:'+Math.max.apply(Math,(articleHeight.length>=1?articleHeight:[0]))+'px;'">
             <article v-for="(item,index) in article" :style="imgLoadStatus?('top:'+position[index].top+'px;left:'+position[index].left+'px;z-index:'+(10-index)+';'):'top:0;left:0;z-index:'+(10-index)+';'">
                 <div class="u_transition post-content-container">
-                    <img v-if="item.images_src.length === 1" :src="item.images_src" @error="imgError();"/>
+                    <div v-if="item.images_src.length === 1" class="articleImg">
+                        <img @mouseover="item.imgMouseStatus=true" @mouseout="item.imgMouseStatus=false" :class="{u_transition: true,scale: item.imgMouseStatus}" :src="item.images_src" @error="imgError();"/>
+                    </div>
                     <div v-else class="swiper-container">
                         <swiper :options="swiperOption[index]" ref="mySwiper">
                             <swiper-slide v-for="banner in item.images_src">
@@ -20,9 +22,12 @@
                         <h2><a class="u_transition u_hover_blue" href="javaScript:void(0);">{{item.title}}</a></h2>
                         <strong>{{item.content}}</strong>
                         <p>
-                            <router-link class="article_categories" v-for="(categories,index) in item.categories" :to="{path: ''}">
-                                {{index > 0 ? '，':''}}{{categories}}
-                            </router-link>
+                            <span style="float: left;" v-for="(categories,index) in item.categories">
+                                {{index < item.categories.length-1 ? '，':''}}
+                                <a @click="$emit('searchCnt', categories)" class="article_categories u_transition u_hover_blue">
+                                    {{categories}}
+                                </a>
+                            </span>
                             <router-link class="review u_transition u_hover_blue_bg":to="{path: ''}">
                                 <i class="glyphicon glyphicon-comment"></i>
                                 {{item.review}}
@@ -32,22 +37,26 @@
                                 <span><i class="glyphicon glyphicon-eye-open"></i>{{item.browsing}}</span>
                             </time>
                         </p>
-                    </div>
+                    </div> 
                 </div>
             </article>
+        </div>
+        <div class="noParam" v-else>
+            <img src="../../images/noParam.png" alt="暂无数据" />
+            <p>找不到相关 "{{searchText}}" 数据</p>
         </div>
         <!-- 分页 -->
         <div v-if="pageNum > 1 && imgLoadStatus" class="pagination g-c-center">
             <ul class="page-numbers g-c-center">
-                <li v-if="page > 1" @click="getArticlesList(Number(page)-1,'NoFirst')">
-                    <router-link class="next page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: Number(page)-1}}">上一页</router-link>
+                <li v-if="page > 1" @click="pageBtn(Number(page)-1,'NoFirst')">
+                    <a class="next page-numbers u_transition u_hover_blue">上一页</a>
                 </li>
-                <li v-for="(item,index) in pageNum" @click="getArticlesList(index+1,'NoFirst')">
+                <li v-for="(item,index) in pageNum" @click="pageBtn(index+1,'NoFirst')">
                     <span v-if="index + 1 == page" class="page-numbers current">{{index+1}}</span>
-                    <router-link v-else class="page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: index+1}}" >{{index+1}}</router-link>
+                    <a v-else class="page-numbers u_transition u_hover_blue">{{index+1}}</a>
                 </li>
-                <li v-if="pageNum > page" @click="getArticlesList(Number(page)+1,'NoFirst')">
-                    <router-link class="next page-numbers u_transition u_hover_blue" :to="{path: '/', query: {page: Number(page)+1}}">下一页</router-link>
+                <li v-if="pageNum > page" @click="pageBtn(Number(page)+1,'NoFirst')">
+                    <a class="next page-numbers u_transition u_hover_blue">下一页</a>
                 </li>
             </ul>
         </div>
@@ -62,19 +71,20 @@ export default {
     props: ["searchData","categoriesName"],
     mounted() {
         //获取文章列表
-        let page = this.$route.query.page ? Number(this.$route.query.page) : 1;
+        let page = this.$route.query.page ? Number(this.$route.query.page) : 1
 
-        if (this.$route.query.searchCnt) {
-            this.getArticlesList(page,"",decodeURIComponent(this.$route.query.searchCnt));
-        } else {
-            this.getArticlesList(page);
+        for (var i in this.$route.query) {
+            this.searchText = this.$route.query[i];
         }
+
+        this.getArticlesList(page,"",this.searchText);
     },
     data() {
         return {
             page: null,
             pageNum: null,
             imgLoadStatus: false,
+            searchText: "",
             article: [],
             articleHeight: [],
             position: {},
@@ -83,7 +93,7 @@ export default {
     },
     methods: {
         /** 获取文章类别
-          * @data   page: 分页, type: {hot: '最新动态'}, searchCnt: 搜索内容
+          * @data   page: 分页, type: {hot: '最新动态',NoFirst: '区分是否是一次访问'}, searchCnt: 搜索内容
          */
         getArticlesList(page,type,searchCnt) {
             let that = this,
@@ -94,24 +104,28 @@ export default {
             that.position = [];
             that.imgLoadStatus = false;
 
-            that.$http.jsonp(apiHost + 'api/getArticlesList?page='+page+'&categories='+that.categoriesName+(searchCnt?'&searchCnt='+searchCnt:'')).then((res) => {
+            that.$http.jsonp(apiHost + 'api/getArticlesList?page='+page+(that.categoriesName?'&categories='+that.categoriesName:'')+(searchCnt?'&searchCnt='+searchCnt:'')).then((res) => {
                 let imgWidth = Math.round((that.$refs.leftBox.offsetWidth - 60) / 2),
                     number = 0;
 
                 if (res.body.code == 0) {
 
                     if (type == "NoFirst" || searchCnt)
-                        document.getElementsByTagName('body')[0].scrollTop = 320;
+                        document.getElementsByTagName('body')[0].scrollTop = 0;
 
                     let data = res.body.data;
 
                     that.page = data.current_page;
                     that.pageNum = data.last_page;
 
+                    if(data.data.length <= 0)
+                        that.imgLoadStatus = true;
+
                     for (var i in data.data) {
                         let x = i;
 
                         data.data[i].index = Number(i);
+                        data.data[i].imgMouseStatus = false;
                         data.data[i].images_src.forEach( ( item, j ) => {
                             let $img = new Image(),
                                 src = imgHost + item + '?imageView2/2/w/' + imgWidth + '/interlace/1&v=1';
@@ -175,6 +189,10 @@ export default {
                 }
             });
         },
+        pageBtn(num,type) {
+            this.$router.push({query: {_s: this.searchText, page: num}});
+            this.getArticlesList(num,type,this.searchText);
+        },
         imgError() {
             var img = event.srcElement;
             img.src = "../dist/images/image_error.png";
@@ -186,6 +204,7 @@ export default {
     		this.getArticlesList(1);
     	},
         searchData(val) {
+            this.searchText = val.content;
             this.getArticlesList(1,"",val.content);
         }
     },
@@ -195,7 +214,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    #leftBox {
+        padding-bottom: 20px;
+    }
     .articleList {
         position: relative;
         width: 100%;
@@ -214,9 +236,21 @@ export default {
             position: absolute;
             width: 50%;
             padding-right: 15px;
-            img {
+            .articleImg {
                 width: 100%;
+                overflow: hidden;
+                cursor: pointer;
+                img {
+                    width: 100%;
+                    &.scale {
+                        transform: scale(1.2);
+                        -webkit-transform: scale(1.2);
+                        -moz-transform: scale(1.2);
+                        -o-transform: scale(1.2);
+                    }
+                }
             }
+            
             .box {
                 height: 264px;
                 padding-top: 20px;
@@ -254,11 +288,12 @@ export default {
                     padding: 25px 0 48px 13%;
                     margin-right: 40%;
                     border-top: 1px solid #e9e9e9;
+
                     .article_categories {
                         display: block;
                         float: left;
                         line-height: 20px;
-                        color: #8d8d8d!important;
+                        color: #8d8d8d;
                         font-size: 13px;
                     }
                     time{
@@ -290,13 +325,21 @@ export default {
         }
     }
 
-    .swiper-wrapper {
-        display: -webkit-box;
-        -webkit-box-pack:center;
-        -webkit-box-align:center;
+    .noParam {
+        padding-top: 50px;
+        text-align: center;
+        img {
+            width: 30%;
+        }
+        p {
+            line-height: 50px;
+            font-size: 20px;
+            color: #8d8d8d;
+        }
     }
 
     .pagination {
+        margin: 20px 0 0 0;
         width: 100%;
         ul {
             display: -webkit-box;

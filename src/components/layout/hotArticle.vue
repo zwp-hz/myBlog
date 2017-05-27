@@ -1,19 +1,19 @@
 <template>
     <div class="recent_posts col-xs-12">
         <h3>最新动态</h3>
-        <div class="article clear" v-for="item in articleList">
-            <router-link class="images fl" :to="{}">
+        <div class="article g-r-center" v-for="item in articleList">
+            <router-link class="images" :to="{}">
                 <img :src="item.images_src[0]" alt="" @error="imgError()" />
                 <span>{{item.review}}</span>
                 <b class="backImg u_transition u_hover_show"><i class="glyphicon glyphicon-link"></i></b>
             </router-link>
-            <div class="rl">
+            <div style="flex: 1;">
                 <div class="categories">
                     <span v-for="(categories,index) in item.categories">
                         {{index > 0 ? '，':''}}
-                        <router-link class="u_transition u_hover_gray" :to="{}">
+                        <a class="u_transition u_hover_gray" @click="$emit('searchCnt', {type: 'Category', text: categories})">
                             {{categories}}
-                        </router-link>
+                        </a>
                     </span>
                 </div>
                 <router-link class="title u_transition u_hover_blue" :to="{}">{{item.title}}</router-link>
@@ -102,9 +102,11 @@ export default {
                     border-radius: 50%;
                 }
             }
+            .categories {
+                span { color: #fff; }
+            }
             .title{
                 display:-webkit-box;
-                width: 60%;
                 font-size: 16px;
                 font-weight: 700;
                 -webkit-box-orient: vertical;

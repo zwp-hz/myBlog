@@ -14,17 +14,6 @@
 <script>
 "use strict";
 export default {
-    mounted() {
-        let apiHost = this.$store.state.APIHOST,
-            that = this;
-
-        //获取标签列表
-        that.$http.jsonp(apiHost + 'api/getTagsList').then((res) => {
-            if (res.body.code == 0) {
-                that.tags = res.body.data;
-            }
-        });
-    },
     data() {
         return {
         	img_404_url: this.$store.state.IMGHOST + 'error_404.png?imageView2/2/w/' + parseInt(document.documentElement.clientWidth*0.35) + '/interlace/1&v=1'

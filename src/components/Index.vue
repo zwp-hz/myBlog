@@ -12,13 +12,13 @@
                     <li @click="categoriesName = item.name" v-for="item in categories"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === item.name}" :to="{path: '/', query: {categories: encodeURIComponent(item.name)}}">{{item.name}}</router-link></li>
                 </ul>
                 <div class="content">
-                    <leftBox :searchData="searchData" :categoriesName="categoriesName"></leftBox>
+                    <leftBox v-on:searchCnt="searchList" :categoriesName="categoriesName"></leftBox>
                     <rightBox v-on:searchCnt="searchList" :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
                 </div>
             </div>
         </div>
         <!-- tags -->
-        <blogFooter :tags="tags"></blogFooter>
+        <blogFooter v-on:searchCnt="searchList"></blogFooter>
     </div>
 </template>
 
@@ -30,11 +30,12 @@ import blogFooter   from './layout/footer.vue'
 import leftBox      from './layout/leftBox.vue'
 import rightBox     from './layout/rightBox.vue'
 
-
 export default {
     mounted() {
         let that = this,
             apiHost = this.$store.state.APIHOST;
+
+        document.getElementsByTagName('body')[0].scrollTop = 0;
 
         //获取必应图片
         that.$http.jsonp(apiHost + 'api/bing').then((res) => {
@@ -55,21 +56,23 @@ export default {
 
         window.onscroll = window.onload = () => {
 
-            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
-                clientHeight = document.documentElement.clientHeight,   //内容可视区域的高度
-                scrollHeight = document.documentElement.scrollHeight;   //滚动条高度
+            if (that.$refs.indexBg) {
+                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+                    clientHeight = document.documentElement.clientHeight,   //内容可视区域的高度
+                    scrollHeight = document.documentElement.scrollHeight;   //滚动条高度
 
-            this.scrollTop = scrollTop;
+                this.scrollTop = scrollTop;
 
-            if(scrollHeight - scrollTop - clientHeight > 560 || clientHeight === scrollHeight) {
-                 that.$refs.indexBg.style.top = scrollTop + "px";
-                 this.rightBoxStatus = false;
-            } else {
-                 that.$refs.indexBg.style.top = scrollHeight - clientHeight - 560 + "px";
-                 this.rightBoxStatus = true;
+                if(scrollHeight - scrollTop - clientHeight > 560 || clientHeight === scrollHeight) {
+                     that.$refs.indexBg.style.top = scrollTop + "px";
+                     this.rightBoxStatus = false;
+                } else {
+                     that.$refs.indexBg.style.top = scrollHeight - clientHeight - 560 + "px";
+                     this.rightBoxStatus = true;
+                }
+
+                that.headerStatus = scrollTop > 0 ? true : false;
             }
-
-            that.headerStatus = scrollTop > 0 ? true : false;
         }
 
         // this.$store.dispatch("increment",1)
@@ -77,31 +80,19 @@ export default {
     },
     data() {
         return {
-            searchData: {},
-            msg: '',
-            tags: [],
             headerStatus: false,
             rightBoxStatus: false,
             scrollTop: null,
-            article: [],
             categories: [],
             categoriesName: (typeof this.$route.query.categories === "undefined" ? "全部" : decodeURIComponent(this.$route.query.categories))
         }
     },
     methods: {
         searchList(text) {
-            let data = {page: 1};
-            if (this.$route.query.categories)
-                data.categories = decodeURIComponent(this.$route.query.categories)
-            if (text)
-                data.searchCnt = encodeURIComponent(text)
+            var data = {};
 
-            this.$router.push( {path: '/', query: data} );
-
-            this.searchData = {
-                date: Date.parse(new Date()),
-                content: text
-            };
+            data[text.type] = text.text;
+            this.$router.push( {path: '/searchResult', query: data} );
         }
     },
     components: {

@@ -1,9 +1,9 @@
 <template>
     <div class="tags col-xs-12">
         <h3>tags</h3>
-        <router-link class="fl u_transition u_hover_blue_bg" v-for="item in tags" :to="{}">
+        <a class="fl u_transition u_hover_blue_bg" @click="$emit('searchCnt', {type: 'Tag', text: item.name})" v-for="item in tags">
             {{item.name}}
-        </router-link>
+        </a>
     </div>
 </template>
 

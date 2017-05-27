@@ -4,11 +4,13 @@
         <blogHeader v-on:searchCnt="searchList" :footerClass="footerClass"></blogHeader>
         <div class="titlebar clear">
             <div class="container">
-                <h1>"{{searchCnt}}"的搜索结果</h1>
+                <h1 v-if="searchCnt.type=='_s'">"{{searchCnt.text}}"的搜索结果</h1>
+                <h1 v-else>{{searchCnt.type}}：{{searchCnt.text}}</h1>
                 <p class="breadcrumbs">
                     <router-link :to="{path: '/'}">首页</router-link>
                     <span>&gt;</span>
-                    <strong>"{{searchCnt}}"的搜索结果</strong>
+                    <strong v-if="searchCnt.type=='_s'">"{{searchCnt.text}}"的搜索结果</strong>
+                    <strong v-else>{{searchCnt.text}}</strong>
                 </p>
             </div>
         </div>
@@ -35,23 +37,32 @@ import rightBox     from './layout/rightBox.vue'
 
 export default {
     mounted() {
-        this.searchCnt = this.$route.query._s;
+        for (var i in this.$route.query) {
+            this.searchCnt = {type: i,text: this.$route.query[i]};
+        }
     },
     data() {
         return {
         	footerClass: "search_detail",
-        	searchCnt: "",
+        	searchCnt: {
+                type: "",
+                text: ""
+            },
             searchData: {}
         }
     },
     methods: {
         searchList(text) {
+            console.log(text)
+            var data = {};
+
+            data[text.type] = text.text;
             this.searchCnt = text;
-            this.$router.push({ query: {_s: text}} );
+            this.$router.push({ query: data} );
 
             this.searchData = {
                 date: Date.parse(new Date()),
-                content: text
+                content:  text.text
             };
         }
     },

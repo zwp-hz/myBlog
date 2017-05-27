@@ -10,7 +10,6 @@ const state = {
 
 const actions = {
     increment (store,type) {
-    	store.zwp = 3;
       	console.log(type)
     }
  }

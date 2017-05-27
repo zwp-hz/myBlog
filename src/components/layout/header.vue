@@ -1,8 +1,8 @@
 <template>
-  	<div id="header" :class="{ fixed: headerStatus }">
+  	<div id="header" :class="{ fixed: headerStatus, search_detail: footerClass}">
   		<div class="container g-r-center">
-  			<a v-if="!headerStatus" class="logo" href="javaScritp:void(0);"><img src="../../images/logo_white.png" /></a>
-            <a v-else class="logo" href="javaScritp:void(0);"><img src="../../images/logo_black.png" /></a>
+  			<router-link v-if="!headerStatus && !footerClass" :to="{path: '/'}" class="logo" href="javaScritp:void(0);"><img src="../../images/logo_white.png" /></router-link>
+        <router-link v-else class="logo" :to="{path: '/'}" href="javaScritp:void(0);"><img src="../../images/logo_black.png" /></router-link>
   			<nav class="g-r-center">
   				<ul class="menuList clearfix">
 		  			<li><router-link :to="{path: '/'}">首頁</router-link></li>
@@ -14,7 +14,7 @@
   		</div>
         <div class="header-search" :class="{ search_show: search_status, fixed: headerStatus }">
             <div class="container g-r-center">
-                <input @keyup.enter="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" />
+                <input @keyup.enter="search" ref="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" />
                 <a @click="search" href="javaScritp:void(0);" class="glyphicon glyphicon-search searchBtn"></a>
                 <a @click="search_status = !search_status" href="javaScritp:void(0);" class="glyphicon removeBtn">×</a>
             </div>
@@ -25,7 +25,7 @@
 <script>
 "use strict";
 export default {
-    props: ["headerStatus"],
+    props: ["headerStatus","footerClass"],
     data () {
         return {
         	search_status: false,
@@ -34,7 +34,13 @@ export default {
     },
     methods: {
         search() {
-            this.$emit('searchCnt', this.searchCnt);
+            this.$emit('searchCnt', {type: "_s", text: this.searchCnt});
+        }
+    },
+    watch: {
+        search_status(val) {
+            if (val)
+                this.$refs.search.focus();
         }
     }
 }

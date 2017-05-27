@@ -35,7 +35,7 @@ body, ul, li, ol, li, dl, dt, dd, form, h1, h2, h3, h4, p, div, hr, tabel, tr, t
 }
 body { position: relative; font-size: 14px; font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif !important; }
 img { border: 0 none; vertical-align: top;}
-a { text-decoration: none !important; outline: none; hide-focus: expression(this.hideFocus=true) }
+a { text-decoration: none !important; cursor: pointer; outline: none; hide-focus: expression(this.hideFocus=true) }
 li { list-style: none; vertical-align:top;}
 input{ font-size: 0.14rem; border: 0; background: none; float: left; outline: none; }
 ::-webkit-input-placeholder { color: #999; }
@@ -67,6 +67,12 @@ input{ font-size: 0.14rem; border: 0; background: none; float: left; outline: no
         height: 12px;
         margin: 0 3px;
     }
+}
+
+.swiper-wrapper {
+    display: -webkit-box !important;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
 }
 
 /* 元件 */
