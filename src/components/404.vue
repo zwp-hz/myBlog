@@ -1,7 +1,7 @@
 <template>
     <div class="error404">
     	<div class="main">
-    		<img class="img_404" :src="img_404_url" alt="" />
+    		<img ondragstart="return false;" class="img_404" :src="img_404_url" alt="" />
     		<p>很抱歉，您访问的页面不在地球上...</p>
     		<div class="buttonBox">
     			<router-link href="javaScript:void(0);" class="back_index" :to="{path: '/'}">返回首页</router-link>

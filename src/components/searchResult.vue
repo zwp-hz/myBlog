@@ -1,11 +1,11 @@
 <template>
     <div id="search">
         <!-- header -->
-        <blogHeader v-on:searchCnt="searchList" :footerClass="footerClass"></blogHeader>
+        <blogHeader v-on:searchCnt="searchList" :elseClass="elseClass"></blogHeader>
         <div class="titlebar clear">
             <div class="container">
                 <h1 v-if="searchCnt.type=='_s'">"{{searchCnt.text}}"的搜索结果</h1>
-                <h1 v-else>{{searchCnt.type}}：{{searchCnt.text}}</h1>
+                <h1 v-else>{{searchCnt.type=='Category'?'分类':searchCnt.type}}：{{searchCnt.text}}</h1>
                 <p class="breadcrumbs">
                     <router-link :to="{path: '/'}">首页</router-link>
                     <span>&gt;</span>
@@ -24,7 +24,7 @@
             </div>
         </div>
         <!-- footer -->
-        <blogFooter v-on:searchCnt="searchList" :footerClass="footerClass"></blogFooter>
+        <blogFooter v-on:searchCnt="searchList" :elseClass="elseClass"></blogFooter>
     </div>
 </template>
 
@@ -40,10 +40,13 @@ export default {
         for (var i in this.$route.query) {
             this.searchCnt = {type: i,text: this.$route.query[i]};
         }
+
+        if (!this.searchCnt.type) 
+            this.searchCnt = {type: "Category",text: "全部"};
     },
     data() {
         return {
-        	footerClass: "search_detail",
+        	elseClass: "search_detail",
         	searchCnt: {
                 type: "",
                 text: ""
@@ -53,7 +56,6 @@ export default {
     },
     methods: {
         searchList(text) {
-            console.log(text)
             var data = {};
 
             data[text.type] = text.text;
@@ -92,7 +94,6 @@ export default {
 		.breadcrumbs {
 			float: right;
 			a,strong {
-				font-weight: normal;
 				color: #8d8d8d!important;
 			}
 			span {
@@ -100,4 +101,8 @@ export default {
 			}
 		}
 	}
+
+    #rightBox .box {
+        background-color: null;
+    }
 </style>

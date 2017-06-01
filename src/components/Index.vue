@@ -38,7 +38,7 @@ export default {
         document.getElementsByTagName('body')[0].scrollTop = 0;
 
         //获取必应图片
-        that.$http.jsonp(apiHost + 'api/bing').then((res) => {
+        this.$http.jsonp(apiHost + 'api/bing').then((res) => {
             if (res.body.code === 0) {
                 let $img = new Image(),
                     ulr = res.body.data[0] +'?imageView2/1/q/90/interlace/1/w/'+ document.documentElement.clientWidth;
@@ -48,9 +48,9 @@ export default {
         },(res) => console.log(res));
 
         //获取分类列表
-        that.$http.jsonp(apiHost + 'api/getCategoryList').then((res) => {
+        this.$http.jsonp(apiHost + 'api/getCategoryList').then((res) => {
             if (res.body.code == 0) {
-                this.categories = res.body.data;
+                that.categories = res.body.data;
             }
         });
 

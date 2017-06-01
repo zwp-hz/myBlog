@@ -6,29 +6,29 @@
         <div v-if="article.length >= 1" :class="imgLoadStatus?'articleList loadSucceed':'articleList'" :style="'height:'+Math.max.apply(Math,(articleHeight.length>=1?articleHeight:[0]))+'px;'">
             <article v-for="(item,index) in article" :style="imgLoadStatus?('top:'+position[index].top+'px;left:'+position[index].left+'px;z-index:'+(10-index)+';'):'top:0;left:0;z-index:'+(10-index)+';'">
                 <div class="u_transition post-content-container">
-                    <div v-if="item.images_src.length === 1" class="articleImg">
-                        <img @mouseover="item.imgMouseStatus=true" @mouseout="item.imgMouseStatus=false" :class="{u_transition: true,scale: item.imgMouseStatus}" :src="item.images_src" @error="imgError();"/>
-                    </div>
+                    <router-link v-if="item.images_src.length === 1" class="articleImg" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">
+                        <img ondragstart="return false;" @mouseover="item.imgMouseStatus=true" @mouseout="item.imgMouseStatus=false" :class="{u_transition: true,scale: item.imgMouseStatus}" :src="item.images_src" @error="imgError();"/>
+                    </router-link>
                     <div v-else class="swiper-container">
                         <swiper :options="swiperOption[index]" ref="mySwiper">
                             <swiper-slide v-for="banner in item.images_src">
-                                <img class="swiper-lazy" :data-src="banner" @error="imgError();"/>
+                                <img ondragstart="return false;" class="swiper-lazy" :data-src="banner" @error="imgError();"/>
                                 <div class="swiper-lazy-preloader"></div>
                             </swiper-slide>
                         </swiper>
                         <div :class="'swiper-pagination swiper-pagination'+index+' swiper-pagination-bullets'"></div>
                     </div>
                     <div class="box">
-                        <h2><a class="u_transition u_hover_blue" href="javaScript:void(0);">{{item.title}}</a></h2>
+                        <h2><router-link class="u_transition u_hover_blue" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">{{item.title}}</router-link></h2>
                         <strong>{{item.content}}</strong>
                         <p>
                             <span style="float: left;" v-for="(categories,index) in item.categories">
-                                {{index < item.categories.length-1 ? '，':''}}
-                                <a @click="$emit('searchCnt', categories)" class="article_categories u_transition u_hover_blue">
+                                {{index < item.categories.length-1 ? ', ':''}}
+                                <a @click="$emit('searchCnt', {type: 'Category', text: categories})" class="article_categories u_transition u_hover_blue">
                                     {{categories}}
                                 </a>
                             </span>
-                            <router-link class="review u_transition u_hover_blue_bg":to="{path: ''}">
+                            <router-link class="review u_transition u_hover_blue_bg" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">
                                 <i class="glyphicon glyphicon-comment"></i>
                                 {{item.review}}
                             </router-link>
@@ -42,7 +42,7 @@
             </article>
         </div>
         <div class="noParam" v-else>
-            <img src="../../images/noParam.png" alt="暂无数据" />
+            <img ondragstart="return false;" src="../../images/noParam.png" alt="暂无数据" />
             <p>找不到相关 "{{searchText}}" 数据</p>
         </div>
         <!-- 分页 -->
@@ -74,7 +74,8 @@ export default {
         let page = this.$route.query.page ? Number(this.$route.query.page) : 1
 
         for (var i in this.$route.query) {
-            this.searchText = this.$route.query[i];
+            if (i == "_s" || i == "Tag" || i == "Category")
+                this.searchText = this.$route.query[i];
         }
 
         this.getArticlesList(page,"",this.searchText);
@@ -190,11 +191,18 @@ export default {
             });
         },
         pageBtn(num,type) {
-            this.$router.push({query: {_s: this.searchText, page: num}});
+            let data = {
+                page: num
+            }
+
+            if (this.searchText) 
+                data._s = this.searchText
+            
+            this.$router.push({query: data});
             this.getArticlesList(num,type,this.searchText);
         },
         imgError() {
-            var img = event.srcElement;
+            let img = event.srcElement;
             img.src = "../dist/images/image_error.png";
             img.onerror = null;
         }
@@ -237,6 +245,7 @@ export default {
             width: 50%;
             padding-right: 15px;
             .articleImg {
+                display: block;
                 width: 100%;
                 overflow: hidden;
                 cursor: pointer;
