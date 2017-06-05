@@ -46,6 +46,7 @@ export default {
         background: #262626;
         &.search_detail {
             position: static;
+            height: auto;
         }
         .container {
             margin: 0 auto;

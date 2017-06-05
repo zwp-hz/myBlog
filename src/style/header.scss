@@ -6,14 +6,19 @@
 	height: 99px;
 	transition: all .5s;
 	&.search_detail {
-		position: static;
+		position: relative;
 		border-bottom: 1px solid #ebebeb;
-		ul a {
-			color: #3d3d3d !important;
-		}
+
+		.headerBox .menu .col-sm-menu .menuList li a,
 		.searchBtn {
-			color: #3d3d3d !important;
+			color: #3d3d3d;
 		}
+		.c-hamburger span,
+		.c-hamburger span::before,
+		.c-hamburger span::after {
+			background-color: #3d3d3d;
+		}
+
 	}
 	&.fixed {
 		position: fixed;
@@ -21,25 +26,40 @@
 		top: 0;
 		height: 70px;
 		background: #fff;
-		a { color: #000 !important; }
+		.headerBox .menu .col-sm-menu .menuList li a { color: #000; }
+		.c-hamburger span,
+		.c-hamburger span::before,
+		.c-hamburger span::after {
+			background-color: #3d3d3d;
+		}
 	}
 
-	.container {
+	.headerBox {
 		position: relative;
 		height: 100%;
 		margin-right: auto;
 		margin-left: auto;
 		img { width: 100px; }
-		nav { justify-content: flex-end; }
-	}
-
-	.menuList {
-		float: right;
-		padding-right: 20px;
-		li {
-			float: left;
-			padding:  0 15px;
-			a { color: #fff; }
+		.menu {
+			flex: 1;
+			span { float: right;}
+			nav, .c-hamburger{
+				display: none;
+				justify-content: flex-end;
+			}
+			.col-sm-menu {
+				display: block;
+				.menuList {
+					float: right;
+					padding-right: 20px;
+					li {
+						float: left;
+						padding:  0 15px;
+						a { color: #fff; }
+					}
+				}
+				a{ line-height: 20px; }
+			}
 		}
 	}
 
@@ -89,4 +109,139 @@
 		    width: 100%;
 		}
 	}
+}
+
+.col-xs-menu {
+	display: block;
+	position: absolute;
+	z-index: 1000;
+	left: 0;
+	top: 100%;
+	width: 100%;
+	height: 0;
+	overflow-y: hidden;
+	background: #232323;
+	&.is_active {
+		height: 230px;
+	}
+	li {
+		border-bottom: 1px solid #403f3f;
+		a {
+			display: block;
+			padding: 16px 0;
+			color: #fff !important;
+		}
+	}
+	.searchBox {
+		input {
+			flex: 1;
+			line-height: 70px;
+			font-size: 20px;
+			color: #fff;
+		}
+		a {
+			display: block;
+			width: 50px;
+			text-align: center;
+			line-height: 70px;
+			font-size: 20px;
+			font-weight: normal;
+			color: #fff !important;
+		}
+	}
+}
+
+// 菜单图标
+.c-hamburger {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    width: 24px;
+    height: 20px;
+    font-size: 0;
+    text-indent: -9999px;
+    appearance: none;
+    box-shadow: none;
+    border-radius: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.c-hamburger:focus {
+    outline: none;
+}
+
+.c-hamburger span {
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 0px;
+    right: 0px;
+    height: 2px;
+    background: #fff;
+}
+
+.c-hamburger span::before,
+.c-hamburger span::after {
+    position: absolute;
+    display: block;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    content: "";
+}
+
+.c-hamburger span::before {
+  top: -9px;
+}
+
+.c-hamburger span::after {
+  bottom: -9px;
+}
+
+.c-hamburger--htx {
+  background-color: transparent;
+}
+
+.c-hamburger--htx span::before,
+.c-hamburger--htx span::after {
+  transition-duration: 0.3s, 0.3s;
+  transition-delay: 0.3s, 0s;
+}
+
+.c-hamburger--htx span::before {
+  transition-property: top, transform;
+}
+
+.c-hamburger--htx span::after {
+  transition-property: bottom, transform;
+}
+
+.c-hamburger--htx.is_active span {
+  background: transparent!important;
+}
+
+.c-hamburger--htx.is_active span::before {
+    top: 0;
+    transform: rotate(45deg);
+    width: 26px;
+    left: -4px;
+    margin-left: 3px;
+}
+
+.c-hamburger--htx.is_active span::after {
+    bottom: 0;
+    transform: rotate(-45deg);
+    width: 26px;
+    left: -4px;
+    margin-left: 3px;
+}
+
+.c-hamburger--htx.is_active span::before,
+.c-hamburger--htx.is_active span::after {
+    transition-delay: 0s, 0.3s;
 }

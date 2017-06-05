@@ -12,7 +12,7 @@
                     <div v-else class="swiper-container">
                         <swiper :options="swiperOption[index]" ref="mySwiper">
                             <swiper-slide v-for="banner in item.images_src">
-                                <img ondragstart="return false;" class="swiper-lazy" :data-src="banner" @error="imgError();"/>
+                                <img style="width: 100%;" ondragstart="return false;" class="swiper-lazy" :data-src="banner" @error="imgError();"/>
                                 <div class="swiper-lazy-preloader"></div>
                             </swiper-slide>
                         </swiper>
@@ -22,22 +22,24 @@
                         <h2><router-link class="u_transition u_hover_blue" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">{{item.title}}</router-link></h2>
                         <strong>{{item.content}}</strong>
                         <p>
-                            <span style="float: left;" v-for="(categories,index) in item.categories">
-                                {{index < item.categories.length-1 ? ', ':''}}
-                                <a @click="$emit('searchCnt', {type: 'Category', text: categories})" class="article_categories u_transition u_hover_blue">
-                                    {{categories}}
-                                </a>
-                            </span>
+                            <b class="article_categories">
+                                <span v-for="(categories,index) in item.categories">
+                                    {{index == 0 ? '':', '}}
+                                    <a @click="$emit('searchCnt', {type: 'Category', text: categories})" class="u_transition u_hover_blue">
+                                        {{categories}}
+                                    </a>
+                                </span>
+                            </b>
                             <router-link class="review u_transition u_hover_blue_bg" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">
                                 <i class="glyphicon glyphicon-comment"></i>
                                 {{item.review}}
                             </router-link>
                             <time class="g-c-center">
-                                <span><i class="glyphicon glyphicon-time"></i>{{Date.parse(item.creation_at) | dateFormat('YYYY-MM-DD')}}</span>
+                                <span class="g-r-center"><i class="glyphicon glyphicon-time"></i>{{Date.parse(item.creation_at) | dateFormat('YYYY/MM/DD')}}</span>
                                 <span><i class="glyphicon glyphicon-eye-open"></i>{{item.browsing}}</span>
                             </time>
                         </p>
-                    </div> 
+                    </div>
                 </div>
             </article>
         </div>
@@ -71,11 +73,25 @@ export default {
     props: ["searchData","categoriesName"],
     mounted() {
         //获取文章列表
-        let page = this.$route.query.page ? Number(this.$route.query.page) : 1
+        let page = this.$route.query.page ? Number(this.$route.query.page) : 1,
+            that = this, timer;
 
         for (var i in this.$route.query) {
             if (i == "_s" || i == "Tag" || i == "Category")
                 this.searchText = this.$route.query[i];
+        }
+
+        //窗口改变
+        window.onresize = () => {
+            clearTimeout(timer);
+
+            let clientWidth = document.documentElement.clientWidth,
+                offsetWidth = that.$refs.leftBox.offsetWidth,
+                imgWidth = Math.round((clientWidth>=768)?((offsetWidth - 60) / 2):(offsetWidth - 30));
+
+            timer = setTimeout(function() {
+                that.setArticleLocation({type: "onresize",imgWidth: imgWidth,clientWidth: clientWidth,ratio: imgWidth/that.position[0].width},that.article);
+            },100);
         }
 
         this.getArticlesList(page,"",this.searchText);
@@ -85,6 +101,7 @@ export default {
             page: null,
             pageNum: null,
             imgLoadStatus: false,
+            load_success_number: 0,
             searchText: "",
             article: [],
             articleHeight: [],
@@ -101,13 +118,16 @@ export default {
                 imgHost = this.$store.state.IMGHOST,
                 apiHost = this.$store.state.APIHOST;
 
-            that.articleHeight = [];
             that.position = [];
+            that.article = [];
             that.imgLoadStatus = false;
+            that.load_success_number = 0;
+            that.swiperOption = {};
 
             that.$http.jsonp(apiHost + 'api/getArticlesList?page='+page+(that.categoriesName?'&categories='+that.categoriesName:'')+(searchCnt?'&searchCnt='+searchCnt:'')).then((res) => {
-                let imgWidth = Math.round((that.$refs.leftBox.offsetWidth - 60) / 2),
-                    number = 0;
+                let clientWidth = document.documentElement.clientWidth,
+                    offsetWidth = that.$refs.leftBox.offsetWidth,
+                    imgWidth = Math.round((clientWidth>=768)?((offsetWidth - 60) / 2):(offsetWidth - 30));
 
                 if (res.body.code == 0) {
 
@@ -129,48 +149,17 @@ export default {
                         data.data[i].imgMouseStatus = false;
                         data.data[i].images_src.forEach( ( item, j ) => {
                             let $img = new Image(),
-                                src = imgHost + item + '?imageView2/2/w/' + imgWidth + '/interlace/1&v=1';
+                                src = imgHost + item + '?imageView2/2/w/' + imgWidth + '/interlace/1';
 
                             if (j === 0) {
                                 data.data[i].images_src[j] = $img.src = src;
                                 
                                 $img.onload = () => {
-                                    setArticleLocation("load",event);
+                                    this.setArticleLocation({type: "load",event: event,imgHeight: $img.height,imgWidth: imgWidth,clientWidth: clientWidth},data.data);
                                 }
 
                                 $img.onerror = () => {
-                                    setArticleLocation("error",event);
-                                }
-
-                                function setArticleLocation(type,event) {
-                                    var imgSrc = event.srcElement.src;
-
-                                    //记录每张图片高度
-                                    for (var x in data.data) {
-                                        if (imgSrc === data.data[x].images_src[0]) {
-                                            that.position[x] = {height: (type==="error" ? Number(imgWidth / 2) : $img.height) + 279}
-                                            break;
-                                        }
-                                    }
-
-                                    //设置定位信息
-                                    if (number >= data.data.length-1) {
-                                        for (var y in that.position) {
-                                            if (y <= 1) {
-                                                that.position[y].left = y % 2 === 0 ? 0 : imgWidth + 15;
-                                                that.position[y].top = 0;
-                                                that.articleHeight.push(that.position[y].height);
-                                            } else {
-                                                that.position[y].top = Math.min.apply(Math,that.articleHeight);
-                                                that.position[y].left = that.articleHeight[0] > that.articleHeight[1] ? imgWidth + 15 : 0;
-                                                that.articleHeight[(that.articleHeight[0] > that.articleHeight[1] ? 1 : 0)] += that.position[y].height;
-                                            }
-                                        }
-
-                                        that.imgLoadStatus = true;
-                                    }
-
-                                    number ++;
+                                    this.setArticleLocation({type: "error",event: event,imgHeight: $img.height,imgWidth: imgWidth,clientWidth: clientWidth},data.data);
                                 }
                             } else {
                                 data.data[i].images_src[j] = src;
@@ -182,20 +171,63 @@ export default {
                                     lazyLoading : true,
                                     pagination: '.swiper-pagination' + i
                                 }
-                            } 
+                            }
                         });
                     }
-     
+
                     that.article = data.data;
                 }
             });
+        },
+        setArticleLocation(obj,param) {
+            if (obj.type == "onresize") {
+                this.position.forEach((item,i) => {
+                    this.position[i].width = obj.imgWidth;
+                    this.position[i].height = Math.round((item.height - 279) * obj.ratio) + 279;
+                });
+            } else {
+                var imgSrc = obj.event.srcElement.src;
+
+                //记录每张图片高度
+                for (var x in param) {
+                    if (imgSrc === param[x].images_src[0]) {
+                        this.position[x] = {
+                            width: obj.imgWidth,
+                            height: (obj.type==="error" ? Number(obj.imgWidth / 2) : obj.imgHeight) + 279
+                        }
+                        break;
+                    }
+                }
+            }
+
+            //设置定位信息
+            if (this.load_success_number >= param.length-1) {
+                this.articleHeight = [];
+
+                for (var y in this.position) {
+                    if (y <= (obj.clientWidth>768?1:0)) {
+                        this.position[y].left = y % 2 === 0 ? 0 : obj.imgWidth + 15;
+                        this.position[y].top = 0;
+                        this.articleHeight.push(this.position[y].height);
+                    } else {
+                        this.position[y].top = Math.min.apply(Math,this.articleHeight);
+                        this.position[y].left = this.articleHeight[0] > this.articleHeight[1] ? obj.imgWidth + 15 : 0;
+                        this.articleHeight[(this.articleHeight[0] > this.articleHeight[1] ? 1 : 0)] += this.position[y].height;
+                    }
+                }
+
+                this.imgLoadStatus = true;
+            }
+
+            this.load_success_number++;
+
         },
         pageBtn(num,type) {
             let data = {
                 page: num
             }
 
-            if (this.searchText) 
+            if (this.searchText)
                 data._s = this.searchText
             
             this.$router.push({query: data});
@@ -233,16 +265,16 @@ export default {
         &.loadSucceed {
             opacity: 1;
             article {
-                transition: all 1s ease;
-                -moz-transition: all 1s ease;  /* Firefox 4 */
-                -webkit-transition: all 1s ease;   /* Safari 和 Chrome */
-                -o-transition: all 1s ease;    /* Opera */
+                width: 50%;
+                transition: all .5s ease;
+                -moz-transition: all .5s ease;  /* Firefox 4 */
+                -webkit-transition: all .5s ease;   /* Safari 和 Chrome */
+                -o-transition: all .5s ease;    /* Opera */
             }
             
         }
         article {
             position: absolute;
-            width: 50%;
             padding-right: 15px;
             .articleImg {
                 display: block;
@@ -250,7 +282,7 @@ export default {
                 overflow: hidden;
                 cursor: pointer;
                 img {
-                    width: 100%;
+                    width: 100% !important;
                     &.scale {
                         transform: scale(1.2);
                         -webkit-transform: scale(1.2);
@@ -293,17 +325,21 @@ export default {
                     -webkit-line-clamp: 3;
                 }
                 p {
+                    display: flex;
+                    display: -webkit-flex;
+                    flex: 1;
                     position: relative;
                     padding: 25px 0 48px 13%;
                     margin-right: 40%;
                     border-top: 1px solid #e9e9e9;
-
                     .article_categories {
-                        display: block;
-                        float: left;
-                        line-height: 20px;
-                        color: #8d8d8d;
-                        font-size: 13px;
+                        margin-right: 15px;
+                         font-weight: normal;
+                         a {
+                            line-height: 20px;
+                            color: #8d8d8d;
+                            font-size: 13px;
+                         }
                     }
                     time{
                         position: absolute;

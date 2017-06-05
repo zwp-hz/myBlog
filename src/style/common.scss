@@ -1,14 +1,8 @@
-@media (min-width: 1251px){
-    
-}
-
 @media (max-width: 1250px){
     .container { max-width: 920px !important; }
 }
 
 @media (max-width: 990px){
-    .footer { position: relative !important; height: auto !important; }
-    #index { margin-bottom: 0 !important; }
     #rightBox {display: none !important;}
 }
 
@@ -20,12 +14,28 @@
     .container { max-width: 600px !important; }
 }
 
-@media (max-width: 700px){
+@media (max-width: 768px){
+    #index { margin-bottom: 0 !important; }
+    #main { padding: 200px 0 30px !important; }
+    #footer { 
+        position: relative !important;
+        z-index: 100 !important;  
+        height: auto !important;
+    }
+    #header {
+        .col-sm-menu {
+            display: none !important;
+        }
+        .c-hamburger {
+            display: block !important;
+        }
+    }
     .container { max-width: 468px !important; }
+    .articleList article { width: 100% !important; padding-right: 0 !important; }
 }
 
 @media (max-width: 550px){
-    .container { max-width: 300px !important; }
+    .container { max-width: 320px !important; }
 }
 
 body, ul, li, ol, li, dl, dt, dd, form, h1, h2, h3, h4, p, div, hr, tabel, tr, td, select, option, br, span, img, a, label, form, input, textarea, em, i, strong, b {

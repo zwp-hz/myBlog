@@ -15,7 +15,7 @@
             </div>
         </div>
         <!-- main -->
-        <div id="main">
+        <div id="search_main">
             <div class="container">
                 <div class="content">
                     <leftBox v-on:searchCnt="searchList" :searchData="searchData"></leftBox>

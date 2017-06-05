@@ -14,14 +14,14 @@
             </div>
         </div>
         <!-- main -->
-        <div id="main">
+        <div id="articleDetail_main">
             <div class="container">
                 <div class="content">
                     <div class="articleContent col-lg-9 col-md-8 col-sm-12">
                         <header class="clear">
                             <h1>{{articleParam.title}}</h1>
                             <p class="fl">
-                                <span>{{articleParam.update_at | dateFormat('YYYY-MM-DD')}}</span>
+                                <span>{{articleParam.update_at | dateFormat('YYYY/MM/DD')}}</span>
                                 <span style="padding-left: 13px;">访问数：{{articleParam.browsing}}</span>
                             </p>
                             <div class="fr">
@@ -31,7 +31,7 @@
                                         {{categories}}
                                     </router-link>
                                 </span>
-                                <a style="padding-left: 13px;">
+                                <a class="u_transition u_hover_gray" style="padding-left: 13px;">
                                     <i class="glyphicon glyphicon-comment"></i>
                                     {{articleParam.review}}
                                 </a>
