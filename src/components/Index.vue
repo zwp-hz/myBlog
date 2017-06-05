@@ -12,7 +12,7 @@
                     <li @click="categoriesName = item.name" v-for="item in categories"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === item.name}" :to="{path: '/', query: {categories: encodeURIComponent(item.name)}}">{{item.name}}</router-link></li>
                 </ul>
                 <div class="content">
-                    <leftBox v-on:searchCnt="searchList" :categoriesName="categoriesName"></leftBox>
+                    <leftBox :searchCnt="searchList" :categoriesName="categoriesName"></leftBox>
                     <rightBox v-on:searchCnt="searchList" :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
                 </div>
             </div>
