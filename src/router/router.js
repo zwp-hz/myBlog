@@ -15,7 +15,7 @@ export default new Router({
   routes: [
     { path: "/", component: index, name: "index", meta: {title: "首页"}},
     { path: "/index", component: index, name: "index2", meta: {title: "首页"}},
-    { path: "/author", component: author, name: "author", meta: {title: "作者"}},
+    { path: "/author", component: author, name: "author", meta: {title: "个人信息"}},
     { path: "/searchResult", component: searchResult, name: "searchResult", meta: {title: "搜索结果"}},
     { path: "/articleDetail", component: articleDetail, name: "articleDetail", meta: {title: "文章详情"}},
     { path: "*", component: error, name: "404", meta: {title: "404"}}

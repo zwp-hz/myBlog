@@ -15,7 +15,7 @@
             </p>
         </div>
         <div class="box clear">
-            <hotArticle v-on:searchCnt="searchList"></hotArticle>
+            <hotArticle v-on:searchCnt="searchList" v-on:articleInfo="articleDeatil"></hotArticle>
             <div class="searchBox col-xs-12 g-r-center">
                 <input @keyup.enter="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" name="" />
                 <a @click="search" href="javaScript:void(0);" class="glyphicon glyphicon-search"></a>
@@ -79,6 +79,9 @@ export default {
         },
         searchList(text) {
             this.$emit('searchCnt', text);
+        },
+        articleDeatil(text) {
+            this.$emit('articleInfo',text);
         }
     },
     watch: {

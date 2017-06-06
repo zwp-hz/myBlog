@@ -6,7 +6,7 @@
                 <p>思想（且不论好坏与否）——行为——习惯，这就是人 生的规律。 —— 特赖因
 科学家不是依赖于个人的思想，而是综合了几千人的智慧，所有的人想一个问题，并且每人做它的部分工作，添加到正建立起来的伟大知识大厦之中。 —— 卢瑟福</p>
             </div>
-            <hotArticle v-on:searchCnt="searchList" class="col-sm-12 col-md-4"></hotArticle>
+            <hotArticle v-on:searchCnt="searchList" v-on:articleInfo="articleDeatil" class="col-sm-12 col-md-4"></hotArticle>
             <tags v-on:searchCnt="searchList" class="col-sm-12 col-md-4"></tags>
         </div>
   	</div>
@@ -25,6 +25,9 @@ export default {
     methods: {
         searchList(text) {
             this.$emit('searchCnt', text);
+        },
+        articleDeatil(text) {
+            this.$emit('articleInfo',text);
         }
     },
     components: {

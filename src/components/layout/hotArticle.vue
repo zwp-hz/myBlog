@@ -2,11 +2,11 @@
     <div class="recent_posts col-xs-12">
         <h3>最新动态</h3>
         <div class="article g-r-center" v-for="item in articleList">
-            <router-link ondragstart="return false;" class="images" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">
+            <a ondragstart="return false;" class="images" @click="$emit('articleInfo', {_id: item._id, title: item.title})">
                 <img ondragstart="return false;" :src="item.images_src[0]" alt="" @error="imgError()" />
                 <span>{{item.review}}</span>
                 <b class="backImg u_transition u_hover_show"><i class="glyphicon glyphicon-link"></i></b>
-            </router-link>
+            </a>
             <div style="flex: 1;">
                 <div class="categories">
                     <span v-for="(categories,index) in item.categories">
@@ -16,7 +16,7 @@
                         </a>
                     </span>
                 </div>
-                <router-link class="title u_transition u_hover_blue" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">{{item.title}}</router-link>
+                <a class="title u_transition u_hover_blue" @click="$emit('articleInfo', {_id: item._id, title: item.title})">{{item.title}}</a>
             </div>
         </div>
     </div>

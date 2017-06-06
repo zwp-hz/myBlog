@@ -47,12 +47,12 @@
                             </div>
                         </div>
                     </div>
-                    <rightBox v-on:searchCnt="searchList"></rightBox>
+                    <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail"></rightBox>
                 </div>
             </div>
         </div>
         <!-- footer -->
-        <blogFooter v-on:searchCnt="searchList" :elseClass="elseClass"></blogFooter>
+        <blogFooter v-on:searchCnt="searchList" v-on:articleInfo="articleDetail" :elseClass="elseClass"></blogFooter>
     </div>
 </template>
 
@@ -65,10 +65,6 @@ import rightBox     from './layout/rightBox.vue'
 
 export default {
     mounted() {
-        let that = this,
-            imgHost = this.$store.state.IMGHOST,
-            apiHost = this.$store.state.APIHOST;
-
         document.getElementsByTagName('body')[0].scrollTop = 0;
 
         this.articleInfo = {
@@ -76,14 +72,7 @@ export default {
             title: this.$route.query.title
         };
 
-        this.$http.jsonp(apiHost + 'api/getArticlesList?_id='+this.articleInfo._id).then((res) => {
-            if (res.body.code === 0) {
-                let param = res.body.data.data[0];
-
-                that.loadStatus = true;
-                that.articleParam = param;
-            }
-        },(res) => console.log(res));
+        this.getArticleDetail();
     },
     data() {
         return {
@@ -102,11 +91,40 @@ export default {
         }
     },
     methods: {
+        getArticleDetail() {
+            let that = this,
+                imgHost = this.$store.state.IMGHOST,
+                apiHost = this.$store.state.APIHOST;
+
+            this.articleParam = {
+                categories: []
+            };
+            this.loadStatus = false;
+
+            this.$http.jsonp(apiHost + 'api/getArticlesList?_id='+this.articleInfo._id).then((res) => {
+                if (res.body.code === 0) {
+                    let param = res.body.data.data[0];
+
+                    that.loadStatus = true;
+                    that.articleParam = param;
+                }
+            },(res) => console.log(res));
+        },
         searchList(text) {
             var data = {};
 
             data[text.type] = text.text;
             this.$router.push( {path: '/searchResult', query: data} );
+        },
+        articleDetail(text) {
+            if (text._id != this.articleInfo._id) {
+                this.articleInfo = {
+                    _id: text._id,
+                    title: text.title
+                }
+
+                this.getArticleDetail();
+            }
         }
     },
     components: {

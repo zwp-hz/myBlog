@@ -13,12 +13,12 @@
                 </ul>
                 <div class="content">
                     <leftBox :searchCnt="searchList" :categoriesName="categoriesName"></leftBox>
-                    <rightBox v-on:searchCnt="searchList" :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
+                    <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail" :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
                 </div>
             </div>
         </div>
         <!-- tags -->
-        <blogFooter v-on:searchCnt="searchList"></blogFooter>
+        <blogFooter v-on:searchCnt="searchList" v-on:articleInfo="articleDetail"></blogFooter>
     </div>
 </template>
 
@@ -93,6 +93,9 @@ export default {
 
             data[text.type] = text.text;
             this.$router.push( {path: '/searchResult', query: data} );
+        },
+        articleDetail(text) {
+            this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}} );
         }
     },
     components: {

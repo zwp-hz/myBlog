@@ -19,12 +19,12 @@
             <div class="container">
                 <div class="content">
                     <leftBox :searchCnt="searchList" :searchData="searchData"></leftBox>
-                    <rightBox v-on:searchCnt="searchList"></rightBox>
+                    <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail"></rightBox>
                 </div>
             </div>
         </div>
         <!-- footer -->
-        <blogFooter v-on:searchCnt="searchList" :elseClass="elseClass"></blogFooter>
+        <blogFooter v-on:searchCnt="searchList" v-on:articleInfo="articleDetail" :elseClass="elseClass"></blogFooter>
     </div>
 </template>
 
@@ -66,6 +66,9 @@ export default {
                 date: Date.parse(new Date()),
                 content:  text.text
             };
+        },
+        articleDetail(text) {
+            this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}} );
         }
     },
     components: {
