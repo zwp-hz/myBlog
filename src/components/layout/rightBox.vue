@@ -2,7 +2,7 @@
   	<div ref="rightBox" id="rightBox" class="col-lg-3 col-md-4 col-sm-12">
         <div class="weather">
             <img ondragstart="return false;" src="../../images/weather_bg.png" alt="" />
-            <img ondragstart="return false;" class="weatherIcon" v-if="key == 0 ? getDayStatus(weatherInfo.time) : !getDayStatus(weatherInfo.time) " v-for="(item,key) in weatherInfo.type" :src="'../dist/images/'+(key==0 ? item.pinyin : 'night_' + item.pinyin)+'.png'" />
+            <img ondragstart="return false;" class="weatherIcon" v-if="key == 0 ? getDayStatus(weatherInfo.time) : !getDayStatus(weatherInfo.time) " v-for="(item,key) in weatherInfo.type" :src="'images/'+(key==0 ? item.pinyin : 'night_' + item.pinyin)+'.png'" />
             <strong class="g-r-center">{{ weatherInfo.time | dateFormat('hh:mm') }}</strong>
             <div class="elseInfo g-c-center">
                 <span>{{ weatherInfo.city + " " + weatherInfo.wendu }}℃</span>

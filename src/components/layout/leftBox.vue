@@ -114,6 +114,7 @@ export default {
           * @data   page: 分页, type: {hot: '最新动态',NoFirst: '区分是否是一次访问'}, searchCnt: 搜索内容
          */
         getArticlesList(page,type,searchCnt) {
+
             let that = this,
                 imgHost = this.$store.state.IMGHOST,
                 apiHost = this.$store.state.APIHOST;
@@ -235,7 +236,7 @@ export default {
         },
         imgError() {
             let img = event.srcElement;
-            img.src = "../dist/images/image_error.png";
+            img.src = "images/image_error.png";
             img.onerror = null;
         }
     },
