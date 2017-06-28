@@ -1,7 +1,7 @@
 <template>
   	<div ref="rightBox" id="rightBox" class="col-lg-3 col-md-4 col-sm-12">
         <div class="weather">
-            <img ondragstart="return false;" src="../../images/weather_bg.png" alt="" />
+            <img ondragstart="return false;" :src="weather_bg" alt="" />
             <img ondragstart="return false;" class="weatherIcon" v-if="key == 0 ? getDayStatus(weatherInfo.time) : !getDayStatus(weatherInfo.time) " v-for="(item,key) in weatherInfo.type" :src="'images/'+(key==0 ? item.pinyin : 'night_' + item.pinyin)+'.png'" />
             <strong class="g-r-center">{{ weatherInfo.time | dateFormat('hh:mm') }}</strong>
             <div class="elseInfo g-c-center">
@@ -34,7 +34,10 @@ export default {
     props: ["rightBoxStatus","scrollTop"],
     mounted() {
         let that = this,
+            imgHost = this.$store.state.IMGHOST,
             apiHost = this.$store.state.APIHOST;
+
+        this.weather_bg = imgHost + "weather_bg.png" + '?imageView2/2/w/' + this.$refs.rightBox.offsetWidth + '/interlace/1&v=20170628';
 
         //获取天气信息
         that.$http.jsonp(apiHost + 'api/getWeather').then((res) => {
@@ -49,7 +52,10 @@ export default {
     },
     data() {
         return {
+            weather_bg: "",
             weatherInfo: {
+                city: '',
+                wendu: '',
                 type: []
             },
             searchCnt: ""
