@@ -18,7 +18,7 @@
         <div id="search_main">
             <div class="container">
                 <div class="content">
-                    <leftBox :searchCnt="searchList" :searchData="searchData"></leftBox>
+                    <leftBox v-on:searchCnt="searchList" :searchData="searchData"></leftBox>
                     <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail"></rightBox>
                 </div>
             </div>

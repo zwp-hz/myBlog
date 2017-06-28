@@ -12,7 +12,7 @@
                     <li @click="categoriesName = item.name" v-for="item in categories"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === item.name}" :to="{path: '/', query: {categories: encodeURIComponent(item.name)}}">{{item.name}}</router-link></li>
                 </ul>
                 <div class="content">
-                    <leftBox :searchCnt="searchList" :categoriesName="categoriesName"></leftBox>
+                    <leftBox v-on:searchCnt="searchList" :categoriesName="categoriesName"></leftBox>
                     <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail" :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
                 </div>
             </div>
@@ -89,7 +89,7 @@ export default {
     },
     methods: {
         searchList(text) {
-            var data = {};
+            let data = {};
 
             data[text.type] = text.text;
             this.$router.push( {path: '/searchResult', query: data} );

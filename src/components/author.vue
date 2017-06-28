@@ -1,6 +1,6 @@
 <template>
     <div id="author">
-    	<blogHeader :headerStatus="headerStatus"></blogHeader>
+        <blogHeader v-on:searchCnt="searchList" :headerStatus="headerStatus"></blogHeader>
         <!-- <div style="height:1500px;" data-0="background-color:rgb(0,0,255);transform:rotate(0deg);" data-end="background-color:rgb(255,0,0);transform:rotate(360deg);"></div> -->
         <div class="img" data-0="left[pathx]:0%;top[pathy]:0%;transform:rotate(-120deg) scale(0.5);" data-666="left[pathx]:33%;top[pathy]:33%;transform:rotate(-140deg) scale(0.6);" data-1600="left[pathx]:70%;top[pathy]:70%;transform:rotate(-480deg) scale(0.8);" data-2000="left[pathx]:95%;top[pathy]:98%;transform:rotate(-480deg) scale(1);">
         </div>
@@ -39,6 +39,15 @@ export default {
     data() {
         return {
         	headerStatus: false
+        }
+    },
+    methods: {
+        searchList(text) {
+            let data = {};
+
+            data[text.type] = text.text;
+            console.log(text,data)
+            this.$router.push( {path: '/searchResult', query: data} );
         }
     },
     components: {
