@@ -70,28 +70,15 @@
 import loadIng   from './loadIng.vue'
 
 export default {
-    props: ["searchData","categoriesName"],
+    props: ["searchData","categoriesName","resizeTime"],
     mounted() {
         //获取文章列表
         let page = this.$route.query.page ? Number(this.$route.query.page) : 1,
-            that = this, timer;
+            that = this;
 
         for (var i in this.$route.query) {
             if (i == "_s" || i == "Tag" || i == "Category")
                 this.searchText = this.$route.query[i];
-        }
-
-        //窗口改变
-        window.onresize = () => {
-            clearTimeout(timer);
-
-            let clientWidth = document.documentElement.clientWidth,
-                offsetWidth = that.$refs.leftBox.offsetWidth,
-                imgWidth = Math.round((clientWidth>=768)?((offsetWidth - 60) / 2):(offsetWidth - 30));
-
-            timer = setTimeout(function() {
-                that.setArticleLocation({type: "onresize",imgWidth: imgWidth,clientWidth: clientWidth,ratio: imgWidth/that.position[0].width},that.article);
-            },100);
         }
 
         this.getArticlesList(page,"",this.searchText);
@@ -106,7 +93,8 @@ export default {
             article: [],
             articleHeight: [],
             position: {},
-            swiperOption: {}
+            swiperOption: {},
+            timer: null
         }
     },
     methods: {
@@ -247,6 +235,18 @@ export default {
         searchData(val) {
             this.searchText = val.content;
             this.getArticlesList(1,"",val.content);
+        },
+        resizeTime(val) {
+            let that = this,
+                clientWidth = document.documentElement.clientWidth,
+                offsetWidth = that.$refs.leftBox.offsetWidth,
+                imgWidth = Math.round((clientWidth>=768)?((offsetWidth - 60) / 2):(offsetWidth - 30));
+
+            clearTimeout(that.timer);
+
+            that.timer = setTimeout(function() {
+                that.setArticleLocation({type: "onresize",imgWidth: imgWidth,clientWidth: clientWidth,ratio: imgWidth/that.position[0].width},that.article);
+            },100);
         }
     },
     components: {

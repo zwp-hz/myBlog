@@ -46,7 +46,6 @@ export default {
             let data = {};
 
             data[text.type] = text.text;
-            console.log(text,data)
             this.$router.push( {path: '/searchResult', query: data} );
         }
     },

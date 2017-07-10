@@ -1,8 +1,9 @@
 <template>
   	<div ref="rightBox" id="rightBox" class="col-lg-3 col-md-4 col-sm-12">
-        <div class="weather">
+        <div class="weather" v-if="weatherInfo.time">
             <img ondragstart="return false;" :src="weather_bg" alt="" />
-            <img ondragstart="return false;" class="weatherIcon" v-if="key == 0 ? getDayStatus(weatherInfo.time) : !getDayStatus(weatherInfo.time) " v-for="(item,key) in weatherInfo.type" :src="'images/'+(key==0 ? item.pinyin : 'night_' + item.pinyin)+'.png'" />
+            <img ondragstart="return false;" class="weatherIcon" v-if="getDayStatus(weatherInfo.time)" :src="'images/'+ weatherInfo.forecast[0].weather[0].day[0].type_py.pinyin + '.png'" />
+            <img ondragstart="return false;" class="weatherIcon" v-else :src="'images/night_'+ weatherInfo.forecast[0].weather[0].night[0].type_py.pinyin + '.png'" />
             <strong class="g-r-center">{{ weatherInfo.time | dateFormat('hh:mm') }}</strong>
             <div class="elseInfo g-c-center">
                 <span>{{ weatherInfo.city + " " + weatherInfo.wendu }}℃</span>
@@ -49,15 +50,13 @@ export default {
                 },1000)
             }
         })
+
+
     },
     data() {
         return {
             weather_bg: "",
-            weatherInfo: {
-                city: '',
-                wendu: '',
-                type: []
-            },
+            weatherInfo: {},
             searchCnt: ""
         }
     },
@@ -69,10 +68,10 @@ export default {
             let date = new Date(time),
                 cur_hh = date.getHours(),
                 cur_mm = date.getMinutes(),
-                sunrise_hh = Number(this.weatherInfo.sunrise_1.substring(0,2)),
-                sunset_hh = Number(this.weatherInfo.sunset_1.substring(0,2)),
-                sunrise_mm = Number(this.weatherInfo.sunrise_1.substring(3,5)),
-                sunset_mm = Number(this.weatherInfo.sunset_1.substring(3,5)),
+                sunrise_hh = Number(this.weatherInfo.sunrise_1[0].substring(0,2)),
+                sunset_hh = Number(this.weatherInfo.sunset_1[0].substring(0,2)),
+                sunrise_mm = Number(this.weatherInfo.sunrise_1[0].substring(3,5)),
+                sunset_mm = Number(this.weatherInfo.sunset_1[0].substring(3,5)),
                 status;
 
             if ( cur_hh > sunrise_hh && cur_hh < sunset_hh) {
