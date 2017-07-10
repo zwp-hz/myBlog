@@ -7,13 +7,9 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "server": "supervisor ./server/server",
     "start": "http-server -a 192.168.10.67 -p 8000"
   },
   "dependencies": {
-    "express": "^4.14.0",
-    "mongoose": "^4.9.2",
-    "request": "^2.80.0",
     "vue": "^2.1.0",
     "vue-awesome-swiper": "^2.4.0"
   },
