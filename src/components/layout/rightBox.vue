@@ -6,7 +6,7 @@
             <img ondragstart="return false;" class="weatherIcon" v-else :src="'images/night_'+ weatherInfo.forecast[0].weather[0].night[0].type_py.pinyin + '.png'" />
             <strong class="g-r-center">{{ weatherInfo.time | dateFormat('hh:mm') }}</strong>
             <div class="elseInfo g-c-center">
-                <span>{{ weatherInfo.city + " " + weatherInfo.wendu }}℃</span>
+                <span>{{+weatherInfo.wendu}}℃</span>
                 <span v-if="key == 0 ? getDayStatus(weatherInfo.time) : !getDayStatus(weatherInfo.time) " v-for="(item,key) in weatherInfo.type">{{ item.name }}</span>
             </div>
             <p class="g-r-center date">

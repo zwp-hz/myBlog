@@ -1,7 +1,5 @@
 <template>
   	<div id="leftBox" ref="leftBox" class="col-lg-9 col-md-8 col-sm-12">
-        <!-- loading -->
-        <loadIng :loadingStatus="imgLoadStatus"></loadIng>
         <!-- 文章 -->
         <div v-if="article.length >= 1" :class="imgLoadStatus?'articleList loadSucceed':'articleList'" :style="'height:'+Math.max.apply(Math,(articleHeight.length>=1?articleHeight:[0]))+'px;'">
             <article v-for="(item,index) in article" :style="imgLoadStatus?('top:'+position[index].top+'px;left:'+position[index].left+'px;z-index:'+(10-index)+';'):'top:0;left:0;z-index:'+(10-index)+';'">
@@ -110,6 +108,7 @@ export default {
             that.position = [];
             that.article = [];
             that.imgLoadStatus = false;
+            that.$emit('imgLoadStatus', false);
             that.load_success_number = 0;
             that.swiperOption = {};
 
@@ -128,8 +127,10 @@ export default {
                     that.page = data.current_page;
                     that.pageNum = data.last_page;
 
-                    if(data.data.length <= 0)
+                    if(data.data.length <= 0) {
                         that.imgLoadStatus = true;
+                        that.$emit('imgLoadStatus', true);
+                    }
 
                     for (var i in data.data) {
                         let x = i;
@@ -206,6 +207,7 @@ export default {
                 }
 
                 this.imgLoadStatus = true;
+                this.$emit('imgLoadStatus', true);
             }
 
             this.load_success_number++;
