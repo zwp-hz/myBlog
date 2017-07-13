@@ -82,7 +82,6 @@ export default {
             //屏幕小于768像素  不显示背景图片
             if (clientWidth > 768) {
                 that.getBingImg.showStatus = true;
-                console.log(that.getBingImg.showStatus )
                 if (!that.getBingImg.getStatus) {
                     //获取必应图片
                     that.$http.jsonp(apiHost + 'api/bing').then((res) => {

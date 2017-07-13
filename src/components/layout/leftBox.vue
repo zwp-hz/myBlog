@@ -29,12 +29,12 @@
                                 </span>
                             </b>
                             <router-link class="review u_transition u_hover_blue_bg" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">
-                                <i class="glyphicon glyphicon-comment"></i>
+                                <i></i>
                                 {{item.review}}
                             </router-link>
                             <time class="g-c-center">
-                                <span class="g-r-center"><i class="glyphicon glyphicon-time"></i>{{Date.parse(item.creation_at) | dateFormat('YYYY/MM/DD')}}</span>
-                                <span><i class="glyphicon glyphicon-eye-open"></i>{{item.browsing}}</span>
+                                <span class="g-r-center"><i></i>{{Date.parse(item.creation_at) | dateFormat('YYYY/MM/DD')}}</span>
+                                <span><i></i>{{item.browsing}}</span>
                             </time>
                         </p>
                     </div>
@@ -226,7 +226,7 @@ export default {
         },
         imgError() {
             let img = event.srcElement;
-            img.src = "images/image_error.png";
+            img.src = "assets/images/image_error.png";
             img.onerror = null;
         }
     },

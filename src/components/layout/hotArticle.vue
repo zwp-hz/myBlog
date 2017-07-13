@@ -5,7 +5,7 @@
             <a ondragstart="return false;" class="images" @click="$emit('articleInfo', {_id: item._id, title: item.title})">
                 <img ondragstart="return false;" :src="item.images_src[0]" alt="" @error="imgError()" />
                 <span>{{item.review}}</span>
-                <b class="backImg u_transition u_hover_show"><i class="glyphicon glyphicon-link"></i></b>
+                <b class="backImg u_transition u_hover_show"><i class="shareFillIcon"></i></b>
             </a>
             <div style="flex: 1;">
                 <div class="categories">
@@ -96,7 +96,7 @@ export default {
                     width: 76px;
                     height: 76px;
                     text-align: center;
-                    line-height: 76px;
+                    line-height: 86px;
                     opacity: 0;
                     background: rgba(74,190,217,0.6);
                     border-radius: 50%;

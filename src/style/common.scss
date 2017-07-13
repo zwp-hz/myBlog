@@ -141,3 +141,28 @@ input{ font-size: 0.14rem; border: 0; background: none; float: left; outline: no
     align-items: center;
     justify-content: center;
 }
+
+/* icon */
+.searchIcon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url('./assets/images/icon/search.png') no-repeat;
+    background-size: 100%;
+}
+
+.closeIcon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url('./assets/images/icon/close.png') no-repeat;
+    background-size: 100%;
+}
+
+.shareFillIcon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url('./assets/images/icon/share_fill.png') no-repeat;
+    background-size: 100%;
+}

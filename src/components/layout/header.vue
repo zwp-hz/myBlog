@@ -8,7 +8,7 @@
                     <span>menu</span>
                 </span>
                 <nav class="col-sm-menu g-r-center clearfix">
-                    <a @click="search_status = !search_status" href="javaScritp:void(0);" class="glyphicon glyphicon-search searchBtn fr"></a>
+                    <a href="javaScritp:void(0);" @click="search_status = !search_status" class="fr searchIcon"></a>
                     <ul class="menuList fr">
                         <li><router-link :to="{path: '/'}">首頁</router-link></li>
                         <li><a href="javaScritp:void(0);">生活</a></li>
@@ -25,14 +25,14 @@
             </ul>
             <div class="container searchBox g-r-center">
                 <input @keyup.enter="search" ref="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" />
-                <a @click="search" href="javaScritp:void(0);" class="glyphicon glyphicon-search searchBtn"></a>
+                <i @click="search"></i>
             </div>
         </nav>
         <div class="header-search g-r-center" :class="{ search_show: search_status, fixed: headerStatus }">
             <div class="container g-r-center">
                 <input @keyup.enter="search" ref="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" />
-                <a @click="search" href="javaScritp:void(0);" class="glyphicon glyphicon-search searchBtn"></a>
-                <a @click="search_status = !search_status" href="javaScritp:void(0);" class="glyphicon removeBtn">×</a>
+                <a href="javaScritp:void(0);" @click="search" class="searchIcon"></a>
+                <a @click="search_status = !search_status" href="javaScritp:void(0);" class="closeIcon"></a>
             </div>
         </div>
   	</div>
