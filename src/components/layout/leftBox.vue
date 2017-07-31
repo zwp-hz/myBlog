@@ -29,12 +29,12 @@
                                 </span>
                             </b>
                             <router-link class="review u_transition u_hover_blue_bg" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">
-                                <i></i>
-                                {{item.review}}
+                                <i class="iconfont icon-huifu"></i>
+                                <span :id="'sourceId::' + item._id" class = "cy_cmt_count" ></span>
                             </router-link>
                             <time class="g-c-center">
-                                <span class="g-r-center"><i></i>{{Date.parse(item.creation_at) | dateFormat('YYYY/MM/DD')}}</span>
-                                <span><i></i>{{item.browsing}}</span>
+                                <span class="g-r-center"><i class="iconfont icon-time"></i>{{Date.parse(item.creation_at) | dateFormat('YYYY/MM/DD')}}</span>
+                                <span><i class="iconfont icon-chakan"></i>{{item.browsing}}</span>
                             </time>
                         </p>
                     </div>
@@ -63,6 +63,7 @@
   	</div>
 </template>
 
+<script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cyt8K1Rab"></script>
 <script>
 "use strict";
 import loadIng   from './loadIng.vue'

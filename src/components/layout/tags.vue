@@ -11,13 +11,10 @@
 "use strict";
 export default {
     mounted() {
-        let apiHost = this.$store.state.APIHOST,
-            that = this;
-
         //获取标签列表
-        that.$http.jsonp(apiHost + 'api/getTagsList').then((res) => {
+        this.$http.jsonp(this.$store.state.APIHOST + 'api/getTagsList').then((res) => {
             if (res.body.code == 0) {
-                that.tags = res.body.data;
+                this.tags = res.body.data;
             }
         });
     },

@@ -5,7 +5,7 @@
         <!-- loading -->
         <loadIng v-if="!loading"></loadIng>
         <!-- indexBg -->
-        <div id="indexBg" ref="indexBg" v-if="getBingImg.showStatus"></div>
+        <div id="indexBg" ref="indexBg" v-if="getBingImg.showStatus" :style="'backgroundImage: url('+getBingImg.biyingImg+');'"></div>
         <!-- main -->
         <div id="main">
             <div class="container">
@@ -15,7 +15,7 @@
                 </ul>
                 <div class="content">
                     <leftBox v-on:searchCnt="searchList" v-on:imgLoadStatus="loadingStatus" :categoriesName="categoriesName" :resizeTime="resizeTime"></leftBox>
-                    <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail" :rightBoxStatus="rightBoxStatus" :scrollTop="scrollTop"></rightBox>
+                    <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail"></rightBox>
                 </div>
             </div>
         </div>
@@ -25,19 +25,19 @@
 </template>
 
 <script>
-"use strict";
-import loadIng      from './layout/loadIng.vue'
-import blogHeader   from './layout/header.vue'
-import blogFooter   from './layout/footer.vue'
-import leftBox      from './layout/leftBox.vue'
-import rightBox     from './layout/rightBox.vue'
+    "use strict";
+    import loadIng      from './layout/loadIng.vue'
+    import blogHeader   from './layout/header.vue'
+    import blogFooter   from './layout/footer.vue'
+    import leftBox      from './layout/leftBox.vue'
+    import rightBox     from './layout/rightBox.vue'
 
-export default {
-    mounted() {
-        let that = this,
-            apiHost = this.$store.state.APIHOST;
+    export default {
+        mounted() {
+            let that = this,
+                apiHost = this.$store.state.APIHOST;
 
-        document.getElementsByTagName('body')[0].scrollTop = 0;
+            document.getElementsByTagName('body')[0].scrollTop = 0;
 
         //获取分类列表
         this.$http.jsonp(apiHost + 'api/getCategoryList').then((res) => {
@@ -52,28 +52,26 @@ export default {
             if (e.type == "resize")
                 that.resizeTime = e.timeStamp;
 
-            this.init();
+            that.init();
         }        
     },
     data() {
         return {
-            loading: false,                                         //加载状态
-            headerStatus: false,                                    //头部状态
-            rightBoxStatus: false,                                  
-            getBingImg: {                                           //必应壁纸
-                getStatus: false,                                       //获取状态
-                showStatus: false                                       //显示状态
+            loading: false,                                                             //加载状态
+            headerStatus: false,                                                        //头部状态
+            getBingImg: {                                                               //必应壁纸
+                biyingImg: sessionStorage.biyingImg ? sessionStorage.biyingImg : '',    //url
+                showStatus: false                                                       //显示状态
             },
-            resizeTime: null,                                       //窗口改动时间
-            scrollTop: null,
-            categories: [],                                             
+            resizeTime: null,                                                           //窗口改动时间
+            categories: [],                                                             //类别
             categoriesName: (typeof this.$route.query.categories === "undefined" ? "全部" : decodeURIComponent(this.$route.query.categories))
         }
     },
     methods: {
         //init
         init() {
-            let that = this,apiHost = this.$store.state.APIHOST,
+            let apiHost = this.$store.state.APIHOST,
                 scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
                 clientHeight = document.documentElement.clientHeight,   //内容可视区域的高度
                 clientWidth = document.documentElement.clientWidth,    //内容可视区域的宽度
@@ -81,36 +79,29 @@ export default {
 
             //屏幕小于768像素  不显示背景图片
             if (clientWidth > 768) {
-                that.getBingImg.showStatus = true;
-                if (!that.getBingImg.getStatus) {
+                this.getBingImg.showStatus = true;
+                if (!this.getBingImg.biyingImg) {
                     //获取必应图片
-                    that.$http.jsonp(apiHost + 'api/bing').then((res) => {
+                    this.$http.jsonp(apiHost + 'api/bing').then((res) => {
                         if (res.body.code === 0) {
-                            that.getBingImg.getStatus = true;
-
-                            let $img = new Image(),
-                                url = res.body.data +'?imageView2/1/q/90/interlace/1/w/'+ document.documentElement.clientWidth;
-                                
-                                that.$refs.indexBg.style.backgroundImage = 'url("'+ url +'")';
+                            sessionStorage.biyingImg = this.getBingImg.biyingImg = res.body.data;
                         }
                     },(res) => console.log(res));
                 }
 
-                if (that.$refs.indexBg) {
-                    that.scrollTop = scrollTop;
-
+                if (this.$refs.indexBg) {
                     if(scrollHeight - scrollTop - clientHeight > 560 || clientHeight === scrollHeight) {
-                         that.$refs.indexBg.style.top = scrollTop + "px";
-                         that.rightBoxStatus = false;
+                        this.$refs.indexBg.style.position = "fixed";
+                        this.$refs.indexBg.style.top = 0;
                     } else {
-                         that.$refs.indexBg.style.top = scrollHeight - clientHeight - 560 + "px";
-                         that.rightBoxStatus = true;
+                        this.$refs.indexBg.style.position = "absolute";
+                        this.$refs.indexBg.style.top = scrollHeight - clientHeight - 560 + "px";
                     }
-                    that.headerStatus = scrollTop > 0 ? true : false;
+                    this.headerStatus = scrollTop > 0 ? true : false;
                 }
             } else {
-                that.headerStatus = true;
-                that.getBingImg.showStatus = false;
+                this.headerStatus = true;
+                this.getBingImg.showStatus = false;
             }
         },
         //搜索侦听

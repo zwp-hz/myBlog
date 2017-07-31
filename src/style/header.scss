@@ -8,15 +8,14 @@
 	&.search_detail {
 		position: relative;
 		border-bottom: 1px solid #ebebeb;
-
-		.headerBox .menu .col-sm-menu .menuList li a,
-		.searchBtn {
+		.iconfont {
 			color: #3d3d3d;
 		}
+		.headerBox .menu .col-sm-menu .menuList li a,
 		.c-hamburger span,
 		.c-hamburger span::before,
 		.c-hamburger span::after {
-			background-color: #3d3d3d;
+			color: #3d3d3d;
 		}
 	}
 	&.fixed {
@@ -25,12 +24,14 @@
 		top: 0;
 		height: 70px;
 		background: #fff;
-		.searchBtn { color: #3d3d3d; }
 		.headerBox .menu .col-sm-menu .menuList li a { color: #000; }
 		.c-hamburger span,
 		.c-hamburger span::before,
 		.c-hamburger span::after {
-			background-color: #3d3d3d;
+			color: #3d3d3d;
+		}
+		.iconfont {
+			color: #3d3d3d;
 		}
 	}
 
@@ -63,7 +64,8 @@
 		}
 	}
 
-	.searchBtn {
+	.iconfont {
+		margin-right: 5px;
 		color: #fff;
 	}
 
@@ -79,6 +81,9 @@
 		&.search_show {
 			z-index: 200;
 			opacity: 1;
+			.iconfont {
+				color: #3d3d3d;
+			}
 		}
 		&.fixed {
 			height: 70px;

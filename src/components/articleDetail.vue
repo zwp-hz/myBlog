@@ -31,10 +31,6 @@
                                         {{categories}}
                                     </router-link>
                                 </span>
-                                <a class="u_transition u_hover_gray" style="padding-left: 13px;">
-                                    <i class="glyphicon glyphicon-comment"></i>
-                                    {{articleParam.review}}
-                                </a>
                             </div>
                         </header>
                         <article>{{articleParam.content}}</article>
@@ -46,6 +42,9 @@
                                 </router-link>
                             </div>
                         </div>
+                        <!--PC和WAP自适应版-->
+                        <div id="SOHUCS" :sid="$route.query.articleId" ></div> 
+                        
                     </div>
                     <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail"></rightBox>
                 </div>
@@ -56,6 +55,13 @@
     </div>
 </template>
 
+<script type="text/javascript"> 
+(function(){
+var appid = 'cyt8s7OWi'; 
+var conf = 'prod_87047aaf9f0eb895a1b671c954064339'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })();</script>
 <script>
 "use strict";
 import loadIng      from './layout/loadIng.vue'
@@ -81,12 +87,6 @@ export default {
             articleInfo: {},
             articleParam: {
                 categories: []
-            },
-            swiperOption: {
-                effect : 'coverflow',
-                initialSlide: 0,
-                lazyLoading : true,
-                pagination: '.swiper-pagination'
             }
         }
     },

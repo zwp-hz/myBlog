@@ -33,7 +33,6 @@ import hotArticle   from './hotArticle.vue'
 import tags         from './tags.vue'
 
 export default {
-    props: ["rightBoxStatus","scrollTop"],
     mounted() {
         let that = this,
             imgHost = this.$store.state.IMGHOST,
@@ -88,21 +87,6 @@ export default {
             this.$emit('articleInfo',text);
         }
     },
-    watch: {
-        scrollTop(val) {
-            if (val > 445) {
-                let clientHeight = document.documentElement.clientHeight,   //内容可视区域的高度
-                    scrollHeight = document.documentElement.scrollHeight;   //滚动条高度
-
-                if (!this.rightBoxStatus) 
-                    this.$refs.rightBox.style.top = val - 420 + "px";
-                else
-                    this.$refs.rightBox.style.top = scrollHeight - clientHeight - 980 + "px";
-            } else {
-                this.$refs.rightBox.style.top = 0;
-            }
-        }
-    },
     components: {
         hotArticle,
         tags
@@ -122,7 +106,6 @@ export default {
         float: right;
         position: relative;
         display: block;
-        padding-left: 0;
         margin-bottom: 20px;
         .weather {
             position: relative;
