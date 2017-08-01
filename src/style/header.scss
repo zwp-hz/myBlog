@@ -11,11 +11,11 @@
 		.iconfont {
 			color: #3d3d3d;
 		}
-		.headerBox .menu .col-sm-menu .menuList li a,
+		.headerBox .menu .col-sm-menu .menuList li a { color: #3d3d3d; }
 		.c-hamburger span,
 		.c-hamburger span::before,
 		.c-hamburger span::after {
-			color: #3d3d3d;
+			background-color: #3d3d3d;
 		}
 	}
 	&.fixed {
@@ -24,14 +24,14 @@
 		top: 0;
 		height: 70px;
 		background: #fff;
-		.headerBox .menu .col-sm-menu .menuList li a { color: #000; }
+		.iconfont {
+			color: #3d3d3d;
+		}
+		.headerBox .menu .col-sm-menu .menuList li a { color: #3d3d3d; }
 		.c-hamburger span,
 		.c-hamburger span::before,
 		.c-hamburger span::after {
-			color: #3d3d3d;
-		}
-		.iconfont {
-			color: #3d3d3d;
+			background-color: #3d3d3d;
 		}
 	}
 

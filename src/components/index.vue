@@ -53,8 +53,7 @@
                 that.resizeTime = e.timeStamp;
 
             that.init();
-        }
-         
+        } 
     },
     data() {
         return {
