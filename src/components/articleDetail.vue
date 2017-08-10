@@ -63,6 +63,8 @@ import rightBox     from './layout/rightBox.vue'
 
 export default {
     mounted() {
+        document.getElementsByTagName('body')[0].scrollTop = 0;
+        
         this.articleInfo = {
             _id: this.$route.query.articleId,
             title: this.$route.query.title
