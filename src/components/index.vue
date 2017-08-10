@@ -111,8 +111,10 @@
             data[text.type] = text.text;
             this.$router.push( {path: '/searchResult', query: data} );
         },
+        //跳转详情页
         articleDetail(text) {
             this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}} );
+            location.reload();
         },
         //加载过渡
         loadingStatus(status) {

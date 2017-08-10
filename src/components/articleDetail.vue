@@ -63,8 +63,6 @@ import rightBox     from './layout/rightBox.vue'
 
 export default {
     mounted() {
-        document.getElementsByTagName('body')[0].scrollTop = 0;
-
         this.articleInfo = {
             _id: this.$route.query.articleId,
             title: this.$route.query.title
@@ -74,18 +72,18 @@ export default {
     },
     data() {
         return {
-            loadStatus: false,
-            elseClass: "search_detail",
-            articleInfo: {},
-            articleParam: {
+            loadStatus: false,                              //加载状态
+            elseClass: "search_detail",                     //区分来源
+            articleInfo: {},                                //文章信息
+            articleParam: {                                 //文章内容
                 categories: []
             }
         }
     },
     methods: {
+        //获取文章详情
         getArticleDetail() {
-            let that = this,
-                imgHost = this.$store.state.IMGHOST,
+            let imgHost = this.$store.state.IMGHOST,
                 apiHost = this.$store.state.APIHOST;
 
             this.articleParam = {
@@ -97,25 +95,31 @@ export default {
                 if (res.body.code === 0) {
                     let param = res.body.data.data[0];
 
-                    that.loadStatus = true;
-                    that.articleParam = param;
+                    this.loadStatus = true;
+                    this.articleParam = param;
+
+                    //加载畅言评论带吗
+                    (function(){
+                    var appid = 'cyt8K1Rab';
+                    var conf = '2a26af657ce8dca9f48847e746aa735c';
+                    var width = window.innerWidth || document.documentElement.clientWidth; 
+                    if (width < 960) { 
+                    window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })();
                 }
             },(res) => console.log(res));
         },
+        //侦听搜索内容
         searchList(text) {
             var data = {};
 
             data[text.type] = text.text;
             this.$router.push( {path: '/searchResult', query: data} );
         },
+        //跳转详情页
         articleDetail(text) {
             if (text._id != this.articleInfo._id) {
-                this.articleInfo = {
-                    _id: text._id,
-                    title: text.title
-                }
-
-                this.getArticleDetail();
+                this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}} );
+                location.reload();
             }
         }
     },

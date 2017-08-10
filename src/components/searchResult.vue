@@ -64,20 +64,26 @@ export default {
         }
     },
     methods: {
+        //侦听搜索内容
         searchList(text) {
-            var data = {};
+            if (text.text != this.$route.query.Category) {
+                var data = {};
 
-            data[text.type] = text.text;
-            this.searchCnt = text;
-            this.$router.push({ query: data} );
+                data[text.type] = text.text;
+                this.searchCnt = text;
+                this.$router.push({ query: data} );
 
-            this.searchData = {
-                date: Date.parse(new Date()),
-                content:  text.text
-            };
+                this.searchData = {
+                    date: Date.parse(new Date()),
+                    content:  text.text
+                };
+
+            }
         },
+        //跳转详情页
         articleDetail(text) {
             this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}} );
+            location.reload();
         },
         //加载过渡
         loadingStatus(status) {

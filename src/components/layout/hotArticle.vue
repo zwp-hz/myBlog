@@ -4,7 +4,7 @@
         <div class="article g-r-center" v-for="item in articleList">
             <a ondragstart="return false;" class="images" @click="$emit('articleInfo', {_id: item._id, title: item.title})">
                 <img ondragstart="return false;" :src="item.images_src[0]" alt="" @error="imgError()" />
-                <span>{{item.review}}</span>
+                <span :id="'sourceId::' + item._id" class = "cy_cmt_count" ></span>
                 <b class="backImg u_transition u_hover_show"><i class="iconfont icon-lianjie"></i></b>
             </a>
             <div style="flex: 1;">

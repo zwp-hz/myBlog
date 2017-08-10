@@ -4,9 +4,11 @@
         <div v-if="article.length >= 1" :class="imgLoadStatus?'articleList loadSucceed':'articleList'" :style="'height:'+Math.max.apply(Math,(articleHeight.length>=1?articleHeight:[0]))+'px;'">
             <article v-for="(item,index) in article" :style="imgLoadStatus?('top:'+position[index].top+'px;left:'+position[index].left+'px;z-index:'+(10-index)+';'):'top:0;left:0;z-index:'+(10-index)+';'">
                 <div class="u_transition post-content-container">
-                    <router-link v-if="item.images_src.length === 1" class="articleImg" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">
+                    <!-- 单张图片 -->
+                    <a v-if="item.images_src.length === 1" class="articleImg"  @click="articleDetail(item._id,item.title)">
                         <img ondragstart="return false;" @mouseover="item.imgMouseStatus=true" @mouseout="item.imgMouseStatus=false" :class="{u_transition: true,scale: item.imgMouseStatus}" :src="item.images_src" @error="imgError();"/>
-                    </router-link>
+                    </a>
+                    <!-- 多张图片 -->
                     <div v-else class="swiper-container">
                         <swiper :options="swiperOption[index]" ref="mySwiper">
                             <swiper-slide v-for="banner in item.images_src">
@@ -17,7 +19,7 @@
                         <div :class="'swiper-pagination swiper-pagination'+index+' swiper-pagination-bullets'"></div>
                     </div>
                     <div class="box">
-                        <h2><router-link class="u_transition u_hover_blue" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">{{item.title}}</router-link></h2>
+                        <h2><a @click="articleDetail(item._id,item.title)" class="u_transition u_hover_blue">{{item.title}}</a></h2>
                         <strong>{{item.content}}</strong>
                         <p>
                             <b class="article_categories">
@@ -28,10 +30,10 @@
                                     </a>
                                 </span>
                             </b>
-                            <router-link class="review u_transition u_hover_blue_bg" :to="{path: '/articleDetail',query: {articleId: item._id,title: item.title}}">
+                            <a class="review u_transition u_hover_blue_bg" @click="articleDetail(item._id,item.title)">
                                 <i class="iconfont icon-huifu"></i>
                                 <span :id="'sourceId::' + item._id" class = "cy_cmt_count" ></span>
-                            </router-link>
+                            </a>
                             <time class="g-c-center">
                                 <span class="g-r-center"><i class="iconfont icon-time"></i>{{Date.parse(item.creation_at) | dateFormat('YYYY/MM/DD')}}</span>
                                 <span><i class="iconfont icon-chakan"></i>{{item.browsing}}</span>
@@ -63,10 +65,9 @@
   	</div>
 </template>
 
-<script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cyt8K1Rab"></script>
 <script>
 "use strict";
-import loadIng   from './loadIng.vue'
+import loadIng      from   './loadIng.vue'
 
 export default {
     props: ["searchData","categoriesName","resizeTime"],
@@ -84,21 +85,21 @@ export default {
     },
     data() {
         return {
-            page: null,
-            pageNum: null,
-            imgLoadStatus: false,
-            load_success_number: 0,
-            searchText: "",
-            article: [],
-            articleHeight: [],
-            position: {},
-            swiperOption: {},
-            timer: null
+            page: null,                                     //当前分页数
+            pageNum: null,                                  //总分页数
+            imgLoadStatus: false,                           //文章图片是否加载完成状态
+            load_success_number: 0,                         //文章图片加载成功数 
+            searchText: "",                                 //搜索内容
+            article: [],                                    //文章列表
+            articleHeight: [],                              //文章容器高度
+            position: {},                                   //文章定位信息
+            swiperOption: {},                               //滑动图片  索引配置
+            timer: null                                     //定时器载体
         }
     },
     methods: {
-        /** 获取文章类别
-          * @data   page: 分页, type: {hot: '最新动态',NoFirst: '区分是否是一次访问'}, searchCnt: 搜索内容
+        /** 获取文章列表
+          * @data   page: 分页, type: {hot: '最新动态',NoFirst: '区分是否是一次加载'}, searchCnt: 搜索内容
          */
         getArticlesList(page,type,searchCnt) {
 
@@ -167,9 +168,28 @@ export default {
                     }
 
                     that.article = data.data;
+
+                    //获取评论数
+                    if(document.getElementById("cy_cmt_num")) {
+                        let listCount = document.getElementById("cy_cmt_num"),
+                            count = listCount.nextSibling;
+
+                        listCount.parentNode.removeChild(listCount);
+                        count.parentNode.removeChild(count);
+                    }
+                    
+                    let head = document.getElementsByTagName('head')[0];
+                    let script = document.createElement('script');
+                    script.id = "cy_cmt_num";
+                    script.src = 'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cyt8K1Rab';
+                    head.appendChild(script);
+                    
                 }
             });
         },
+        /** 设置文章位置
+          * @data   obj: 浏览器参数, param: 文章参数
+         */
         setArticleLocation(obj,param) {
             if (obj.type == "onresize") {
                 this.position.forEach((item,i) => {
@@ -212,8 +232,17 @@ export default {
             }
 
             this.load_success_number++;
-
         },
+        /** 跳转详情页
+          * @data   id: 文章id, title: 文章title
+         */
+        articleDetail(id,title) {
+            this.$router.push( {path: '/articleDetail', query: {articleId: id, title: title}} );
+            location.reload();
+        },
+        /** 分页
+          * @data   num: 分页, type: 是否第一次加载 ? '' : 'NoFirst'
+         */
         pageBtn(num,type) {
             let data = {
                 page: num
@@ -225,6 +254,7 @@ export default {
             this.$router.push({query: data});
             this.getArticlesList(num,type,this.searchText);
         },
+        //图片加载失败
         imgError() {
             let img = event.srcElement;
             img.src = "assets/images/image_error.png";
@@ -232,13 +262,16 @@ export default {
         }
     },
     watch: {
-    	categoriesName(val) {
+        //标签切换
+    	categoriesName() {
     		this.getArticlesList(1);
     	},
+        //搜索侦听
         searchData(val) {
             this.searchText = val.content;
             this.getArticlesList(1,"",val.content);
         },
+        //浏览器窗口变化侦听
         resizeTime(val) {
             let that = this,
                 clientWidth = document.documentElement.clientWidth,

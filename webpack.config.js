@@ -5,7 +5,7 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 const cleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
-  entry: './src/main.js',
+  entry: './src/main.js',xs
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '',
