@@ -8,13 +8,10 @@ const state = {
   	IMGHOST: "http://omdiu1qhf.bkt.clouddn.com/"
 }
 
-const actions = {
-    increment (store,type) {
-      	console.log(type)
-    }
- }
+// const actions = {
+
+// }
 
 export default new Vuex.Store({
-  state,
-  actions
+  state
 })

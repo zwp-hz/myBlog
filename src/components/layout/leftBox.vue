@@ -183,7 +183,6 @@ export default {
                     script.id = "cy_cmt_num";
                     script.src = 'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cyt8K1Rab';
                     head.appendChild(script);
-                    
                 }
             });
         },
