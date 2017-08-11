@@ -84,7 +84,7 @@ export default {
             this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}} );
             setTimeout(function() {
                 location.reload();
-            },100)
+            },10)
         },
         //加载过渡
         loadingStatus(status) {
