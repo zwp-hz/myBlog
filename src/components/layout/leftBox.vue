@@ -168,21 +168,7 @@ export default {
                     }
 
                     that.article = data.data;
-
-                    //获取评论数
-                    if(document.getElementById("cy_cmt_num")) {
-                        let listCount = document.getElementById("cy_cmt_num"),
-                            count = listCount.nextSibling;
-
-                        listCount.parentNode.removeChild(listCount);
-                        count.parentNode.removeChild(count);
-                    }
-                    
-                    let head = document.getElementsByTagName('head')[0];
-                    let script = document.createElement('script');
-                    script.id = "cy_cmt_num";
-                    script.src = 'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cyt8K1Rab';
-                    head.appendChild(script);
+                    this.$store.dispatch('setCommentNum');
                 }
             });
         },

@@ -8,10 +8,27 @@ const state = {
   	IMGHOST: "http://omdiu1qhf.bkt.clouddn.com/"
 }
 
-// const actions = {
+const actions = {
+	//设置评论数
+	setCommentNum(store) {
+		if(document.getElementById("cy_cmt_num")) {
+	        let listCount = document.getElementById("cy_cmt_num"),
+	            count = listCount.nextSibling;
 
-// }
+	        listCount.parentNode.removeChild(listCount);
+	        count.parentNode.removeChild(count);
+	    }
+	    
+	    let head = document.getElementsByTagName('head')[0];
+	    let script = document.createElement('script');
+
+	    script.id = "cy_cmt_num";
+	    script.src = 'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cyt8K1Rab';
+	    head.appendChild(script);
+	}
+}
 
 export default new Vuex.Store({
-  state
+  state,
+  actions
 })

@@ -24,21 +24,28 @@
 
 <script>
 "use strict";
+var accessNum = 0;
+
 export default {
     mounted() {
         let imgHost = this.$store.state.IMGHOST,
-            apiHost = this.$store.state.APIHOST,
-            that = this;
+            apiHost = this.$store.state.APIHOST;
 
         //获取热门文章
-        that.$http.jsonp(apiHost + 'api/getArticlesList?type=hot').then((res) => {
+        this.$http.jsonp(apiHost + 'api/getArticlesList?type=hot').then((res) => {
             if (res.body.code == 0) {
                 for (var i of res.body.data.data) {
                     i.images_src.forEach( ( item, j ) => {
                         i.images_src[j] = imgHost + item + "?imageView2/1/w/150/h/150/interlace1/q/90";
                     });
                 }
-                that.articleList = res.body.data.data;
+                this.articleList = res.body.data.data;
+
+                if (accessNum++ % 2 == 0) {
+                    if (this.$route.name == "articleDetail") {
+                        this.$store.dispatch('setCommentNum');
+                    }
+                }
             }
         });
     },
