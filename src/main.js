@@ -28,6 +28,12 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);
 });
 
+Vue.directive('title', {
+  inserted: function (el, binding) {
+    document.title = binding.value
+  }
+})
+
 router.afterEach(to =>{document.title = to.meta.title})
 
 const app = new Vue({

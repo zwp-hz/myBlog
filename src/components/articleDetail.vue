@@ -1,5 +1,5 @@
 <template>
-    <div id="articleDetail">
+    <div id="articleDetail" v-if="articleInfo.title" v-title="articleInfo.title">
         <!-- loading -->
         <loadIng :loadingStatus="loadStatus"></loadIng>
         <!-- header -->
@@ -9,7 +9,7 @@
                 <p class="breadcrumbs">
                     <router-link :to="{path: '/'}">首页</router-link>
                     <span>&gt;</span>
-                    <strong v-if="articleInfo.title">{{articleInfo.title}}</strong>
+                    <strong>{{articleInfo.title}}</strong>
                 </p>
             </div>
         </div>
