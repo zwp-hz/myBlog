@@ -21,6 +21,9 @@
         position: relative !important;
         z-index: 100 !important;  
         height: auto !important;
+        .put-on-record {
+            padding: 20px 0 !important;
+        }
     }
     #header {
         .col-sm-menu {
@@ -48,6 +51,7 @@ img { border: 0 none; vertical-align: top;}
 a { text-decoration: none !important; cursor: pointer; outline: none; hide-focus: expression(this.hideFocus=true) }
 li { list-style: none; vertical-align:top;}
 input{ font-size: 0.14rem; border: 0; background: none; float: left; outline: none; }
+strong,b { font-weight: normal; }
 ::-webkit-input-placeholder { color: #999; }
 .clear{ zoom: 1;}
 .clear:after { content: "\20"; clear: both; display: block;}

@@ -1,20 +1,19 @@
 <template>
   	<div ref="rightBox" id="rightBox" class="col-lg-3 col-md-4 col-sm-12">
-        <div class="weather" v-if="weatherInfo.time">
-            <img ondragstart="return false;" :src="weather_bg" alt="" />
-            <img ondragstart="return false;" class="weatherIcon" v-if="getDayStatus(weatherInfo.time)" :src="'assets/images/weather/'+ weatherInfo.forecast[0].weather[0].day[0].type_py.pinyin + '.png'" />
-            <img ondragstart="return false;" class="weatherIcon" v-else :src="'assets/images/weather/night_'+ weatherInfo.forecast[0].weather[0].night[0].type_py.pinyin + '.png'" />
-            <strong class="g-r-center">{{ weatherInfo.time | dateFormat('hh:mm') }}</strong>
-            <div class="elseInfo g-c-center">
-                <span>{{weatherInfo.city+" "+weatherInfo.wendu}}℃</span>
-                <span v-if="getDayStatus(weatherInfo.time)">{{weatherInfo.forecast[0].weather[0].day[0].type[0]}}</span>
-                <span v-else>{{ weatherInfo.forecast[0].weather[0].night[0].type[0]}}</span>
-            </div>
-            <p class="g-r-center date">
-                <span>{{ weatherInfo.time | dateFormat('MM') }}</span>
-                <span>{{ weatherInfo.time | dateFormat('DD') }}</span>
-                <span>{{ weatherInfo.time | dateFormat('W') }}</span>
-            </p>
+        <!-- 天气 -->
+        <div class="weather">
+            <section class="g-c-center" v-if="sunlightStatus">
+                <i v-if="sunlightStatus == 1" :class="'iconfont icon-' + weatherInfo.forecast[0].weather[0].day[0].type_py.pinyin"></i>
+                <i v-else :class="'iconfont icon-night-' + weatherInfo.forecast[0].weather[0].night[0].type_py.pinyin"></i>
+                <div class="info g-r-center">
+                    <p>
+                        <span>{{ weatherInfo.city[0] }}</span>
+                        <b v-if="sunlightStatus == 2">{{weatherInfo.forecast[0].weather[0].day[0].type[0]}}</b>
+                        <b v-else>{{ weatherInfo.forecast[0].weather[0].night[0].type[0]}}</b>
+                    </p>
+                    <strong>{{ weatherInfo.wendu[0] }}ﾟ</strong>
+                </div>
+            </section>
         </div>
         <div class="box clear">
             <hotArticle v-on:searchCnt="searchList" v-on:articleInfo="articleDeatil"></hotArticle>
@@ -34,51 +33,46 @@ import tags         from './tags.vue'
 
 export default {
     mounted() {
-        let that = this,
-            imgHost = this.$store.state.IMGHOST,
+        let imgHost = this.$store.state.IMGHOST,
             apiHost = this.$store.state.APIHOST;
 
-        this.weather_bg = imgHost + "weather_bg.png" + '?imageView2/2/w/' + this.$refs.rightBox.offsetWidth + '/interlace/1&v=20170628';
-
         //获取天气信息
-        that.$http.jsonp(apiHost + 'api/getWeather').then((res) => {
+        this.$http.jsonp(apiHost + 'api/getWeather').then((res) => {
             if (res.body.code === 0) {
-                that.weatherInfo = res.body.data;
-
-                setInterval(() => {
-                    that.weatherInfo.time = that.weatherInfo.time + 1000;
-                },1000)
+                this.weatherInfo = res.body.data;
+                this.sunlightStatus = this.getSunlightStatus(res.body.data);
             }
         })
     },
     data() {
         return {
-            weather_bg: "",
-            weatherInfo: {},
-            searchCnt: ""
+            weatherInfo: {},                                                //天信息
+            sunlightStatus: null,                                           //日出落状态
+            searchCnt: ""                                                   //搜索内容
         }
     },
     methods: {
         search() {
             this.$emit('searchCnt', {type: "_s", text: this.searchCnt});
         },
-        getDayStatus(time) {
-            let date = new Date(time),
-                cur_hh = date.getHours(),
-                cur_mm = date.getMinutes(),
-                sunrise_hh = Number(this.weatherInfo.sunrise_1[0].substring(0,2)),
-                sunset_hh = Number(this.weatherInfo.sunset_1[0].substring(0,2)),
-                sunrise_mm = Number(this.weatherInfo.sunrise_1[0].substring(3,5)),
-                sunset_mm = Number(this.weatherInfo.sunset_1[0].substring(3,5)),
-                status;
+        /* 获取日出落状态
+            params:   info: 天气信息。    
+            return:   1: 日出。   2: 日落。
+        */
+        getSunlightStatus(info) {
+            let date = new Date(info.time),                                 //系统时间
+                cur_hh = date.getHours(),                                   //当前时
+                cur_mm = date.getMinutes(),                                 //当前分
+                sunrise_hh = Number(info.sunrise_1[0].substring(0,2)),      //日出时
+                sunset_hh = Number(info.sunset_1[0].substring(0,2)),        //日落时
+                sunrise_mm = Number(info.sunrise_1[0].substring(3,5)),      //日出分
+                sunset_mm = Number(info.sunset_1[0].substring(3,5));        //日落分
 
-            if ( cur_hh > sunrise_hh && cur_hh < sunset_hh) {
-                status = true;
-            } else if (cur_hh < sunrise_hh && cur_hh > sunset_hh) {
-                status = false;
+            if ( (cur_hh > sunrise_hh && cur_hh < sunset_hh) || (cur_hh == sunrise_hh && cur_mm >= sunrise_mm) || (cur_hh == sunset_hh && cur_mm < sunset_mm) ) {
+                return 1;
+            } else {
+                return 2;
             }
-
-            return status;
         },
         searchList(text) {
             this.$emit('searchCnt', text);
@@ -108,44 +102,29 @@ export default {
         display: block;
         margin-bottom: 20px;
         .weather {
-            position: relative;
-            margin-bottom: 20px;
-            img {width: 100%;}
-            .weatherIcon {
-                position: absolute;
-                top: 5%;
-                left: 2.2%;
-                z-index: 100;
-                width: 21.45%;
+            height: 150px;
+            width: 100%;
+            margin-bottom: 10px;
+            .iconfont {
+                display: block;
+                font-size: 60px;
             }
-            .elseInfo {
-                position: absolute;
-                top: 37%;
-                right: 0;
-                width: 23%;
-                height: 27.55%;
-                color: #fff;
-                font-size: 12px;
-            }
-            p.date {
-                position: absolute;
-                bottom: 20%;
-                right: 2%;
-                width: 25.33%;
-                height: 13.38%;
-                text-align: center;
-                span {
-                    flex: 1;
+            .info {
+                flex: none;
+                p {
+                    padding: 0 20px;
                 }
-            }
-            strong {
-                position: absolute;
-                top: 37.79%;
-                left: 26.43%;
-                width: 46.25%;
-                height: 37.79%;
-                text-align: center;
-                font-size: 30px;
+                span {
+                    font-size: 25px;
+                }
+                b {
+                    display: block;
+                    color: #666;
+                    font-size: 12px;
+                }
+                strong {
+                    font-size: 35px;
+                }
             }
         }
 

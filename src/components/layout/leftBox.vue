@@ -342,7 +342,6 @@ export default {
                     margin-bottom: 28px;
                     color: #8d8d8d;
                     text-indent: 1em;
-                    font-weight: 400;
                     font-size: 14px;
                     -webkit-line-clamp: 3;
                 }
@@ -356,7 +355,6 @@ export default {
                     border-top: 1px solid #e9e9e9;
                     .article_categories {
                         margin-right: 15px;
-                         font-weight: normal;
                          a {
                             line-height: 20px;
                             color: #8d8d8d;

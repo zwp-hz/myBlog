@@ -9,6 +9,7 @@
             <hotArticle v-on:searchCnt="searchList" v-on:articleInfo="articleDeatil" class="col-sm-12 col-md-4"></hotArticle>
             <tags v-on:searchCnt="searchList" class="col-sm-12 col-md-4"></tags>
         </div>
+        <p class="put-on-record">©2017-2017&nbsp;&nbsp;朱为鹏&nbsp;&nbsp;<a href="http://www.miitbeian.gov.cn/" target="_blank">浙ICP备17031040号-1</a></p>
   	</div>
 </template>
 
@@ -53,7 +54,7 @@ export default {
         }
         .container {
             margin: 0 auto;
-            padding: 100px 0 !important;
+            padding: 100px 0 0 !important;
             .about_me {
                 img { width: 150px; }
                 p { 
@@ -61,6 +62,14 @@ export default {
                     padding: 20px 0;
                     text-indent: 2em;
                 }
+            }
+        }
+        .put-on-record {
+            padding-bottom: 40px;
+            color: #fff;
+            text-align: center;
+            a {
+                color: #fff;
             }
         }
     }
