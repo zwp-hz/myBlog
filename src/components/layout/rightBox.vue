@@ -8,7 +8,7 @@
                 <div class="info g-r-center">
                     <p>
                         <span>{{ weatherInfo.city[0] }}</span>
-                        <b v-if="sunlightStatus == 2">{{weatherInfo.forecast[0].weather[0].day[0].type[0]}}</b>
+                        <b v-if="sunlightStatus == 1">{{weatherInfo.forecast[0].weather[0].day[0].type[0]}}</b>
                         <b v-else>{{ weatherInfo.forecast[0].weather[0].night[0].type[0]}}</b>
                     </p>
                     <strong>{{ weatherInfo.wendu[0] }}ﾟ</strong>
