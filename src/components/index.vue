@@ -113,10 +113,9 @@
         },
         //跳转详情页
         articleDetail(text) {
-            this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}} );
-            setTimeout(function() {
-                location.reload();
-            },100)
+            this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}},function() {
+               location.reload();
+            });
         },
         //加载过渡
         loadingStatus(status) {

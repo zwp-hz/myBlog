@@ -222,8 +222,9 @@ export default {
           * @data   id: 文章id, title: 文章title
          */
         articleDetail(id,title) {
-            this.$router.push( {path: '/articleDetail', query: {articleId: id, title: title}} );
-            location.reload();
+            this.$router.push( {path: '/articleDetail', query: {articleId: id, title: title}},function() {
+                location.reload();
+            });
         },
         /** 分页
           * @data   num: 分页, type: 是否第一次加载 ? '' : 'NoFirst'

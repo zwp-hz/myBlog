@@ -120,10 +120,9 @@ export default {
         //跳转详情页
         articleDetail(text) {
             if (text._id != this.articleInfo._id) {
-                this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}} );
-                setTimeout(function() {
+                this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}},function() {
                     location.reload();
-                },100)
+                });
             }
         }
     },
