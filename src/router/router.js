@@ -13,8 +13,8 @@ Vue.use(Router)
 export default new Router({
   // mode: 'history',
   routes: [
-    { path: "/", component: index, name: "index", meta: {title: "首页"}},
-    { path: "/index", component: index, name: "index2", meta: {title: "首页"}},
+    { path: "/", component: index, name: "index", meta: {title: "朱为鹏的网站"}},
+    { path: "/index", component: index, name: "index2", meta: {title: "朱为鹏的网站"}},
     { path: "/author", component: author, name: "author", meta: {title: "个人信息"}},
     { path: "/searchResult", component: searchResult, name: "searchResult", meta: {title: "搜索结果"}},
     { path: "/articleDetail", component: articleDetail, name: "articleDetail", meta: {title: "文章详情"}},
