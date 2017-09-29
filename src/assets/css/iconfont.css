@@ -34,6 +34,8 @@
 
 .icon-quxiao:before { content: "\e60a"; }
 
+.icon-lietu:before { content: "\e6be"; }
+
 .icon-chakan:before { content: "\e658"; }
 
 .icon-qing:before { content: "\e604"; }
@@ -86,4 +88,8 @@
 
 .icon-night-wu:before { content: "\e6ef"; }
 
+.icon-zhenyu:before { content: "\e632"; }
+
 .icon-time:before { content: "\e685"; }
+
+.icon-zanwushuju:before { content: "\e600"; }

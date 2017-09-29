@@ -10,12 +10,14 @@
                     </a>
                     <!-- 多张图片 -->
                     <div v-else class="swiper-container">
-                        <swiper :options="swiperOption[index]" ref="mySwiper">
-                            <swiper-slide v-for="banner in item.images_src">
-                                <img style="width: 100%;" ondragstart="return false;" class="swiper-lazy" :data-src="banner" @error="imgError();"/>
-                                <div class="swiper-lazy-preloader"></div>
-                            </swiper-slide>
-                        </swiper>
+                        <a @click="articleDetail(item._id,item.title)">
+                            <swiper :options="swiperOption[index]" ref="mySwiper">
+                                <swiper-slide v-for="banner in item.images_src">
+                                    <img style="width: 100%;" ondragstart="return false;" class="swiper-lazy" :data-src="banner" @error="imgError();"/>
+                                    <div class="swiper-lazy-preloader"></div>
+                                </swiper-slide>
+                            </swiper>
+                        </a>
                         <div :class="'swiper-pagination swiper-pagination'+index+' swiper-pagination-bullets'"></div>
                     </div>
                     <div class="box">
@@ -44,7 +46,7 @@
             </article>
         </div>
         <div class="noParam" v-else>
-            <img ondragstart="return false;" src="../../images/noParam.png" alt="暂无数据" />
+            <i class="iconfont icon-zanwushuju"></i>
             <p>找不到相关 "{{searchText}}" 数据</p>
         </div>
         <!-- 分页 -->
@@ -394,11 +396,11 @@ export default {
     .noParam {
         padding-top: 50px;
         text-align: center;
-        img {
-            width: 30%;
+        i {
+            font-size: 80px;
         }
         p {
-            line-height: 50px;
+            line-height: 80px;
             font-size: 20px;
             color: #8d8d8d;
         }
