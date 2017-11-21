@@ -1,44 +1,40 @@
 <template>
     <div id="author">
-        <blogHeader v-on:searchCnt="searchList" :headerStatus="headerStatus"></blogHeader>
-        <!-- <div style="height:1500px;" data-0="background-color:rgb(0,0,255);transform:rotate(0deg);" data-end="background-color:rgb(255,0,0);transform:rotate(360deg);"></div> -->
-        <div class="img" data-0="left[pathx]:0%;top[pathy]:0%;transform:rotate(-120deg) scale(0.5);" data-666="left[pathx]:33%;top[pathy]:33%;transform:rotate(-140deg) scale(0.6);" data-1600="left[pathx]:70%;top[pathy]:70%;transform:rotate(-480deg) scale(0.8);" data-2000="left[pathx]:95%;top[pathy]:98%;transform:rotate(-480deg) scale(1);">
-        </div>
+        <blogHeader v-on:searchCnt="searchList" :elseClass="elseClass"></blogHeader>
+        <svg id="svg" width="100%" height="100%">
+            <path data-300="stroke-dashoffset:580;" data-2052="stroke-dashoffset:0;" d="M153 334
+            C153 334 151 334 151 334
+            C151 339 153 344 156 344
+            C164 344 171 339 171 334
+            C171 322 164 314 156 314
+            C142 314 131 322 131 334
+            C131 350 142 364 156 364
+            C175 364 191 350 191 334
+            C191 311 175 294 156 294
+            C131 294 111 311 111 334
+            C111 361 131 384 156 384
+            C186 384 211 361 211 334
+            C211 300 186 274 156 274"
+            style="fill:none;stroke:red;stroke-width:2;stroke-dasharray:580px; stroke-dashoffset:0;"/>
+            <path data-0="stroke-dashoffset:200;" data-300="stroke-dashoffset:0;" d="M20,20 C90,40 130,100 180,20" stroke="#000000" fill="none" style="stroke-width: 2px;stroke-dasharray:200px; stroke-dashoffset:0;"></path>
+        </svg>
         
     </div>
 </template>
 
 <script>
 "use strict";
-import blogHeader   from './layout/header.vue'
+import blogHeader  from './layout/header.vue'
 
 export default {
     mounted() {
         let that = this;
-        
-        window.onscroll = window.onload = () => {
-            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 
-            that.headerStatus = scrollTop > 0 ? true : false;
-        }
 
-        skrollr.init({
-            forceHeight: false,
-            easing: {
-                pathy: function(p) {
-                    // return (Math.sin(p * Math.PI * 2 - Math.PI/2) + 1) / 2;
-                    return p;
-                },
-                pathx: function(p) {
-                    return p;
-                    // return (Math.cos(p * Math.PI * 2 - Math.PI/2) + 1) / 2;
-                },
-            }
-        })
     },
     data() {
         return {
-        	headerStatus: false
+            elseClass: 'author'
         }
     },
     methods: {
@@ -68,6 +64,10 @@ export default {
             height: 150px;
             background: url("../images/icon_author.png") no-repeat;
             background-size: 100% auto;
+        }
+        svg{
+            position: fixed;
+            top: 100px;
         }
     }
 </style>

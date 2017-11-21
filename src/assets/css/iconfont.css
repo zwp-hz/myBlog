@@ -26,6 +26,8 @@
 
 .icon-night-leizhenyu:before { content: "\e6d9"; }
 
+.icon-night-xiaoyu:before { content: "\e64f"; }
+
 .icon-night-yin:before { content: "\e648"; }
 
 .icon-night-zhenxue:before { content: "\e649"; }
@@ -33,6 +35,8 @@
 .icon-night-zhenyu:before { content: "\e64a"; }
 
 .icon-quxiao:before { content: "\e60a"; }
+
+.icon-yin:before { content: "\e62a"; }
 
 .icon-lietu:before { content: "\e6be"; }
 
@@ -93,3 +97,7 @@
 .icon-time:before { content: "\e685"; }
 
 .icon-zanwushuju:before { content: "\e600"; }
+
+.icon-logo:before { content: "\e74c"; }
+
+.icon-home:before { content: "\e626"; }

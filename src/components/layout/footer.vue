@@ -6,8 +6,8 @@
                 <p>思想（且不论好坏与否）——行为——习惯，这就是人 生的规律。 —— 特赖因</p>
                 <p>科学家不是依赖于个人的思想，而是综合了几千人的智慧，所有的人想一个问题，并且每人做它的部分工作，添加到正建立起来的伟大知识大厦之中。 —— 卢瑟福</p>
             </div>
-            <hotArticle v-on:searchCnt="searchList" v-on:articleInfo="articleDeatil" class="col-sm-12 col-md-4"></hotArticle>
-            <tags v-on:searchCnt="searchList" class="col-sm-12 col-md-4"></tags>
+            <hotArticle v-on:searchCnt="searchList" v-on:articleInfo="articleDeatil" class="col-sm-6 col-md-4"></hotArticle>
+            <tags v-on:searchCnt="searchList" class="col-sm-6 col-md-4"></tags>
         </div>
         <p class="put-on-record">©2017-2017&nbsp;&nbsp;朱为鹏&nbsp;&nbsp;<a href="http://www.miitbeian.gov.cn/" target="_blank">浙ICP备17031040号-1</a></p>
   	</div>
@@ -48,7 +48,7 @@ export default {
         height: 560px;
         overflow: hidden;
         background: #262626;
-        &.search_detail {
+        &.article {
             position: static;
             height: auto;
         }

@@ -4,6 +4,11 @@
 
 @media (max-width: 990px){
     #rightBox {display: none !important;}
+    #footer {
+        .about_me {
+            margin-bottom: 30px;
+        }
+    }
 }
 
 @media (max-width: 900px){
@@ -41,16 +46,20 @@
     .container { max-width: 320px !important; }
 }
 
-body, ul, li, ol, li, dl, dt, dd, form, h1, h2, h3, h4, p, div, hr, tabel, tr, td, select, option, br, span, img, a, label, form, input, textarea, em, i, strong, b {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
 body { position: relative; font-size: 14px; font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif !important; }
 img { border: 0 none; vertical-align: top;}
 a { text-decoration: none !important; cursor: pointer; outline: none; hide-focus: expression(this.hideFocus=true) }
 li { list-style: none; vertical-align:top;}
-input{ font-size: 0.14rem; border: 0; background: none; float: left; outline: none; }
+input{
+    float: left;
+    font-size: 0.14rem; 
+    border: 0; 
+    background: none;
+    outline: none;
+    &:disabled {
+        background-color: rgba(192, 192, 192, 0.4) !important;
+    }
+}
 strong,b { font-weight: normal; }
 ::-webkit-input-placeholder { color: #999; }
 .clear{ zoom: 1;}

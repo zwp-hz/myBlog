@@ -1,7 +1,7 @@
 <template>
     <div id="index">
         <!-- header -->
-        <blogHeader v-on:searchCnt="searchList" :headerStatus="headerStatus"></blogHeader>
+        <blogHeader v-on:searchCnt="searchList"></blogHeader>
         <!-- loading -->
         <loadIng v-if="!loading"></loadIng>
         <!-- indexBg -->
@@ -13,7 +13,7 @@
                     <li @click="categoriesName = '全部'"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === '全部'}" :to="{path: '/'}">全部</router-link></li>
                     <li @click="categoriesName = item.name" v-for="item in categories"><router-link class="u_transition u_hover_blue_bg" :class="{cur: categoriesName === item.name}" :to="{path: '/', query: {categories: encodeURIComponent(item.name)}}">{{item.name}}</router-link></li>
                 </ul>
-                <div class="content">
+                <div class="content clear">
                     <leftBox v-on:searchCnt="searchList" v-on:imgLoadStatus="loadingStatus" :categoriesName="categoriesName" :resizeTime="resizeTime"></leftBox>
                     <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail"></rightBox>
                 </div>
@@ -25,19 +25,19 @@
 </template>
 
 <script>
-    "use strict";
-    import loadIng      from './layout/loadIng.vue'
-    import blogHeader   from './layout/header.vue'
-    import blogFooter   from './layout/footer.vue'
-    import leftBox      from './layout/leftBox.vue'
-    import rightBox     from './layout/rightBox.vue'
+"use strict";
+import loadIng      from './layout/loadIng.vue'
+import blogHeader   from './layout/header.vue'
+import blogFooter   from './layout/footer.vue'
+import leftBox      from './layout/leftBox.vue'
+import rightBox     from './layout/rightBox.vue'
 
-    export default {
-        mounted() {
-            let that = this,
-                apiHost = this.$store.state.APIHOST;
+export default {
+    mounted() {
+        let that = this,
+            apiHost = this.$store.state.APIHOST;
 
-            document.getElementsByTagName('body')[0].scrollTop = 0;
+        document.getElementsByTagName('body')[0].scrollTop = 0;
 
         //获取分类列表
         this.$http.jsonp(apiHost + 'api/getCategoryList').then((res) => {
@@ -53,12 +53,11 @@
                 that.resizeTime = e.timeStamp;
 
             that.init();
-        } 
+        };
     },
     data() {
         return {
             loading: false,                                                             //加载状态
-            headerStatus: false,                                                        //头部状态
             getBingImg: {                                                               //必应壁纸
                 biyingImg: sessionStorage.biyingImg ? sessionStorage.biyingImg : '',    //url
                 showStatus: false                                                       //显示状态
@@ -97,10 +96,8 @@
                         this.$refs.indexBg.style.position = "absolute";
                         this.$refs.indexBg.style.top = scrollHeight - clientHeight - 560 + "px";
                     }
-                    this.headerStatus = scrollTop > 0 ? true : false;
                 }
             } else {
-                this.headerStatus = true;
                 this.getBingImg.showStatus = false;
             }
         },
@@ -109,13 +106,12 @@
             let data = {};
 
             data[text.type] = text.text;
+            console.log(data);
             this.$router.push( {path: '/searchResult', query: data} );
         },
         //跳转详情页
         articleDetail(text) {
-            this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}},function() {
-               location.reload();
-            });
+            this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}});
         },
         //加载过渡
         loadingStatus(status) {

@@ -5,12 +5,12 @@ Vue.use(Vuex)
 
 const state = {
 	APIHOST: window.location.href.indexOf("www") != -1 ? "http://www.zhuweipeng.me:8989/" : "http://localhost:8989/",
-  	IMGHOST: "http://omdiu1qhf.bkt.clouddn.com/"
+  	IMGHOST: "http://image.zhuweipeng.me/"
 }
 
 const actions = {
-	//设置评论数
-	setCommentNum(store) {
+	//获取畅言评论数
+	getCommentNum(store) {
 		if(document.getElementById("cy_cmt_num")) {
 	        let listCount = document.getElementById("cy_cmt_num"),
 	            count = listCount.nextSibling;

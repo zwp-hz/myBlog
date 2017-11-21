@@ -5,7 +5,7 @@
             <a ondragstart="return false;" class="images" @click="$emit('articleInfo', {_id: item._id, title: item.title})">
                 <img v-if="!item.imgLoadState" ondragstart="return false;" :src="item.images_src[0]" alt="" @error="imgError(index)" />
                 <i class="iconfont icon-lietu" v-else></i>
-                <span :id="'sourceId::' + item._id" class = "cy_cmt_count" ></span>
+                <span>0</span>
                 <b class="backImg u_transition u_hover_show"><i class="iconfont icon-lianjie"></i></b>
             </a>
             <div style="flex: 1;">
@@ -33,7 +33,7 @@ export default {
             apiHost = this.$store.state.APIHOST;
 
         //获取热门文章    
-        this.$http.jsonp(apiHost + 'api/getArticlesList?type=hot').then((res) => {
+        this.$http.jsonp(apiHost + 'api/getArticlesList',{params: {type: 'hot',release: true}}).then((res) => {
             if (res.body.code == 0) {
                 for (var i of res.body.data.data) {
                     i.images_src.forEach( ( item, j ) => {
@@ -43,13 +43,6 @@ export default {
                     i.imgLoadState = false;
                 }
                 this.articleList = res.body.data.data;
-
-                //追加获取评论数js代码
-                if (accessNum++ % 2 == 0) {
-                    if (this.$route.name == "articleDetail") {
-                        this.$store.dispatch('setCommentNum');
-                    }
-                }
             }
         });
     },
@@ -118,7 +111,7 @@ export default {
                     width: 76px;
                     height: 76px;
                     text-align: center;
-                    line-height: 86px;
+                    line-height: 76px;
                     opacity: 0;
                     background: rgba(74,190,217,0.6);
                     border-radius: 50%;

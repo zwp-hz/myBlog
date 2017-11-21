@@ -9,6 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "remarkable": "^1.7.1",
     "vue": "^2.1.0",
     "vue-awesome-swiper": "^2.4.0"
   },

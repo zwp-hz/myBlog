@@ -54,7 +54,7 @@ export default {
     data() {
         return {
             loading: false,
-        	elseClass: "search_detail",                             //其他样式 
+        	elseClass: 'article',                                   //其他样式
             resizeTime: null,                                       //窗口改动时间
         	searchCnt: {                                            //搜索内容、类别      
                 type: "",
@@ -81,9 +81,7 @@ export default {
         },
         //跳转详情页
         articleDetail(text) {
-            this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}},function() {
-                location.reload();
-            });
+            this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}});
         },
         //加载过渡
         loadingStatus(status) {

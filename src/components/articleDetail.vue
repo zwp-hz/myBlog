@@ -27,13 +27,13 @@
                             <div class="fr">
                                 <span v-for="(categories,index) in articleParam.categories">
                                     {{index == 0 ? '':', '}}
-                                    <router-link class="u_transition u_hover_gray" :to="{path: '/searchResult', query: {Category: categories}}">
+                                    <router-link class="u_transition u_hover_blue" :to="{path: '/searchResult', query: {Category: categories}}">
                                         {{categories}}
                                     </router-link>
                                 </span>
                             </div>
                         </header>
-                        <article>{{articleParam.content}}</article>
+                        <article v-html="articleParam.content"></article>
                         <div class="blog-tags">
                             <h5>Tags In</h5>
                             <div class="blog-tags-list clear">
@@ -42,8 +42,7 @@
                                 </router-link>
                             </div>
                         </div>
-                        <!--PC和WAP自适应版(畅言)-->
-                        <div id="SOHUCS" :sid="$route.query.articleId" ></div>
+                        <comment></comment>
                     </div>
                     <rightBox v-on:searchCnt="searchList" v-on:articleInfo="articleDetail"></rightBox>
                 </div>
@@ -60,6 +59,10 @@ import loadIng      from './layout/loadIng.vue'
 import blogHeader   from './layout/header.vue'
 import blogFooter   from './layout/footer.vue'
 import rightBox     from './layout/rightBox.vue'
+import comment      from './layout/comment.vue'
+
+const Remarkable = require('remarkable');
+const md = new Remarkable();
 
 export default {
     mounted() {
@@ -75,7 +78,7 @@ export default {
     data() {
         return {
             loadStatus: false,                              //加载状态
-            elseClass: "search_detail",                     //区分来源
+            elseClass: 'article',                           //其他样式
             articleInfo: {},                                //文章信息
             articleParam: {                                 //文章内容
                 categories: []
@@ -93,22 +96,16 @@ export default {
             };
             this.loadStatus = false;
 
-            this.$http.jsonp(apiHost + 'api/getArticlesList?_id='+this.articleInfo._id).then((res) => {
+            this.$http.jsonp(apiHost + 'api/getArticlesList',{params: {_id: this.articleInfo._id}}).then((res) => {
                 if (res.body.code === 0) {
                     let param = res.body.data.data[0];
 
+                    param.content = md.render(param.content);
+
                     this.loadStatus = true;
                     this.articleParam = param;
-
-                    //加载畅言评论带吗
-                    (function(){
-                    var appid = 'cyt8K1Rab';
-                    var conf = '2a26af657ce8dca9f48847e746aa735c';
-                    var width = window.innerWidth || document.documentElement.clientWidth; 
-                    if (width < 960) { 
-                    window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })();
                 }
-            },(res) => console.log(res));
+            });
         },
         //侦听搜索内容
         searchList(text) {
@@ -120,9 +117,7 @@ export default {
         //跳转详情页
         articleDetail(text) {
             if (text._id != this.articleInfo._id) {
-                this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}},function() {
-                    location.reload();
-                });
+                this.$router.push( {path: '/articleDetail', query: {articleId: text._id, title: text.title}});
             }
         }
     },
@@ -130,7 +125,8 @@ export default {
         loadIng,
         blogHeader,
         blogFooter,
-        rightBox
+        rightBox,
+        comment
     }
 }
 </script>
@@ -147,7 +143,7 @@ export default {
         .breadcrumbs {
             float: right;
             a,strong {
-                color: #8d8d8d!important;
+                color: #8d8d8d !important;
             }
             span {
                 padding: 0 10px;
@@ -174,11 +170,10 @@ export default {
                 padding-bottom: 40px;
                 margin-bottom: 15px;
                 line-height: 1.8;
-                text-indent: 2em;
+                color: #516272;
             }
             .blog-tags {
                 padding-bottom: 32px;
-                border-bottom: 1px solid #ebebeb;
                 h5 {
                     margin-bottom: 22px;
                     color: #3f3f3f;
