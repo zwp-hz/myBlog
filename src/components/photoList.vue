@@ -43,9 +43,9 @@ export default {
             prefix = this.$route.query.prefix;
 
         // 获取对应相册列表
-        this.$http.post(APIHOST + 'api/getQiniuList',{
+        this.$http.jsonp(APIHOST + 'api/getQiniuList',{params: {
             prefix: prefix
-        }).then((res) => {
+        }}).then((res) => {
             if (res.body.code === 0) {
                 let items = res.body.data.items.reverse(),
                     imgJson = {};

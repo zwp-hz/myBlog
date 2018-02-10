@@ -61,10 +61,10 @@ export default {
 
         // 获取对应相册3条数据
         json.forEach( (item,index) => {
-            this.$http.post(APIHOST + 'api/getQiniuList',{
+            this.$http.jsonp(APIHOST + 'api/getQiniuList',{params: {
                 prefix: item,
                 limit: 3
-            }).then((res) => {
+            }}).then((res) => {
                 if (res.body.code === 0) {
                     let items = res.body.data.items;
 
