@@ -1,6 +1,6 @@
 <template>
     <div id="author">
-        <blogHeader v-on:searchCnt="searchList" :elseClass="elseClass"></blogHeader>
+        <headerBox :headerData="headerData"></headerBox>
         <svg id="svg" width="100%" height="100%">
             <path data-300="stroke-dashoffset:580;" data-2052="stroke-dashoffset:0;" d="M153 334
             C153 334 151 334 151 334
@@ -18,23 +18,24 @@
             style="fill:none;stroke:red;stroke-width:2;stroke-dasharray:580px; stroke-dashoffset:0;"/>
             <path data-0="stroke-dashoffset:200;" data-300="stroke-dashoffset:0;" d="M20,20 C90,40 130,100 180,20" stroke="#000000" fill="none" style="stroke-width: 2px;stroke-dasharray:200px; stroke-dashoffset:0;"></path>
         </svg>
-        
     </div>
 </template>
 
 <script>
 "use strict";
-import blogHeader  from './layout/header.vue'
+import headerBox  from './layout/header.vue'
 
 export default {
     mounted() {
         let that = this;
-
-
     },
     data() {
         return {
-            elseClass: 'author'
+            headerData: {
+                searchStatus: false,
+                isStatic: true,
+                type: "author"
+            }
         }
     },
     methods: {
@@ -46,7 +47,7 @@ export default {
         }
     },
     components: {
-        blogHeader
+        headerBox
     }
 }
 
@@ -58,13 +59,6 @@ export default {
         height: 3000px;
         overflow: hidden;
         background-color: #3498db;
-        .img {
-            position: absolute;
-            width: 100px;
-            height: 150px;
-            background: url("../images/icon_author.png") no-repeat;
-            background-size: 100% auto;
-        }
         svg{
             position: fixed;
             top: 100px;

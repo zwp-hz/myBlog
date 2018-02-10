@@ -1,23 +1,23 @@
 <template>
-    <div class="recent_posts col-xs-12">
+    <div class="recent_posts">
         <h3>最新动态</h3>
-        <div class="article g-r-center" v-for="(item, index) in articleList">
-            <a ondragstart="return false;" class="images" @click="$emit('articleInfo', {_id: item._id, title: item.title})">
-                <img v-if="!item.imgLoadState" ondragstart="return false;" :src="item.images_src[0]" alt="" @error="imgError(index)" />
-                <i class="iconfont icon-lietu" v-else></i>
-                <span>0</span>
-                <b class="backImg u_transition u_hover_show"><i class="iconfont icon-lianjie"></i></b>
-            </a>
+        <div class="article g-r-center" v-for="(item,index) in articleList_hot">
+            <router-link :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" ondragstart="return false;" class="images" :style="item.images_src[0].status == 1 ? 'background: url('+item.images_src[0].src+') no-repeat center bottom' : ''">
+                <img v-if="item.images_src[0].status == 0" style="opacity: 0;" @load="imgLoad(index,'load');" @error="imgLoad(index,'error');" :src="item.images_src[0].src" alt="" />
+                <i v-if="item.images_src[0].status == 2" class="iconfont icon-codestore"></i>
+                <span>{{item.review.length}}</span>
+                <b class="backImg u_transition_300 u_hover_show"><i class="iconfont icon-lianjie"></i></b>
+            </router-link>
             <div style="flex: 1;">
                 <div class="categories">
-                    <span v-for="(categories,index) in item.categories">
+                    <span v-for="(value,index) in item.categories">
                         {{index > 0 ? ', ':''}}
-                        <a class="u_transition u_hover_blue" @click="$emit('searchCnt', {type: 'Category', text: categories})">
-                            {{categories}}
+                        <a @click="search({type: 'Category', text: value})" class="u_transition_300 u_hover_active">
+                            {{value}}
                         </a>
                     </span>
                 </div>
-                <a class="title u_transition u_hover_blue" @click="$emit('articleInfo', {_id: item._id, title: item.title})">{{item.title}}</a>
+                <router-link :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" class="title u_transition_300 u_hover_active">{{item.title}}</router-link>
             </div>
         </div>
     </div>
@@ -25,39 +25,52 @@
 
 <script>
 "use strict";
-var accessNum = 0;
-
 export default {
     mounted() {
-        let imgHost = this.$store.state.IMGHOST,
-            apiHost = this.$store.state.APIHOST;
+        let { IMGHOST, APIHOST, articleList_hot } = this.$store.state;
 
-        //获取热门文章    
-        this.$http.jsonp(apiHost + 'api/getArticlesList',{params: {type: 'hot',release: true}}).then((res) => {
-            if (res.body.code == 0) {
-                for (var i of res.body.data.data) {
-                    i.images_src.forEach( ( item, j ) => {
-                        i.images_src[j] = imgHost + item + "?imageView2/1/w/150/h/150/interlace1/q/90";
-                    });
+        if (!articleList_hot) {
+            //获取热门文章
+            this.$http.jsonp(APIHOST + 'api/getArticlesList',{params: {type: 'hot',release: true}}).then((res) => {
+                if (res.body.code == 0) {
+                    let data = res.body.data.data;
 
-                    i.imgLoadState = false;
+                    for (var i of data) {
+                        i.images_src.forEach( ( item, j ) => {
+                            i.images_src[j] = {
+                                src: IMGHOST + item + "?imageView2/2/interlace/1/w/100",
+                                status: 0   // 0：图片未加载  1：图片加载成功  2：图片加载失败
+                            };
+                        });
+
+                        i.imgLoadState = false;
+                    }
+                    this.articleList_hot = data;
+
+                    this.$store.commit('setFooterData', {type: 'articleList_hot',data: data});
                 }
-                this.articleList = res.body.data.data;
-            }
-        });
+            });
+        }
     },
     data() {
         return {
-        	articleList: []
+        	articleList_hot: this.$store.state.articleList_hot || []
         }
     },
     methods: {
-        imgError(index) {
-            this.articleList[index].imgLoadState = true;
-
-            var img = event.srcElement;
-            img.src = "../assets/images/image_error.png";
-            img.onerror = null;
+        /** 图片加载
+         * @index  下标
+         * @type   load：加载成功  error：加载失败
+         */
+        imgLoad(index,type) {
+            this.articleList_hot[index].images_src[0].status = type == 'load' ? 1 : 2;
+        },
+        /** 标签搜索
+          * @data   搜索参数
+         */
+        search(data) {
+            this.$store.commit('searchChange', data);
+            this.$router.push({path: '/searchResult', query: {Category: data.text}});
         }
     }
 }
@@ -66,11 +79,17 @@ export default {
 
 <style lang="scss" scoped>
 	.recent_posts {
+        h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            line-height: 30px;
+            color: #e3e3e3;
+        }
         a {color: #fff;}
         .article {
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #3e3e3e;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #cecec4;
             &:last-child{ border-bottom: none;}
             .images {
                 position: relative;
@@ -78,11 +97,15 @@ export default {
                 width: 76px;
                 height: 76px;
                 margin-right: 19px;
-                background-color: #ebebeb;
                 border-radius: 50% 50%;
-                img { 
-                    width: 100%;
-                    border-radius: 50% 50%;
+                background-color: #cecec4;
+                background-size: cover !important;
+                -webkit-background-size: cover !important;
+                .icon-codestore {
+                    position: absolute;
+                    top: 19.5px;
+                    left: 21px;
+                    font-size: 34px;
                 }
                 .icon-lietu {
                     position: absolute;
@@ -101,7 +124,7 @@ export default {
                     text-align: center;
                     line-height: 19px;
                     color: #fff;
-                    background: #47c9e5;
+                    background: #1ed9be;
                     border-radius: 50% 50%;
                 }
                 .backImg {

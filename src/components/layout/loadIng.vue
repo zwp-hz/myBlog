@@ -1,10 +1,12 @@
 <template>
-    <div id="loading" :class="loadingStatus?'loadingHide g-r-center':'g-r-center'" v-if="!loadingHide">
-        <div class="item-loader-container">
-            <div class="la-square-jelly-box la-2x">
-                <div></div>
-                <div></div>
+    <div id="loading-overlay" v-if="$store.state.first_load" class="loading-overlay" :class="{loaded: loadStatus && status}">
+        <div class="loading-reveal">
+            <div class="loading-left"></div>
+            <div class="loading-right">
+                <div class="loading-reveal-b">loading</div>
             </div>
+        </div>
+        <div class="bustle-gem">
         </div>
     </div>
 </template>
@@ -12,55 +14,270 @@
 <script>
 "use strict";
 export default {
-	props: ["loadingStatus"],
+    props: ["loadStatus"],
     mounted() {
-        
+        let _this = this;
+
+        setTimeout(() => {
+            _this.status = true;
+            // 0.8s 动画结束后。更改首次加载状态
+            setTimeout(() => {
+                _this.$store.commit('loadChange');
+            },800)
+        },1000);
     },
     data() {
         return {
-        	loadingHide: false	
+        	status: false              // 状态。 false：表示时间未过1秒。 true：表示时间已经过了1秒
         }
     },
     methods: {
-    	setloadIngHide() {
-    		let that = this;
-
-	        setTimeout(() => {
-	        	that.loadingHide = true;
-	        },500);
-    	}
-    },
-    watch: {
-    	loadingStatus(val) {
-            if (val == true) {
-                this.setloadIngHide();
-            } else {
-                this.loadingHide = false;
-            }
-    	}
+    	
     }
 }
-
 </script>
 
 <style lang="scss" scoped>
-	#loading {
-	    position: fixed;
-	    top: 0;
-	    left: 0;
-	    z-index: 2000;
-	    height: 100vh;
-	    width: 100vw;
-	    opacity: 1;
-	    background-color: #4fc1e9;
+$activeColor: #1ed9be;
+.loading-overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    color: #fff;
+}
+.loading-reveal {
+    position: absolute;
+    left: -100%;
+    top: -100%;
+    width: 300%;
+    height: 300%;
+    transform: rotate(45deg);
+}
+.loading-left {
+    position: absolute;
+    top: 0%;
+    right: 50%;
+    width: 50%;
+    height: 100%;
+    background-color: #FFF;
+    border-right: 1px solid #F9F9F9;
+}
+.loading-right {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    background-color: #F9F9F9;
+    overflow: hidden;
+    border-left: 1px solid #F9F9F9;
+}
+.loading-reveal-b {
+    position: absolute;
+    left: -70px;
+    top: 42%;
+    font-size: 200px;
+    line-height: 400px;
+    transform: rotate(-45deg);
+}
 
-	    &.loadingHide {
-	    	opacity: 0;
-	    	transition: all 0.5s ease-in;
-			-moz-transition: all 0.5s ease-in;
-			-webkit-transition: all 0.5s ease-in;
-			-o-transition: all 0.5s ease-in;
-	    }
-	}
-	.la-square-jelly-box,.la-square-jelly-box>div{position:relative;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.la-square-jelly-box{display:block;font-size:0;color:#fff}.la-square-jelly-box.la-dark{color:#333}.la-square-jelly-box>div{display:inline-block;float:none;background-color:currentColor;border:0 solid currentColor}.la-square-jelly-box{width:32px;height:32px}.la-square-jelly-box>div:nth-child(1),.la-square-jelly-box>div:nth-child(2){position:absolute;left:0;width:100%}.la-square-jelly-box>div:nth-child(1){top:-25%;z-index:1;height:100%;border-radius:10%;-webkit-animation:square-jelly-box-animate 0.6s -0.1s linear infinite;-moz-animation:square-jelly-box-animate 0.6s -0.1s linear infinite;-o-animation:square-jelly-box-animate 0.6s -0.1s linear infinite;animation:square-jelly-box-animate 0.6s -0.1s linear infinite}.la-square-jelly-box>div:nth-child(2){bottom:-9%;height:10%;background:#000;border-radius:50%;opacity:.2;-webkit-animation:square-jelly-box-shadow 0.6s -0.1s linear infinite;-moz-animation:square-jelly-box-shadow 0.6s -0.1s linear infinite;-o-animation:square-jelly-box-shadow 0.6s -0.1s linear infinite;animation:square-jelly-box-shadow 0.6s -0.1s linear infinite}.la-square-jelly-box.la-sm{width:16px;height:16px}.la-square-jelly-box.la-2x{width:64px;height:64px}.la-square-jelly-box.la-3x{width:96px;height:96px}@-webkit-keyframes square-jelly-box-animate{17%{border-bottom-right-radius:10%}25%{-webkit-transform:translateY(25%) rotate(22.5deg);transform:translateY(25%) rotate(22.5deg)}50%{border-bottom-right-radius:100%;-webkit-transform:translateY(50%) scale(1, 0.9) rotate(45deg);transform:translateY(50%) scale(1, 0.9) rotate(45deg)}75%{-webkit-transform:translateY(25%) rotate(67.5deg);transform:translateY(25%) rotate(67.5deg)}100%{-webkit-transform:translateY(0) rotate(90deg);transform:translateY(0) rotate(90deg)}}@-moz-keyframes square-jelly-box-animate{17%{border-bottom-right-radius:10%}25%{-moz-transform:translateY(25%) rotate(22.5deg);transform:translateY(25%) rotate(22.5deg)}50%{border-bottom-right-radius:100%;-moz-transform:translateY(50%) scale(1, 0.9) rotate(45deg);transform:translateY(50%) scale(1, 0.9) rotate(45deg)}75%{-moz-transform:translateY(25%) rotate(67.5deg);transform:translateY(25%) rotate(67.5deg)}100%{-moz-transform:translateY(0) rotate(90deg);transform:translateY(0) rotate(90deg)}}@-o-keyframes square-jelly-box-animate{17%{border-bottom-right-radius:10%}25%{-o-transform:translateY(25%) rotate(22.5deg);transform:translateY(25%) rotate(22.5deg)}50%{border-bottom-right-radius:100%;-o-transform:translateY(50%) scale(1, 0.9) rotate(45deg);transform:translateY(50%) scale(1, 0.9) rotate(45deg)}75%{-o-transform:translateY(25%) rotate(67.5deg);transform:translateY(25%) rotate(67.5deg)}100%{-o-transform:translateY(0) rotate(90deg);transform:translateY(0) rotate(90deg)}}@keyframes square-jelly-box-animate{17%{border-bottom-right-radius:10%}25%{-webkit-transform:translateY(25%) rotate(22.5deg);-moz-transform:translateY(25%) rotate(22.5deg);-o-transform:translateY(25%) rotate(22.5deg);transform:translateY(25%) rotate(22.5deg)}50%{border-bottom-right-radius:100%;-webkit-transform:translateY(50%) scale(1, 0.9) rotate(45deg);-moz-transform:translateY(50%) scale(1, 0.9) rotate(45deg);-o-transform:translateY(50%) scale(1, 0.9) rotate(45deg);transform:translateY(50%) scale(1, 0.9) rotate(45deg)}75%{-webkit-transform:translateY(25%) rotate(67.5deg);-moz-transform:translateY(25%) rotate(67.5deg);-o-transform:translateY(25%) rotate(67.5deg);transform:translateY(25%) rotate(67.5deg)}100%{-webkit-transform:translateY(0) rotate(90deg);-moz-transform:translateY(0) rotate(90deg);-o-transform:translateY(0) rotate(90deg);transform:translateY(0) rotate(90deg)}}@-webkit-keyframes square-jelly-box-shadow{50%{-webkit-transform:scale(1.25, 1);transform:scale(1.25, 1)}}@-moz-keyframes square-jelly-box-shadow{50%{-moz-transform:scale(1.25, 1);transform:scale(1.25, 1)}}@-o-keyframes square-jelly-box-shadow{50%{-o-transform:scale(1.25, 1);transform:scale(1.25, 1)}}@keyframes square-jelly-box-shadow{50%{-webkit-transform:scale(1.25, 1);-moz-transform:scale(1.25, 1);-o-transform:scale(1.25, 1);transform:scale(1.25, 1)}}
-</style>
+.bustle-gem {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    margin-left: -50px;
+    margin-top: -50px;
+    width: 100px;
+    height: 100px;
+    font-size: 60px;
+    line-height: 100px;
+    text-align: center;
+    background-color: $activeColor;
+    border-radius: 6px;
+    -webkit-animation: init-gem 0.8s ease 0s 1;
+}
+
+.bustle-gem:before {
+    content: ' ';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 0;
+    width: 100px;
+    height: 100px;
+    background-color: $activeColor;
+    border-radius: 6px;
+    transform: rotate(45deg);
+    -webkit-animation: init-gem-before 0.8s ease-in-out 0s 1;
+}
+
+.bustle-gem:after {
+    content: 'zZ';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 2;
+    transform: rotate(0deg);
+    -webkit-animation: init-gem-after 0.9s cubic-bezier(0,0.6,0.4,0) 0s 1;
+}
+
+/*** TRIGGER ANIMATIONS ***/
+
+@-webkit-keyframes init-gem {
+  0% {
+    top: -50%;
+    margin-top: -200px;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    border-radius: 50%/50%;
+  }
+  20% {
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+  }
+  30% {
+    top: 90%;
+    width: 100px;
+    height: 70px;
+    line-height: 70px;
+    border-radius: 50%/50%;
+  }
+  60% {
+    top: 50%;
+    margin-top: -140px;
+    margin-left: -35px;
+    width: 70px;
+    height: 100px;
+    line-height: 100px;
+    border-radius: 50%/50%;
+    transform: rotate(0deg);
+  }
+  70% {
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 100px;
+    height: 100px;
+    border-radius: 8%/8%;
+  }
+  80% {
+    transform: rotate(-20deg);
+  }
+  90% {
+    transform: rotate(30deg);
+  }
+}
+
+@-webkit-keyframes init-gem-before {
+  0% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  70% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  71% {
+    opacity: 0.8;
+    transform: rotate(0deg);
+  }
+  78% {
+    opacity: 0.8;
+    transform: rotate(-10deg);
+  }
+  91% {
+    opacity: 1;
+    transform: rotate(50deg);
+  }
+}
+
+@-webkit-keyframes init-gem-after {
+  0%, 20% {
+    transform: rotate(-50deg);
+  }
+  30% {
+    transform: rotate(30deg);
+  }
+  80% {
+    transform: rotate(-20deg);
+  }
+}
+
+/********************
+  LOADED ANIMATION
+********************/
+.loaded {
+    animation: zIndex 0s both 0.8s;
+    -webkit-animation: zIndex 0s both 0.8s;
+    .bustle-gem {
+        margin-left: 1500px;
+        margin-top: -1500px;
+        animation: loaded-gem 0.8s ease-in-out 0s 1;
+        -webkit-animation: loaded-gem 0.8s ease-in-out 0s 1;
+    }
+    .loading-left {
+        width: 0%;
+        border-color: $activeColor;
+        border-right-width: 5px;
+        top: -100%;
+        animation: loaded-left 0.8s ease-in-out 0s 1;
+        -webkit-animation: loaded-left 0.8s ease-in-out 0s 1;
+    }
+    .loading-right {
+        width: 0%;
+        border-color: $activeColor;
+        border-left-width: 5px;
+        bottom: -100%;
+        animation: loaded-right 0.8s ease-in-out 0s 1;
+        -webkit-animation: loaded-right 0.8s ease-in-out 0s 1;
+    }
+}
+@-webkit-keyframes zIndex {
+    100% {
+        z-index: -1; 
+    }
+   
+}
+
+
+@-webkit-keyframes loaded-gem {
+  0%, 50% {
+    margin-left: -50px;
+    margin-top: -50px;
+  }
+}
+@-webkit-keyframes loaded-left {
+  0% {
+    top: 0%;
+    width: 100%;
+    border-color: #F5F5F5;
+    border-right-width: 1px;
+  }
+  50% {
+    top: 0%;
+    width: 0%;
+    border-color: $activeColor;
+    border-right-width: 5px;
+  }
+}
+@-webkit-keyframes loaded-right {
+  0% {
+    bottom: 0%;
+    width: 100%;
+    border-color: #F5F5F5;
+    border-left-width: 1px;
+  }
+  50% {
+    bottom: 0%;
+    width: 0%;
+    border-color: $activeColor;
+    border-left-width: 5px;
+  }
+}</style>

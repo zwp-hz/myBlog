@@ -1,61 +1,115 @@
 <template>
-  	<div id="header" :class="elseClass" data-top="background-color: rgba(255,255,255,0);height: 99px;" data--20p-top="background-color: rgba(255,255,255,0);height: 99px;" data--45p-top="background-color: rgba(255,255,255,1);height: 70px;">
-  		<div class="container headerBox g-r-center" data-top="color: rgba(255,255,255,1);" data--20p-top="color: rgba(255,255,255,1);" data--45p-top="color: rgba(141,141,141,1);">
-  			<div class="home"><router-link  :to="{path: '/'}"><i class="iconfont icon-home"></i></router-link></div>
-            <div class="menu">
-                <span @click="toggleMenu=!toggleMenu" class="c-hamburger c-hamburger--htx" :class="{is_active: toggleMenu}">
-                    <span>menu</span>
-                </span>
-                <nav class="col-sm-menu g-r-center clearfix">
-                    <div class="fr searchBox" data-top="background-color: rgba(255,255,255,1);color: rgba(141,141,141,1);" data--20p-top="background-color: rgba(255,255,255,1);color: rgba(141,141,141,1);" data--45p-top="background-color: rgba(141,141,141,1);color: rgba(255,255,255,1);">
-                        <input @keyup.enter="search" ref="search" v-model="searchCnt" class="fl u_transition" type="text" name="search" placeholder="search" />
-                        <a href="javaScritp:void(0);" class="fl g-c-center">
-                            <i class="fr iconfont icon-search"></i>
-                        </a>
+  	<header>
+        <div id="header" class="u_transition_300" :class="[ headerData.type, scrollStatus ]" data-0="background-color: rgba(255,255,255,0);" data-50p="background-color: rgba(255,255,255,0);" data-80p="background-color: rgba(255,255,255,1);">
+            <div class="container headerBox g-r-center" data--0="color: rgba(206,206,196,1);" data-50p="color: rgba(206,206,196,1);" data-80p="color: rgba(53, 58, 64,1);">
+                <nav class="g-r-center" style="justify-content: flex-end;">
+                    <div class="menuList">
+                        <ul class="g-r-center">
+                            <li v-for="item in navArray" :class="{active: curRoute.indexOf(item.name) != -1 }" ><router-link class="u_transition_300" :to="{path: item.route}">{{item.title}}</router-link></li>
+                        </ul>
+                        <div class="hamburger-menu" :class="{active: menuSwitch}" @click="menuSwitch = !menuSwitch">
+                            <div class="bar"></div>
+                            <router-link class="u_transition_300 iconfont" :class="[item.icon,{active: curRoute.indexOf(item.name) != -1 }]" v-for="item in navArray" :to="{path: item.route}">
+                            </router-link>
+                        </div>
                     </div>
-                    <ul class="menuList fr">
-                        <li><router-link :to="{path: '/'}">首頁</router-link></li>
-                        <li><router-link :to="{path: '/lived'}">生活</router-link></li>
-                        <li><router-link :to="{path: '/author'}">个人信息</router-link></li>
-                    </ul>
+                    <div v-if="headerData.searchStatus" class="searchBox u_transition_300">
+                        <input @keyup.enter="search" ref="search" v-model="searchCnt" class="fl u_transition_300" type="text" name="search" placeholder="search" />
+                        <span class="fl g-c-center" @click="search">
+                            <i class="fr iconfont icon-search"></i>
+                        </span>
+                    </div>
+                    <button class="u_button u_transition_300" href="javaScript: void(0);" data-0="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-50p="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-80p="background-color: rgba(30,217,190,1); border: 1px solid rgb(30,217,190);">
+                        登录
+                    </button>
                 </nav>
+                <i v-if="headerData.isStatic" class="iconfont icon-codestore u_transition_300"></i>
+                <i v-else class="iconfont icon-codestore active" data-0="top: 30%; font-size: 80px;" data-30p="top: 30%; font-size: 80px;" data-80p="top: 1%; font-size: 50px;"></i>
             </div>
-  		</div>
-        <nav class="col-xs-menu g-r-center u_transition" :class="{is_active: toggleMenu}">
-            <ul class="menuList container clearfix">
-                <li><router-link :to="{path: '/'}">首頁</router-link></li>
-                <li><a href="javaScritp:void(0);">生活</a></li>
-                <li><router-link :to="{path: 'author'}">个人信息</router-link></li>
-            </ul>
-            <div class="container searchBox g-r-center">
-                <input @keyup.enter="search" ref="search" v-model="searchCnt" type="search" placeholder="搜点什么吧" />
-                <i @click="search"></i>
+        </div>
+        <div id="blogHeader" v-if="headerData.type === 'blog'">
+            <div class="g-bolang">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 14" height="70" preserveAspectRatio="none"><path class="g-bolang-svg" d="M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z"></path></svg>
             </div>
-        </nav>
-  	</div>
+            <h1>{{headerData.title}}</h1>
+        </div>
+        <div v-if="headerData.images_src" class="detail_bg u_transition_300" :class="[{'img-progressive--not-loaded': headerData.images_src.status == 0},{'img-progressive--is-loaded': headerData.images_src.status == 1}]">
+            <img v-if="headerData.images_src.status == 0" @load="imgLoad('load');" @error="imgLoad('error');" :src="headerData.images_src.src+'100'" alt="" />
+            <img v-if="headerData.images_src.status == 1" :src="headerData.images_src.src+'500'" alt="" />
+        </div>
+  	</header>
 </template>
 
 <script>
 "use strict";
+
 export default {
-    props: ["elseClass"],
+    props: ["headerData"],
     mounted() {
-        skrollr.init({
-            forceHeight: false
-        });
+        if(!/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)){
+            skrollr.init({
+                forceHeight: true,
+                smoothScrollingDuration: 200
+            });
+        }
+
+        this.handleScroll();
+        this.scrollStatus = document.documentElement.scrollTop > 50 ? 'down' : '';
     },
     data () {
         return {
-            toggleMenu: false,
+            menuSwitch: false,
+            navArray: [{
+                route: '/', name: 'index', title: '首页', icon: 'icon-ai-home'
+            },{
+                route: '/blog', name: 'blog', title: '博客', icon: 'icon-bokeyuan'
+            },{
+                route: '/photoWall', name: 'photoWall', title: '照片墙', icon: 'icon-zhaopianqiang'
+            },{
+                route: '/author', name: 'author', title: '作者', icon: 'icon-zuozhe'
+            }],
+            scrollStatus: '',
+            curRoute: this.$route.name,
         	searchCnt: ""
         }
     },
     methods: {
         search() {
-            this.$emit('searchCnt', {type: "_s", text: this.searchCnt});
+            if (this.searchCnt && this.searchCnt != this.$store.state.searchCnt.text) {
+                let data = {type: "_s", text: this.searchCnt};
+
+                this.$store.commit('searchChange', data);
+                this.$router.push({path: '/searchResult', query: {_s: this.searchCnt}});
+            }
+        },
+        handleScroll(e) {
+            let beforeScrollTop = document.documentElement.scrollTop;
+
+            window.addEventListener("scroll", () => {
+                let afterScrollTop = document.documentElement.scrollTop,
+                    delta = afterScrollTop - beforeScrollTop;
+
+                if (this.menuSwitch) this.menuSwitch = false;
+
+                beforeScrollTop = afterScrollTop;
+
+                if (afterScrollTop <= 50) {
+                    this.scrollStatus = '';
+                    return false;
+                }
+
+                if ( delta <= 0 && delta > -3 ) 
+                    return false;
+                else
+                    this.scrollStatus = delta > 0 ? 'down' : 'up';
+            }, false);
+        },
+        /** 图片加载
+         * @type   load：加载成功  error：加载失败
+         */
+        imgLoad(type) {
+            this.headerData.images_src.status = type == 'load' ? 1 : 0;
         }
-    },
-    watch: {
     }
 }
 </script>

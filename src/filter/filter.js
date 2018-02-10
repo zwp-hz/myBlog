@@ -1,10 +1,10 @@
 /**
  * 日期格式化
- * @param timeSpan
- * @param format
+ * @param timeSpan  时间戳
+ * @param format    时间格式
  * @returns {*}
  */
-export function dateFormat (timeSpan,format) {
+export function dateFormat(timeSpan,format) {
   if (!timeSpan) return;
 
   let date = new Date(timeSpan);
@@ -29,4 +29,18 @@ export function dateFormat (timeSpan,format) {
   }
 
   return format;
+}
+
+/**
+ * 数值日期转中文
+ * @param data 数值
+ * @returns {*}
+ */
+export function number_to_chinese(data) {
+  if (!data) return;
+
+  let chinese = ["零","一","二","三","四","五","六","七","八","九"],
+      result = '';
+  
+  return result = data.length > 1 ? '十' + chinese[data[1]] : chinese[data[0]];
 }

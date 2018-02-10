@@ -3,17 +3,17 @@ const webpack = require('webpack')
 const copyWebpackPlugin = require('copy-webpack-plugin')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const cleanWebpackPlugin = require('clean-webpack-plugin')
+const PrerenderSpaPlugin = require('prerender-spa-plugin')
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '',
-    filename: 'build.[hash].js'
+    filename: './js/[name].build.[hash].js'
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -22,19 +22,20 @@ module.exports = {
             'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
           }
         }
-      },
-      {
+      },{
         test: /\.css$/,
         loader: 'style-loader!css-loader'
-      },
-      {
+      },{
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
-      },
-      { 
+      },{ 
         test: /\.(png|jpg|gif|svg|ico)$/,
         loader: 'url-loader?limit=10240&name=images/[name].[ext]?[hash]'
+      }, 
+      {
+        test: /\.(eot|woff|svg|ttf|woff2)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/,
+        loader: 'file-loader?name="[name].[ext]"!url-loader'
       }
     ]
   },
@@ -45,7 +46,7 @@ module.exports = {
     new htmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
-      inject: 'body'
+      inject: 'head'
     }),
     new cleanWebpackPlugin(['dist'],{})
   ],
@@ -66,7 +67,11 @@ module.exports = {
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
-  // module.exports.output.publicPath = './dist/';
+  module.exports.output = {
+    path: path.resolve(__dirname, './dist'),
+    publicPath: 'http://www.zhuweipeng.me/',
+    filename: 'js/[name].build.[hash].js'
+  }
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
@@ -81,6 +86,10 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
+    }),
+    new PrerenderSpaPlugin(
+        path.join(__dirname, './dist'),
+        ['/','/blog']
+    )
   ])
 }

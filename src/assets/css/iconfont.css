@@ -18,86 +18,98 @@
 
 .icon-huifu:before { content: "\e647"; }
 
-.icon-night-qing:before { content: "\e642"; }
+.icon-night-qing:before { content: "\e642" !important; }
+
+.icon-github:before { content: "\ead8"; }
 
 .icon-search:before { content: "\e639"; }
 
-.icon-night-duoyun:before { content: "\e6d5"; }
+.icon-night-duoyun:before { content: "\e6d5" !important; }
 
-.icon-night-leizhenyu:before { content: "\e6d9"; }
+.icon-night-leizhenyu:before { content: "\e6d9" !important; }
 
-.icon-night-xiaoyu:before { content: "\e64f"; }
+.icon-night-xiaoyu:before { content: "\e64f" !important; }
 
-.icon-night-yin:before { content: "\e648"; }
+.icon-night-yin:before { content: "\e648" !important; }
 
-.icon-night-zhenxue:before { content: "\e649"; }
+.icon-night-zhenxue:before { content: "\e649" !important; }
 
-.icon-night-zhenyu:before { content: "\e64a"; }
+.icon-night-zhenyu:before { content: "\e64a" !important; }
+
+.icon-dingwei:before { content: "\e61f"; }
+
+.icon-ai-home:before { content: "\e61d"; }
 
 .icon-quxiao:before { content: "\e60a"; }
 
-.icon-yin:before { content: "\e62a"; }
+.icon-yin:before { content: "\e62a" !important; }
+
+.icon-biaoqian:before { content: "\e62b"; }
 
 .icon-lietu:before { content: "\e6be"; }
 
 .icon-chakan:before { content: "\e658"; }
 
-.icon-qing:before { content: "\e604"; }
+.icon-qing:before { content: "\e604" !important; }
 
-.icon-yun:before { content: "\e605"; }
+.icon-yun:before { content: "\e605" !important; }
 
-.icon-duoyun:before { content: "\e606"; }
+.icon-duoyun:before { content: "\e606" !important; }
 
-.icon-zhongyu:before { content: "\e607"; }
+.icon-zhongyu:before { content: "\e607" !important; }
 
-.icon-xiaoyu:before { content: "\e608"; }
+.icon-xiaoyu:before { content: "\e608" !important; }
 
-.icon-dayu:before { content: "\e609"; }
+.icon-dayu:before { content: "\e609" !important; }
 
-.icon-leizhenyu:before { content: "\e60b"; }
+.icon-leizhenyu:before { content: "\e60b" !important; }
 
-.icon-yujiabingbao:before { content: "\e60c"; }
+.icon-yujiabingbao:before { content: "\e60c" !important; }
 
-.icon-tedabaoyu:before { content: "\e60d"; }
+.icon-tedabaoyu:before { content: "\e60d" !important; }
 
-.icon-baoyu:before { content: "\e60e"; }
+.icon-baoyu:before { content: "\e60e" !important; }
 
-.icon-xiaoxue:before { content: "\e60f"; }
+.icon-xiaoxue:before { content: "\e60f" !important; }
 
-.icon-zhongxue:before { content: "\e610"; }
+.icon-zhongxue:before { content: "\e610" !important; }
 
-.icon-yujiaxue:before { content: "\e611"; }
+.icon-yujiaxue:before { content: "\e611" !important; }
 
-.icon-daxue:before { content: "\e612"; }
+.icon-daxue:before { content: "\e612" !important; }
 
-.icon-fuchen:before { content: "\e613"; }
+.icon-fuchen:before { content: "\e613" !important; }
 
-.icon-shachen:before { content: "\e614"; }
+.icon-shachen:before { content: "\e614" !important; }
 
-.icon-dabaoxue:before { content: "\e615"; }
+.icon-dabaoxue:before { content: "\e615" !important; }
 
-.icon-wu:before { content: "\e616"; }
+.icon-wu:before { content: "\e616" !important; }
 
-.icon-wumai:before { content: "\e617"; }
+.icon-wumai:before { content: "\e617" !important; }
 
-.icon-jufeng:before { content: "\e618"; }
+.icon-jufeng:before { content: "\e618" !important; }
 
-.icon-dafeng:before { content: "\e619"; }
+.icon-dafeng:before { content: "\e619" !important; }
 
-.icon-longjuanfeng:before { content: "\e61a"; }
+.icon-longjuanfeng:before { content: "\e61a" !important; }
 
-.icon-feng:before { content: "\e61b"; }
+.icon-feng:before { content: "\e61b" !important; }
 
 .icon-weizhi:before { content: "\e61c"; }
 
-.icon-night-wu:before { content: "\e6ef"; }
+.icon-night-wu:before { content: "\e6ef" !important; }
 
-.icon-zhenyu:before { content: "\e632"; }
+.icon-zuozhe:before { content: "\e61e"; }
+
+.icon-zhenyu:before { content: "\e632" !important; }
 
 .icon-time:before { content: "\e685"; }
 
 .icon-zanwushuju:before { content: "\e600"; }
 
-.icon-logo:before { content: "\e74c"; }
+.icon-zhaopianqiang:before { content: "\e640"; }
 
-.icon-home:before { content: "\e626"; }
+.icon-codestore:before { content: "\e7d5"; }
+
+.icon-bokeyuan:before { content: "\e603"; }
