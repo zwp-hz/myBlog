@@ -89,7 +89,7 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new PrerenderSpaPlugin(
         path.join(__dirname, './dist'),
-        ['/','/blog']
+        ['/','/blog','/searchResult','/articleDetail','/author','/photoWall','/photoList','/error']
     )
   ])
 }
