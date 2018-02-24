@@ -12,7 +12,7 @@
                 <div class="weather_box">
                     <Weather data-0="left: -150px; opacity: -1;" data-60p="left: 0; opacity: 1;"></Weather>
                 </div>
-                <div v-if="biying_images.url" class="wallpaper" :style="'background: url(http://www.bing.com/'+biying_images.url+') no-repeat center bottom'">
+                <div v-if="biying_images.url" class="wallpaper" :style="'background: url(http://www.bing.com/'+biying_images.url+') #000 no-repeat center bottom'">
                     <p class="g-c-center">
                         <strong>必应每日壁纸欣赏</strong>
                         <span>{{biying_images.copyright}}</span>

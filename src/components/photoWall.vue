@@ -262,6 +262,7 @@ export default {
     }
     @media (max-width: 767px){
         #lived {
+            position: static;
             height: auto;
             min-height: 100vh;
             min-width: auto;

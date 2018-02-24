@@ -1,6 +1,11 @@
 #articleList {
-    min-height: 400px;
-    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    .container {
+        min-height: 400px;
+        margin: 0 auto;
+    }
     article {
         position: relative;
         width: 33.33%;
@@ -187,7 +192,7 @@
 }
 
 @media (max-width: 550px){
-    #articleList {
+    #articleList .container {
         min-height: 300px;
     }
     article {

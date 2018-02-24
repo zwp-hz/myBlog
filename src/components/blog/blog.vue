@@ -55,10 +55,13 @@ export default {
 
 <style lang="scss" scoped>
     #blogMain {
+        position: relative;
+        top: -1px;
+        background: #fff;
         .categories {
             flex-wrap: wrap;
             li {
-                margin: 0 8px 8px;
+                margin: 1px 8px 8px 8px;
                 a {
                     display: block;
                     height: 34px;
