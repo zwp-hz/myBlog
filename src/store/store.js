@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 const state = {
-	APIHOST: window.location.href.indexOf("www") != -1 ? "http://www.zhuweipeng.me:8989/" : "http://localhost:8989/",
+	APIHOST: "http://localhost:8989/",
   	IMGHOST: "http://image.zhuweipeng.me/",		// 七牛图片host
   	searchCnt: {},								// 搜索内容
   	first_load: true,							// 是否第一次加载
