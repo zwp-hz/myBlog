@@ -236,20 +236,20 @@ $activeColor: #1ed9be;
         -webkit-animation: loaded-right 0.8s ease-in-out 0s 1;
     }
 }
-// @-webkit-keyframes zIndex {
-//     100% {
-//         z-index: -1; 
-//     }
-// }
 
+@keyframes zIndex {
+    100% {
+        z-index: -1; 
+    }
+}
 
-@-webkit-keyframes loaded-gem {
+@keyframes loaded-gem {
   0%, 50% {
     margin-left: -50px;
     margin-top: -50px;
   }
 }
-@-webkit-keyframes loaded-left {
+@keyframes loaded-left {
   0% {
     top: 0%;
     width: 100%;
@@ -263,7 +263,7 @@ $activeColor: #1ed9be;
     border-right-width: 5px;
   }
 }
-@-webkit-keyframes loaded-right {
+@keyframes loaded-right {
   0% {
     bottom: 0%;
     width: 100%;
