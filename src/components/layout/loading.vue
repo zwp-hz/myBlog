@@ -51,86 +51,81 @@ $activeColor: #1ed9be;
     height: 100vh;
     overflow: hidden;
     color: #fff;
+    .loading-reveal {
+        position: absolute;
+        left: -100%;
+        top: -100%;
+        width: 300%;
+        height: 300%;
+        transform: rotate(45deg);
+        .loading-left {
+            position: absolute;
+            top: 0%;
+            right: 50%;
+            width: 50%;
+            height: 100%;
+            background-color: #FFF;
+            border-right: 1px solid #F9F9F9;
+        }
+        .loading-right {
+            position: absolute;
+            bottom: 0%;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            background-color: #F9F9F9;
+            overflow: hidden;
+            border-left: 1px solid #F9F9F9;
+            .loading-reveal-b {
+                position: absolute;
+                left: -70px;
+                top: 42%;
+                font-size: 200px;
+                line-height: 400px;
+                transform: rotate(-45deg);
+            }
+        }
+    }
+    .bustle-gem {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        margin-left: -50px;
+        margin-top: -50px;
+        width: 100px;
+        height: 100px;
+        font-size: 60px;
+        line-height: 100px;
+        text-align: center;
+        background-color: $activeColor;
+        border-radius: 6px;
+        -webkit-animation: init-gem 0.8s ease 0s 1;
+        &:before {
+            content: ' ';
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 0;
+            width: 100px;
+            height: 100px;
+            background-color: $activeColor;
+            border-radius: 6px;
+            transform: rotate(45deg);
+            -webkit-animation: init-gem-before 0.8s ease-in-out 0s 1;
+        }
+        &:after {
+            content: 'zZ';
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            z-index: 2;
+            transform: rotate(0deg);
+            -webkit-animation: init-gem-after 0.9s cubic-bezier(0,0.6,0.4,0) 0s 1;
+        }
+    }
 }
-.loading-reveal {
-    position: absolute;
-    left: -100%;
-    top: -100%;
-    width: 300%;
-    height: 300%;
-    transform: rotate(45deg);
-}
-.loading-left {
-    position: absolute;
-    top: 0%;
-    right: 50%;
-    width: 50%;
-    height: 100%;
-    background-color: #FFF;
-    border-right: 1px solid #F9F9F9;
-}
-.loading-right {
-    position: absolute;
-    bottom: 0%;
-    left: 50%;
-    width: 50%;
-    height: 100%;
-    background-color: #F9F9F9;
-    overflow: hidden;
-    border-left: 1px solid #F9F9F9;
-}
-.loading-reveal-b {
-    position: absolute;
-    left: -70px;
-    top: 42%;
-    font-size: 200px;
-    line-height: 400px;
-    transform: rotate(-45deg);
-}
-
-.bustle-gem {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 1;
-    margin-left: -50px;
-    margin-top: -50px;
-    width: 100px;
-    height: 100px;
-    font-size: 60px;
-    line-height: 100px;
-    text-align: center;
-    background-color: $activeColor;
-    border-radius: 6px;
-    -webkit-animation: init-gem 0.8s ease 0s 1;
-}
-
-.bustle-gem:before {
-    content: ' ';
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 0;
-    width: 100px;
-    height: 100px;
-    background-color: $activeColor;
-    border-radius: 6px;
-    transform: rotate(45deg);
-    -webkit-animation: init-gem-before 0.8s ease-in-out 0s 1;
-}
-
-.bustle-gem:after {
-    content: 'zZ';
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    z-index: 2;
-    transform: rotate(0deg);
-    -webkit-animation: init-gem-after 0.9s cubic-bezier(0,0.6,0.4,0) 0s 1;
-}
-
-/*** TRIGGER ANIMATIONS ***/
 
 @-webkit-keyframes init-gem {
   0% {
@@ -213,9 +208,6 @@ $activeColor: #1ed9be;
   }
 }
 
-/********************
-  LOADED ANIMATION
-********************/
 .loaded {
     animation: zIndex 0s both 0.8s;
     -webkit-animation: zIndex 0s both 0.8s;
@@ -242,13 +234,13 @@ $activeColor: #1ed9be;
         -webkit-animation: loaded-right 0.8s ease-in-out 0s 1;
     }
 }
+
 @-webkit-keyframes zIndex {
     100% {
         z-index: -1; 
     }
    
 }
-
 
 @-webkit-keyframes loaded-gem {
   0%, 50% {
@@ -283,4 +275,5 @@ $activeColor: #1ed9be;
     border-color: $activeColor;
     border-left-width: 5px;
   }
-}</style>
+}
+</style>

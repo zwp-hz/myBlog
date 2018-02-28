@@ -102,10 +102,10 @@ strong,b { font-weight: normal; }
     z-index: 99;
     opacity: .8;
     -webkit-transform: rotate(45deg);
-    -webkit-animation: u_arrow 1.5s infinite ease-in-out;
+    -webkit-animation: arrow_move 1.5s infinite ease-in-out;
 }
  
-@-webkit-keyframes u_arrow {
+@-webkit-keyframes arrow_move {
     0% {
     opacity:0;
     -webkit-transform:translate(0, 0px) rotate(45deg)
