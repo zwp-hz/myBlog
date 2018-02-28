@@ -129,7 +129,7 @@ $activeColor: #1ed9be;
     }
 }
 
-@-webkit-keyframes init-gem {
+@keyframes init-gem {
   0% {
     top: -50%;
     margin-top: -200px;
@@ -175,7 +175,7 @@ $activeColor: #1ed9be;
   }
 }
 
-@-webkit-keyframes init-gem-before {
+@keyframes init-gem-before {
   0% {
     opacity: 0;
     transform: rotate(0deg);
@@ -198,7 +198,7 @@ $activeColor: #1ed9be;
   }
 }
 
-@-webkit-keyframes init-gem-after {
+@keyframes init-gem-after {
   0%, 20% {
     transform: rotate(-50deg);
   }

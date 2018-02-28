@@ -67,11 +67,11 @@ module.exports = {
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
-  // module.exports.output = {
-  //   path: path.resolve(__dirname, './dist'),
-  //   publicPath: 'http://www.zhuweipeng.me/',
-  //   filename: 'js/[name].build.[hash].js'
-  // }
+  module.exports.output = {
+    path: path.resolve(__dirname, './dist'),
+    publicPath: 'http://www.zhuweipeng.me/',
+    filename: 'js/[name].build.[hash].js'
+  }
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
@@ -86,10 +86,10 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
-    // new PrerenderSpaPlugin(
-    //     path.join(__dirname, './dist'),
-    //     ['/','/blog','/searchResult','/articleDetail','/author','/photoWall','/photoList','/error']
-    // )
+    }),
+    new PrerenderSpaPlugin(
+        path.join(__dirname, './dist'),
+        ['/','/blog','/searchResult','/articleDetail','/author','/photoWall','/photoList','/error']
+    )
   ])
 }
