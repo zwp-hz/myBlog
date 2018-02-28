@@ -4,7 +4,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 const state = {
-	APIHOST: "http://localhost:8989/",
+	APIHOST: "http://api.zhuweipeng.me/",
+	// APIHOST: "http://localhost:8989/",
   	IMGHOST: "http://image.zhuweipeng.me/",		// 七牛图片host
   	searchCnt: {},								// 搜索内容
   	first_load: true,							// 是否第一次加载

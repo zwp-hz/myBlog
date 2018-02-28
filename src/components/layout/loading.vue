@@ -31,7 +31,7 @@ export default {
     },
     data() {
         return {
-        	status: false              // 状态。 false：表示时间未过1秒。 true：表示时间已经过了1秒
+        	status: false              // 状态。 true：表示第一层动画结束
         }
     },
     methods: {

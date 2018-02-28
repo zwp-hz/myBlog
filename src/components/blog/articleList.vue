@@ -11,7 +11,7 @@
                                 <i class="iconfont icon-codestore" :style="'opacity:'+(item.images_src.status == 2 ? 1 : 0)"></i>    
                             </router-link>
                             <router-link v-else :to="{path: '/articleDetail',query: {id: item._id,title: item.title}}">
-                                <i class="iconfont icon-codestore"></i>    
+                                <i class="iconfont icon-codestore"></i>
                             </router-link>
                         </div>
                         <div class="info">

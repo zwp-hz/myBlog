@@ -23,10 +23,8 @@
         </div>
         <div id="modal" v-if="modal.status">
             <div class="mask" @click="img_modal('','','hide')"></div>
-            <div class="centent" :class="{active: modal.move_status}" :style="modal.style">
-                <div class="box"  v-html="modal.html">
-                    
-                </div>
+            <div class="centent" :class="{active: modal.move_status !== 0,textShow: modal.move_status === 2}" :style="modal.style">
+                <div class="box"  v-html="modal.html"></div>
             </div>
             <div class="u_loading" v-if="modal.load_status"></div>
         </div>
@@ -98,7 +96,7 @@ export default {
             modal: {
                 html: '',
                 status: false,
-                move_status: false,
+                move_status: 0,
                 load_status: false,
                 style: {}
             }
@@ -115,14 +113,14 @@ export default {
                 _this = this;
 
             if (type === 'hide') {
-                _this.modal.move_status = false;
+                _this.modal.move_status = 0;
 
                 setTimeout( () => {
                     document.body.style.overflow = 'auto';
                     _this.modal.status = false;
                 },500)
             } else {
-                let obj = event.path[0].tagName === 'A' ? event.path[0] : event.path[1],
+                let obj = event.path ? event.path[0].tagName === 'A' ? event.path[0] : event.path[1] : event.target,
                     src_1080 = src.replace(/w\/(.*)/g,'w/1080'),
                     $img = new Image();
 
@@ -133,17 +131,20 @@ export default {
                 _this.modal.style = {
                     width: obj.clientWidth + 'px',
                     height: obj.clientHeight + 'px',
-                    top: obj.offsetTop -scrollTop  + 'px',
-                    left: obj.offsetLeft+ 'px'
+                    top: obj.offsetTop - scrollTop  + 'px',
+                    left: obj.offsetLeft + 'px'
                 }
 
                 setTimeout( () => {
-                    _this.modal.move_status = true;
                     _this.modal.html = obj.innerHTML;
+                    setTimeout( () => {
+                        _this.modal.move_status = 1;
+                    },99)
                 },1)
-
+                
                 // 加载1080p图片资源
                 setTimeout( () => {
+                    _this.modal.move_status = 2;
                     _this.modal.load_status = true;
                     $img.src = src_1080;
                     $img.onload = (e) => {
@@ -152,7 +153,7 @@ export default {
                             _this.modal.load_status = false;
                         }
                     }
-                },500);
+                },600);
             }
         }
     },
@@ -243,7 +244,7 @@ export default {
                                     span {
                                         position: absolute;
                                         bottom: 5px;
-                                        z-index: 10;
+                                        z-index: -1;
                                         width: 100%;
                                         height: 48px;
                                         padding-left: 10px;
@@ -281,6 +282,7 @@ export default {
                                             box-shadow: 0 -100px 100px -60px hsla(0,0,0,.5) inset;
                                         }
                                         span {
+                                            z-index: 10;
                                             opacity: 1;
                                         }
                                     }
@@ -344,6 +346,7 @@ export default {
                         overflow: hidden;
                         text-overflow:ellipsis;
                         white-space: nowrap;
+                        opacity: 0;
                         b {
                             font-size: 12px;
                             padding-right: 5px;
@@ -352,11 +355,14 @@ export default {
                 }
                 &.active {
                     top: 50% !important;
-                    left: 50% !important;
+                    left: 25% !important;
                     width: 50% !important;
                     height: auto !important;
-                    -webkit-transform: translate(-50%,-50%);
-                    transform: translate(-50%,-50%);
+                    -webkit-transform: translateY(-50%);
+                    transform: translateY(-50%);
+                }
+                &.textShow span {
+                    opacity: 1;
                 }
             }
             .u_loading {
@@ -369,6 +375,7 @@ export default {
         #photoList #modal {
             .centent {
                 &.active {
+                    left: 30% !important;
                     width: 40% !important;
                 }
             }
@@ -401,6 +408,7 @@ export default {
         #photoList #modal {
             .centent {
                 &.active {
+                    left: 10% !important;
                     width: 80% !important;
                 }
             }
