@@ -48,13 +48,13 @@ export default {
     mounted() {
         if(!/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)){
             skrollr.init({
-                forceHeight: true,
                 smoothScrollingDuration: 200
             });
         }
 
         this.handleScroll();
-        this.scrollStatus = document.documentElement.scrollTop > 50 ? 'down' : '';
+
+        this.scrollStatus = document.documentElement.scrollTop || document.body.scrollTop > 50 ? 'down' : '';
     },
     data () {
         return {
@@ -83,10 +83,10 @@ export default {
             }
         },
         handleScroll(e) {
-            let beforeScrollTop = document.documentElement.scrollTop;
+            let beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 
             window.addEventListener("scroll", () => {
-                let afterScrollTop = document.documentElement.scrollTop,
+                let afterScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
                     delta = afterScrollTop - beforeScrollTop;
 
                 if (this.menuSwitch) this.menuSwitch = false;

@@ -1,5 +1,5 @@
 <template>
-    <div id="loading-overlay" v-if="$store.state.first_load" class="loading-overlay" :class="{loaded: loadStatus && status}">
+    <div v-if="$store.state.first_load" class="loading-overlay" :class="{loaded: loadStatus && status}">
         <div class="loading-reveal">
             <div class="loading-left"></div>
             <div class="loading-right">
@@ -18,7 +18,10 @@ export default {
     mounted() {
         let _this = this;
 
+        document.body.style.overflow = 'hidden';
+
         setTimeout(() => {
+            document.body.style.overflow = 'auto';
             _this.status = true;
             // 0.8s 动画结束后。更改首次加载状态
             setTimeout(() => {

@@ -1,5 +1,5 @@
 <template>
-    <div id="index" :style="'background: #fff url('+bg_image_src+') no-repeat center bottom fixed;'">
+    <div id="index">
         <loading :loadStatus="loadStatus"></loading>
         <headerBox :headerData="headerData"></headerBox>
         <section id="intro" class="g-r-center" data-0="opacity: 1" data-50p="opacity: 0;">
@@ -12,7 +12,7 @@
                 <div class="weather_box">
                     <Weather data-0="left: -150px; opacity: -1;" data-60p="left: 0; opacity: 1;"></Weather>
                 </div>
-                <div v-if="biying_images.url" class="wallpaper" :style="'background: url(http://www.bing.com/'+biying_images.url+') #000 no-repeat center bottom'">
+                <div v-if="biying_images.url" class="wallpaper" :style="'background: url(http://www.bing.com/'+biying_images.url+') #cecec4 no-repeat center bottom'">
                     <p class="g-c-center">
                         <strong>必应每日壁纸欣赏</strong>
                         <span>{{biying_images.copyright}}</span>
@@ -41,11 +41,14 @@ export default {
         img.onload = img.onerror = () => this.loadStatus = true;
 
     	// 获取必应图片
-        this.$http.jsonp(APIHOST + 'api/bing').then((res) => {
-            if (res.body.code === 0) {
-                this.biying_images = res.body.data.images[0];
-            }
-        },(res) => console.log(res));
+        if (!sessionStorage.biying_images) {
+            this.$http.jsonp(APIHOST + 'api/bing').then((res) => {
+                if (res.body.code === 0) {
+                    this.biying_images = res.body.data.images[0];
+                    sessionStorage.biying_images = JSON.stringify(res.body.data.images[0]);
+                }
+            },(res) => console.log(res));
+        }
     },
     data() {
         return {
@@ -55,7 +58,7 @@ export default {
                 searchStatus: false,
                 isStatic: false,
             },
-            biying_images: {}
+            biying_images: sessionStorage.biying_images ? JSON.parse(sessionStorage.biying_images) : {}
         }
     },
     methods: {

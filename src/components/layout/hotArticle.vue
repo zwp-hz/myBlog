@@ -2,9 +2,14 @@
     <div class="recent_posts">
         <h3>最新动态</h3>
         <div class="article g-r-center" v-for="(item,index) in articleList_hot">
-            <router-link :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" ondragstart="return false;" class="images" :style="item.images_src[0].status == 1 ? 'background: url('+item.images_src[0].src+') no-repeat center bottom' : ''">
-                <img v-if="item.images_src[0].status == 0" style="opacity: 0;" @load="imgLoad(index,'load');" @error="imgLoad(index,'error');" :src="item.images_src[0].src" alt="" />
-                <i v-if="item.images_src[0].status == 2" class="iconfont icon-codestore"></i>
+            <router-link v-if="item.images_src.src" :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" ondragstart="return false;" class="images" :style="item.images_src.status == 1 ? 'background: url('+item.images_src.src+') no-repeat center bottom' : ''">
+                <img v-if="item.images_src.status == 0" style="opacity: 0;" @load="imgLoad(index,'load');" @error="imgLoad(index,'error');" :src="item.images_src.src" alt="" />
+                <i v-if="item.images_src.status == 2" class="iconfont icon-codestore"></i>
+                <span>{{item.review.length}}</span>
+                <b class="backImg u_transition_300 u_hover_show"><i class="iconfont icon-lianjie"></i></b>
+            </router-link>
+            <router-link v-else :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" ondragstart="return false;" class="images">
+                <i class="iconfont icon-codestore"></i>
                 <span>{{item.review.length}}</span>
                 <b class="backImg u_transition_300 u_hover_show"><i class="iconfont icon-lianjie"></i></b>
             </router-link>
@@ -35,15 +40,16 @@ export default {
                 if (res.body.code == 0) {
                     let data = res.body.data.data;
 
-                    for (var i of data) {
-                        i.images_src.forEach( ( item, j ) => {
-                            i.images_src[j] = {
-                                src: IMGHOST + item + "?imageView2/2/interlace/1/w/100",
+                    for (var item of data) {
+                        if (item.images_src.length > 0) {
+                            item.images_src = {
+                                src: IMGHOST + item.images_src[0] + "?imageView2/2/interlace/1/w/100",
                                 status: 0   // 0：图片未加载  1：图片加载成功  2：图片加载失败
-                            };
-                        });
-
-                        i.imgLoadState = false;
+                            }
+                        } else {
+                            item.images_src = {};
+                        }
+                        
                     }
                     this.articleList_hot = data;
 
@@ -63,7 +69,7 @@ export default {
          * @type   load：加载成功  error：加载失败
          */
         imgLoad(index,type) {
-            this.articleList_hot[index].images_src[0].status = type == 'load' ? 1 : 2;
+            this.articleList_hot[index].images_src.status = type == 'load' ? 1 : 2;
         },
         /** 标签搜索
           * @data   搜索参数

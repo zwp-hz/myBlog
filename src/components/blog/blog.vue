@@ -65,7 +65,8 @@ export default {
                 a {
                     display: block;
                     height: 34px;
-                    padding: 6px 15px;
+                    line-height: 34px;
+                    padding: 0 15px;
                     background-color: #fff;
                     border-radius: 100px;
                     color: #8d8d8d;

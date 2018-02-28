@@ -1,8 +1,8 @@
 <template>
     <div id="search">
         <headerBox :headerData="headerData"></headerBox>
-        <div class="titlebar clear container">
-            <div class="container">
+        <div class="titlebar">
+            <div class="container clear">
                 <h1 v-if="(searchCnt.type || routeQuery.type) == '_s'">"{{searchCnt.text || routeQuery.text}}"的搜索结果</h1>
                 <h1 v-else>{{(searchCnt.type || routeQuery.type) == 'Category' ? '分类' : (searchCnt.type || routeQuery.type)}}：{{searchCnt.text || routeQuery.text}}</h1>
                 <p class="breadcrumbs">
@@ -65,9 +65,14 @@ export default {
 <style lang="scss" scoped>
 	#search {
 		.titlebar {
-			min-height: 60px;
-            margin: 0 auto;
-            line-height: 60px;
+            position: relative;
+            top: -1px;
+			background-color: #fff;
+            .container {
+                min-height: 60px;
+                margin: 0 auto;
+                line-height: 60px;
+            }
 			h1 {
 				float: left;
 				font-size: 24px;

@@ -104,7 +104,7 @@ export default {
         position: fixed;
         top: 0;
         left: 0;
-        height: 100vh;
+        height: 5280px;
         width: 100vw;
         background: #363638;
         min-width: 1200px;

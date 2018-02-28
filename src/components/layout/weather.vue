@@ -80,7 +80,7 @@ export default {
         .info {
             flex: none;
             p {
-                padding: 0 20px;
+                padding: 0 10px;
                 text-align: center;
             }
             span {

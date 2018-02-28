@@ -1,8 +1,18 @@
 #index {
     position: relative;
-    height: 100%;
-    background-size: cover !important;
-    -webkit-background-size: cover !important;
+    height: 100vh;
+    &:before {
+        content: ' ';
+        position: fixed;
+        z-index: -1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: url('http://image.zhuweipeng.me/blog_index_bg.jpg?imageView2/2/interlace/1') no-repeat center bottom;
+        background-size: cover !important;
+        -webkit-background-size: cover !important;
+    }
     #intro {
         position: relative;
         height: 100vh;
@@ -47,7 +57,7 @@
                 width: 100vw;
                 height: 70vh;
                 background-size: cover !important;
-                background-color: #000;
+                background-color: #cecec4;
                 -webkit-background-size: cover !important;
                 p {
                     padding: 10px 10px 10px 25vw;

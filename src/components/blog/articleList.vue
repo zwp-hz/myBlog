@@ -1,14 +1,17 @@
 <template>
-    <div id="articleList">
+    <div id="articleList" :style="{zIndex: loadStatus ? 1 : 200}">
         <div class="container">
             <loading :loadStatus="loadStatus"></loading>
-            <div class="clear" style="margin: 20px -15px 30px 0;" v-if="articleList.data.length >= 1">
+            <div class="clear" style="margin: 20px -15px 0 0;" v-if="articleList.data.length >= 1">
                 <article class="u_transition_300" v-for="(item,index) in articleList.data">
                     <div class="content u_transition_300">
                         <div class="image">
-                            <router-link :to="{path: '/articleDetail',query: {id: item._id,title: item.title}}" class="progressive--not-loaded" :data-url="item.images_src.src+'500'" :style="item.images_src.status === 2 ? '' : 'background: url('+item.images_src.src+'60)' ">
+                            <router-link v-if="item.images_src.src" :to="{path: '/articleDetail',query: {id: item._id,title: item.title}}" class="progressive--not-loaded" :data-url="item.images_src.src+'500'" :style="item.images_src.status === 2 ? '' : 'background: url('+item.images_src.src+'60)' ">
                                 <img v-if="item.images_src.status == 0" style="opacity: 0;" @load="imgLoad(index,'load');" @error="imgLoad(index,'error');" :src="item.images_src.src+'100'" alt="" />
                                 <i class="iconfont icon-codestore" :style="'opacity:'+(item.images_src.status == 2 ? 1 : 0)"></i>    
+                            </router-link>
+                            <router-link v-else :to="{path: '/articleDetail',query: {id: item._id,title: item.title}}">
+                                <i class="iconfont icon-codestore"></i>    
                             </router-link>
                         </div>
                         <div class="info">
@@ -104,18 +107,22 @@ export default {
                 categories: this.categoriesName || '',
                 searchCnt: searchCnt || ''
             }}).then((param) => {
+                this.loadStatus = true;
                 if (param.body.code == 0) {
                 	let data = param.body.data;
 
                     for (let item of data.data) {
-                        item.images_src = {
-                            src: IMGHOST + item.images_src + '?imageView2/2/interlace/1/w/',
-                            status: 0   // 0：图片未加载  1：图片加载成功  2：图片加载失败
-                        };
+                        if (item.images_src.length > 0) {
+                            item.images_src = {
+                                src: IMGHOST + item.images_src + '?imageView2/2/interlace/1/w/',
+                                status: 0   // 0：图片未加载  1：图片加载成功  2：图片加载失败
+                            };
+                        } else {
+                            item.images_src = {};
+                        }
                     }
 
                     this.articleList = data;
-                    this.loadStatus = true;
 
                     // DOM渲染完成
                     this.$nextTick( () => {
