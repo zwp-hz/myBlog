@@ -14,7 +14,7 @@ const error = r => require.ensure([], () => r(require('../components/404.vue')),
 Vue.use(Router);
 
 export default new Router({
-	// mode: 'history',
+	mode: 'history',
 	routes: [
 	    { path: "/", component: index, name: "index", meta: {title: "朱为鹏的网站"}},
 	    { path: "/blog", component: blog, name: "blog", meta: {title: "朱为鹏的博客"}},
