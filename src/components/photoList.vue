@@ -93,20 +93,24 @@ export default {
                 type: 'static'
             },
             imgList: {},
-            modal: {
+            modal: {                            // 弹出层样式、信息
                 html: '',
                 status: false,
                 move_status: 0,
                 load_status: false,
                 style: {}
-            }
+            },
+            befoer_modal: {                     // 记录之前的弹出层样式
+                top: '',
+                height: ''
+            }                        
         }
     },
     methods: {
         /** 图片弹出层
           * @event      元素属性   
           * @src        图片地址     
-          * @type       显示隐藏状态。 默认：show。 可选 hide  
+          * @type       显示隐藏状态。 默认：show。 可选 hide
          */
         img_modal(event,src,type) {
             let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
@@ -114,6 +118,8 @@ export default {
 
             if (type === 'hide') {
                 _this.modal.move_status = 0;
+                _this.modal.style.top = _this.befoer_modal.top;
+                _this.modal.style.height = _this.befoer_modal.height;
 
                 setTimeout( () => {
                     document.body.style.overflow = 'auto';
@@ -128,6 +134,10 @@ export default {
 
                 // 设置modal 样式
                 _this.modal.status = true;
+                _this.befoer_modal = {
+                    top: obj.offsetTop - scrollTop + 'px',
+                    height: obj.clientHeight + 'px'
+                };
                 _this.modal.style = {
                     width: obj.clientWidth + 'px',
                     height: obj.clientHeight + 'px',
@@ -135,10 +145,18 @@ export default {
                     left: obj.offsetLeft + 'px'
                 }
 
+                // 根据图片尺寸获取弹出层的top值
+                let clientWidth = document.documentElement.clientWidth,
+                    clientHeight = document.documentElement.clientHeight,
+                    ratio = clientWidth >= 1110 ? 0.4 : clientWidth <= 700 ? 0.8 : 0.5,
+                    img_header = (clientWidth * ratio) / (obj.clientWidth / obj.clientHeight);
+
                 setTimeout( () => {
                     _this.modal.html = obj.innerHTML;
                     setTimeout( () => {
                         _this.modal.move_status = 1;
+                        _this.modal.style.top = (clientHeight - img_header) / 2 + 'px';
+                        _this.modal.style.height = img_header + 'px';
                     },99)
                 },1)
                 
@@ -354,12 +372,8 @@ export default {
                     }
                 }
                 &.active {
-                    top: 50% !important;
                     left: 25% !important;
                     width: 50% !important;
-                    height: auto !important;
-                    -webkit-transform: translateY(-50%);
-                    transform: translateY(-50%);
                 }
                 &.textShow span {
                     opacity: 1;
