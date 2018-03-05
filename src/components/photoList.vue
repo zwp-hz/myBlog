@@ -155,7 +155,7 @@ export default {
                     _this.modal.html = obj.innerHTML;
                     setTimeout( () => {
                         _this.modal.move_status = 1;
-                        _this.modal.style.top = (clientHeight - img_header) / 2 + 'px';
+                        _this.modal.style.top = clientHeight - img_header <= 0 ? '1vh' : (clientHeight - img_header) / 2 + 'px';
                         _this.modal.style.height = img_header + 'px';
                     },99)
                 },1)
