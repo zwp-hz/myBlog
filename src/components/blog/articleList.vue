@@ -1,5 +1,5 @@
 <template>
-    <div id="articleList" :style="{zIndex: loadStatus ? 1 : 200}">
+    <div id="articleList">
         <div class="container">
             <loading :loadStatus="loadStatus"></loading>
             <div class="clear" style="margin: 20px -15px 0 0;" v-if="articleList.data.length >= 1">
