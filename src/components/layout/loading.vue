@@ -93,7 +93,7 @@ $activeColor: #1ed9be;
     position: absolute;
     left: 50%;
     top: 50%;
-    z-index: 1;
+    z-index: 1000;
     margin-left: -50px;
     margin-top: -50px;
     width: 100px;
