@@ -2,40 +2,35 @@
     <div id="articleList">
         <div class="container">
             <loading :loadStatus="loadStatus"></loading>
-            <div class="clear" style="margin: 20px -15px 0 0;" v-if="articleList.data.length >= 1">
+            <div class="articleList" v-if="articleList.data.length >= 1">
                 <article class="u_transition_300" v-for="(item,index) in articleList.data">
-                    <div class="content u_transition_300">
-                        <div class="image">
-                            <router-link v-if="item.images_src.src" :to="{path: '/articleDetail',query: {id: item._id,title: item.title}}" class="progressive--not-loaded" :data-url="item.images_src.src+'500'" :style="item.images_src.status === 2 ? '' : 'background: url('+item.images_src.src+'60)' ">
-                                <img v-if="item.images_src.status == 0" style="opacity: 0;" @load="imgLoad(index,'load');" @error="imgLoad(index,'error');" :src="item.images_src.src+'100'" alt="" />
-                                <i class="iconfont icon-codestore" :style="'opacity:'+(item.images_src.status == 2 ? 1 : 0)"></i>    
+                    <div class="image" v-if="item.images_src.src" @click="toArticleDetail(item)">
+                        <a class="progressive--not-loaded" :data-url="item.images_src.src+'500'" :style="item.images_src.status === 2 ? '' : 'background: url('+item.images_src.src+'60)' ">
+                            <img v-if="item.images_src.status == 0" style="opacity: 0;" @load="imgLoad(index,'load');" @error="imgLoad(index,'error');" :src="item.images_src.src+'100'" alt="" />
+                            <i class="iconfont icon-codestore" :style="'opacity:'+(item.images_src.status == 2 ? 1 : 0)"></i>    
+                        </a>
+                    </div>
+                    <div class="info">
+                        <h2><router-link :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" class="u_transition_300 u_hover_active">{{item.title}}</router-link></h2>
+                        <strong>{{item.describe}}</strong>
+                        <p>
+                            <b class="article_categories">
+                                <span v-for="(value,index) in item.categories">
+                                    {{index == 0 ? '':', '}}
+                                    <a @click="search({type: 'Category', text: value})" class="u_transition_300 u_hover_active">
+                                        {{value}}
+                                    </a>
+                                </span>
+                            </b>
+                            <router-link :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" class="review u_transition_300 u_hover_active_bg">
+                                <i class="iconfont icon-huifu"></i>
+                                <span>{{item.review.length}}</span>
                             </router-link>
-                            <router-link v-else :to="{path: '/articleDetail',query: {id: item._id,title: item.title}}">
-                                <i class="iconfont icon-codestore"></i>
-                            </router-link>
-                        </div>
-                        <div class="info">
-                            <h2><router-link :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" class="u_transition_300 u_hover_active">{{item.title}}</router-link></h2>
-                            <strong>{{item.describe}}</strong>
-                            <p>
-                                <b class="article_categories">
-                                    <span v-for="(value,index) in item.categories">
-                                        {{index == 0 ? '':', '}}
-                                        <a @click="search({type: 'Category', text: value})" class="u_transition_300 u_hover_active">
-                                            {{value}}
-                                        </a>
-                                    </span>
-                                </b>
-                                <router-link :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" class="review u_transition_300 u_hover_active_bg">
-                                    <i class="iconfont icon-huifu"></i>
-                                    <span>{{item.review.length}}</span>
-                                </router-link>
-                                <time class="g-c-center">
-                                    <span class="g-r-center"><i class="iconfont icon-time"></i>{{item.creation_at | dateFormat('YYYY/MM/DD')}}</span>
-                                    <span><i class="iconfont icon-chakan"></i>{{item.browsing}}</span>
-                                </time>
-                            </p>
-                        </div>
+                            <time class="g-c-center">
+                                <span class="g-r-center"><i class="iconfont icon-time"></i>{{item.creation_at | dateFormat('YYYY/MM/DD')}}</span>
+                                <span><i class="iconfont icon-chakan"></i>{{item.browsing}}</span>
+                            </time>
+                        </p>
                     </div>
                 </article>
             </div>
@@ -89,6 +84,9 @@ export default {
         }
     },
     methods: {
+        toArticleDetail(data) {
+            this.$router.push({path: '/articleDetail', query: {id: data._id, title: data.title}});
+        },
     	/** 获取文章列表
           * @data   page: 分页, searchCnt: 搜索内容
          */

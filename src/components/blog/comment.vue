@@ -12,8 +12,8 @@
                     <textarea class="input" v-model="comment_data.content" maxlength="200" placeholder="说点什么吧..." required></textarea>
                 </div>
                 <div class="form-row clear">
-                    <input v-if="checkbox_status" class="input" v-model="comment_data.email" placeholder="邮箱" type="email" required/>
-                    <input v-else class="input" disabled placeholder="邮箱" type="email" />
+                    <input v-if="checkbox_status" class="input" v-model="comment_data.nickname" placeholder="昵称" required/>
+                    <input v-else class="input" disabled placeholder="昵称" />
                 </div>
                 <div class="form-row text-right">
                     <label for="comment-anonymous">
@@ -38,7 +38,7 @@
                 </div>
                 <div class="box">
                     <div class="comment-info">
-                        <strong>{{item.email || '匿名'}}</strong>
+                        <strong>{{item.nickname || '匿名'}}</strong>
                         <i>{{item.city}}</i>
                         <span>{{item.creation_at | dateFormat('YYYY年MM月DD日 hh:mm')}}</span>
                     </div>
@@ -60,7 +60,9 @@ export default {
     },
     data () {
         return {
-            comment_data: {},               // 评论参数
+            comment_data: {                 // 评论数据
+                nickname: localStorage.nickname || ''
+            },               
             comment_list: [],               // 评论列表
             comment_msg: "",                // 提交评论 提示信息
             comment_msg_status: false,      // 提示信息状态
@@ -72,7 +74,7 @@ export default {
         // 发表评论
         submit() {
             this.request_status = true;
-            if (!this.checkbox_status) delete this.comment_data.email;
+            if (!this.checkbox_status) delete this.comment_data.nickname;
 
             // 添加评论
             this.$http.jsonp(this.$store.state.APIHOST + 'api/setComment',{
@@ -81,8 +83,10 @@ export default {
                 })
             }).then((res) => {
                 if (res.body.code === 0) {
+                    // 记录用户昵称
+                    localStorage.nickname = this.comment_data.nickname || '';
                     this.comment_list.push(res.body.data);
-                    this.comment_data = {};
+                    this.comment_data.content = '';
                     this.setCommentMsg(res.body.message);
                 } else {
                     this.comment_msg = res.body.message;

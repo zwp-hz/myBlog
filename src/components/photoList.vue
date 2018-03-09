@@ -234,11 +234,12 @@ export default {
                             column-gap:10px;
                             overflow: hidden;
                             li {
-                                display: inline-block;
                                 width: 100%;
                                 min-height: 50px;
                                 margin-bottom: 10px;
                                 overflow: hidden;
+                                -webkit-column-break-inside: avoid;
+                                break-inside: avoid;
                                 a {
                                     position: relative;
                                     background-color: #cecec4;

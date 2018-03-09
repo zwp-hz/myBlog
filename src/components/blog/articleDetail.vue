@@ -5,9 +5,9 @@
         <div class="header">
             <h1 class="u_transition_700" :class="{active: articleParam.title}">{{articleParam.title}}</h1>
             <h3></h3>
-            <section class="u_transition_700" :class="{active: articleParam.update_at}">
+            <section class="u_transition_700" :class="{active: articleParam.creation_at}">
                 <p>
-                    <span>{{articleParam.update_at | dateFormat('YYYY年MM月DD日')}}</span>
+                    <span>{{articleParam.creation_at | dateFormat('YYYY年MM月DD日')}}</span>
                     <span style="padding-left: 13px;">访问数：{{articleParam.browsing}}</span>
                 </p>
                 <div>
