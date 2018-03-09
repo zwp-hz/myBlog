@@ -214,6 +214,10 @@ strong,b { font-weight: normal; }
     }
 }
 
+#index .g-bolang-svg {
+    fill-opacity: 0;
+}
+
 // 图片模糊
 .progressive--not-loaded {
     filter: blur(20px);

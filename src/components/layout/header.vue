@@ -19,9 +19,10 @@
                             <i class="fr iconfont icon-search"></i>
                         </span>
                     </div>
-                    <button class="u_button u_transition_300" href="javaScript: void(0);" data-0="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-50p="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-80p="background-color: rgba(30,217,190,1); border: 1px solid rgb(30,217,190);">
+<!--                     <button class="u_button u_transition_300" href="javaScript: void(0);" data-0="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-50p="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-80p="background-color: rgba(30,217,190,1); border: 1px solid rgb(30,217,190);">
                         登录
-                    </button>
+                    </button> -->
+                    <i style="margin-left: 10px;">Hi 你好</i>
                 </nav>
                 <i v-if="headerData.isStatic" class="iconfont icon-codestore u_transition_300"></i>
                 <i v-else class="iconfont icon-codestore active" data-0="top: 30%; font-size: 80px;" data-30p="top: 30%; font-size: 80px;" data-80p="top: 1%; font-size: 50px;"></i>

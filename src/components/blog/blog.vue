@@ -10,7 +10,7 @@
             </div>
         </div>
         <articleList :categoriesName="categoriesName"></articleList>
-    	<footerBox></footerBox>
+    	<footerBox :blogPage="true"></footerBox>
     </div>
 </template>
 

@@ -228,8 +228,8 @@ export default {
                             flex: 1;
                             padding: 10px 10px 0 10px;
                             border-left: 2px solid #fff;
-                            -webkit-column-count: 3;
-                            column-count: 3;
+                            -webkit-column-count: 4;
+                            column-count: 4;
                             -webkit-column-gap: 10px;
                             column-gap:10px;
                             overflow: hidden;
