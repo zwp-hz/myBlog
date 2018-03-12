@@ -9,6 +9,8 @@ const articleDetail = r => require.ensure([], () => r(require('../components/blo
 const author = r => require.ensure([], () => r(require('../components/author.vue')), 'author');
 const photoWall = r => require.ensure([], () => r(require('../components/photoWall.vue')), 'photoWall');
 const photoList = r => require.ensure([], () => r(require('../components/photoList.vue')), 'photoList');
+// 海贝网络科技有限公司测试
+const prod = r => require.ensure([], () => r(require('../components/prod.vue')), 'prod');
 const error = r => require.ensure([], () => r(require('../components/404.vue')), 'error');
 
 Vue.use(Router);
@@ -23,6 +25,7 @@ export default new Router({
 	    { path: "/photoWall", component: photoWall, name: "photoWall", meta: {title: "照片墙"}},
 	    { path: "/photoList", component: photoList, name: "photoWall_list", meta: {title: "照片列表"}},
 	    { path: "/author", component: author, name: "author", meta: {title: "个人信息"}},
+	    { path: "/prod", component: prod, name: "prod", meta: {title: "海贝网络科技有限公司测试"}},
 	    { path: "*", component: error, name: "404", meta: {title: "404"}}
     ],
     scrollBehavior (to, from, savedPosition) {
