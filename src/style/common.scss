@@ -14,8 +14,7 @@ a { text-decoration: none !important; cursor: pointer; outline: none; hide-focus
 li { list-style: none; vertical-align:top;}
 input{
     float: left;
-    font-size: 0.14rem;
-    border: 0; 
+    border: 0;
     background: none;
     outline: none;
     &:disabled {
