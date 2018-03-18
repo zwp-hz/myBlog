@@ -13,7 +13,7 @@
                 <div class="wrap box1" data-0="display: none;" data-500="left: -75px;opacity: 0;display: block;" data-1250="left: -55px;opacity: 1;">
                     <div class="row">
                         <router-link class="set" :to="{path: '/photoList',query: {prefix: imgParents[0].prefix}}">
-                            <span v-for="(item,index) in imgParents[0].items" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key"></span>
+                            <span v-for="(item,index) in imgParents[0].items"  :key="index" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key"></span>
                             <span class="layer three">{{imgParents[0].prefix.replace(/:/g,'')}}</span>
                         </router-link>
                     </div>
@@ -21,7 +21,7 @@
                 <div class="wrap box2" data-0="display: none;" data-1350="left: 193px;opacity: 0;display: block;" data-2100="left: 213px;opacity: 1;">
                     <div class="row">
                         <router-link class="set" :to="{path: '/photoList',query: {prefix: imgParents[1].prefix}}">
-                            <span v-for="(item,index) in imgParents[1].items" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key"></span>
+                            <span v-for="(item,index) in imgParents[1].items" :key="index" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key"></span>
                             <span class="layer three">{{imgParents[1].prefix}}</span>
                         </router-link>
                     </div>
@@ -41,7 +41,7 @@
         </div>
         <div id="col-sm">
             <h1>旧日回忆</h1>
-            <section v-for="item in imgParents" v-if="item.items[1]">
+            <section v-for="item in imgParents" :key="item" v-if="item.items[1]">
                 <router-link class="g-c-center" :to="{path: '/photoList',query: {prefix: item.prefix}}" :style="'background: url('+item.items[1].key+'500)'">
                     {{item.prefix.replace(/:/g,'')}}
                 </router-link> 

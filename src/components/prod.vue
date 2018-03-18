@@ -12,8 +12,8 @@
     		</div>
     		<div class="info">
     			<strong>商品信息</strong>
-    			<p><span>颜色</span><b v-for="(item,index) in data.goods"><i v-if="index != 0">，</i>{{item.color}}</b></p>
-    			<p><span>尺码</span><b v-for="(item,index) in data.goods[0].detail"><i v-if="index != 0">，</i>{{item.size}}</b></p>
+    			<p><span>颜色</span><b v-for="(item,index) in data.goods" :key="index"><i v-if="index != 0">，</i>{{item.color}}</b></p>
+    			<p><span>尺码</span><b v-for="(item,index) in data.goods[0].detail" :key="index">><i v-if="index != 0">，</i>{{item.size}}</b></p>
     		</div>
     		<footer @click="popupStatus = true">立即购买</footer>
     		<div class="popup" :class="{active: popupStatus}">
@@ -22,12 +22,12 @@
     				<h3>单价：{{data.price}}/件</h3>
     				<div class="title">
     					<span>尺码</span>
-    					<span v-for="item in data.goods[0].detail">{{item.size}}</span>
+    					<span v-for="item in data.goods[0].detail" :key="item">>{{item.size}}</span>
     					<span>小记</span>
     				</div>
-    				<p v-for="(item,index) in data.goods"><span>
+    				<p v-for="(item,index) in data.goods" :key="index">><span>
     					{{item.color}}</span>
-    					<input :focusStatus="size.status" @input="sizeInput(index);" v-model="size.value" v-for="size in item.detail" type="number" name="" />
+    					<input :focusStatus="size.status" @input="sizeInput(index);" v-model="size.value" v-for="size in item.detail" :key="size"> type="number" name="" />
     					<strong>{{Number(data.price)*(item.color_sum||0)}}</strong>
     				</p>
     				<div class="massage" v-if="massage">{{massage}}</div>

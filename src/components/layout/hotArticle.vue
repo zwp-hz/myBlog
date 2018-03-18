@@ -1,7 +1,7 @@
 <template>
     <div class="recent_posts">
         <h3>最新动态</h3>
-        <div class="article g-r-center" v-for="(item,index) in articleList_hot">
+        <div class="article g-r-center" v-for="(item,index) in articleList_hot" :key="index">
             <router-link v-if="item.images_src.src" :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" ondragstart="return false;" class="images" :style="item.images_src.status == 1 ? 'background: url('+item.images_src.src+') no-repeat center bottom' : ''">
                 <img v-if="item.images_src.status == 0" style="opacity: 0;" @load="imgLoad(index,'load');" @error="imgLoad(index,'error');" :src="item.images_src.src" alt="" />
                 <i v-if="item.images_src.status == 2" class="iconfont icon-codestore"></i>
@@ -15,7 +15,7 @@
             </router-link>
             <div style="flex: 1;">
                 <div class="categories">
-                    <span v-for="(value,index) in item.categories">
+                    <span v-for="(value,index) in item.categories" :key="index">
                         {{index > 0 ? ', ':''}}
                         <a @click="search({type: 'Category', text: value})" class="u_transition_300 u_hover_active">
                             {{value}}
@@ -136,6 +136,7 @@ export default {
                 .backImg {
                     position: absolute;
                     top: 0;
+                    right: 0;
                     z-index: 50;
                     width: 76px;
                     height: 76px;

@@ -2,14 +2,14 @@
     <div id="photoList">
         <headerBox :headerData="headerData"></headerBox>
         <div class="main">
-            <section class="container" v-for="(m,y_key) in imgList">
+            <section class="container" v-for="(m,y_key) in imgList" :key="y_key">
                 <h2>{{y_key.replace(/:/g,'')}}</h2>
-                <div class="month_box" v-for="(d,m_key) in m">
+                <div class="month_box" v-for="(d,m_key) in m" :key="m_key">
                     <h3>{{m_key.replace(/-/g,'')|number_to_chinese}}</h3>
-                    <div class="day_box g-r-center" v-for="(list,d_key) in d">
+                    <div class="day_box g-r-center" v-for="(list,d_key) in d" :key="d_key">
                         <span>{{d_key.replace(/:/g,'')}}<i></i></span>
                         <ul>
-                           <li v-for="item in list" @click="img_modal($event,item.src)">
+                           <li v-for="item in list" :key="item" @click="img_modal($event,item.src)">
                                 <a href="javaScript:void(0);" data_type="img" :data-url="item.src" class="progressive--not-loaded">
                                     <img :style="'opacity:'+(item.status === 2 ? 0 : 1)" @load="item.status=1" @error="item.status=2" :src="item.src_small" alt="" />
                                     <i class="iconfont icon-codestore" :style="'display:'+(item.status === 2 ? 'block' : 'none')"></i>

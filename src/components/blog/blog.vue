@@ -5,7 +5,7 @@
             <div class="container">
                 <ul class="categories g-r-center">
                     <li @click="categoriesName = '全部'"><router-link class="u_transition_300 u_hover_active_bg" :class="{cur: categoriesName === '全部'}" :to="{path: '/blog'}">全部</router-link></li>
-                    <li @click="categoriesName = item.name" v-for="item in categories"><router-link class="u_transition_300 u_hover_active_bg" :class="{cur: categoriesName === item.name}" :to="{path: '/blog', query: {categories: item.name}}">{{item.name}}</router-link></li>
+                    <li @click="categoriesName = item.name" v-for="item in categories" :key="item"><router-link class="u_transition_300 u_hover_active_bg" :class="{cur: categoriesName === item.name}" :to="{path: '/blog', query: {categories: item.name}}">{{item.name}}</router-link></li>
                 </ul>
             </div>
         </div>

@@ -1,15 +1,15 @@
 <template>
   	<header>
-        <div id="header" class="u_transition_300" :class="[ headerData.type, scrollStatus ]" data-0="background-color: rgba(255,255,255,0);" data-50p="background-color: rgba(255,255,255,0);" data-80p="background-color: rgba(255,255,255,1);">
-            <div class="container headerBox g-r-center" data--0="color: rgba(206,206,196,1);" data-50p="color: rgba(206,206,196,1);" data-80p="color: rgba(53, 58, 64,1);">
+        <div id="header" class="u_transition_300" :class="[ headerData.type, scrollStatus ]" data-0="background-color: rgba(255,255,255,0);" data-50p="background-color: rgba(255,255,255,0);" data-76p="background-color: rgba(255,255,255,1);">
+            <div class="container headerBox g-r-center" data--0="color: rgba(206,206,196,1);" data-50p="color: rgba(206,206,196,1);" data-76p="color: rgba(53, 58, 64,1);">
                 <nav class="g-r-center" style="justify-content: flex-end;">
                     <div class="menuList">
                         <ul class="g-r-center">
-                            <li v-for="item in navArray" :class="{active: curRoute.indexOf(item.name) != -1 }" ><router-link class="u_transition_300" :to="{path: item.route}">{{item.title}}</router-link></li>
+                            <li v-for="item in navArray" :key="item" :class="{active: curRoute.indexOf(item.name) != -1 }" ><router-link class="u_transition_300" :to="{path: item.route}">{{item.title}}</router-link></li>
                         </ul>
                         <div class="hamburger-menu" :class="{active: menuSwitch}" @click="menuSwitch = !menuSwitch">
                             <div class="bar"></div>
-                            <router-link class="u_transition_300 iconfont" :class="[item.icon,{active: curRoute.indexOf(item.name) != -1 }]" v-for="item in navArray" :to="{path: item.route}">
+                            <router-link class="u_transition_300 iconfont" :class="[item.icon,{active: curRoute.indexOf(item.name) != -1 }]" v-for="item in navArray" :key="item" :to="{path: item.route}">
                             </router-link>
                         </div>
                     </div>
@@ -19,13 +19,13 @@
                             <i class="fr iconfont icon-search"></i>
                         </span>
                     </div>
-<!--                     <button class="u_button u_transition_300" href="javaScript: void(0);" data-0="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-50p="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-80p="background-color: rgba(30,217,190,1); border: 1px solid rgb(30,217,190);">
+<!--                     <button class="u_button u_transition_300" href="javaScript: void(0);" data-0="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-50p="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-76p="background-color: rgba(30,217,190,1); border: 1px solid rgb(30,217,190);">
                         登录
                     </button> -->
                     <i style="margin-left: 10px;">Hi 你好</i>
                 </nav>
                 <i v-if="headerData.isStatic" class="iconfont icon-codestore u_transition_300"></i>
-                <i v-else class="iconfont icon-codestore active" data-0="top: 30%; font-size: 80px;" data-30p="top: 30%; font-size: 80px;" data-80p="top: 1%; font-size: 50px;"></i>
+                <i v-else class="iconfont icon-codestore active" data-0="top: 30%; font-size: 80px;" data-30p="top: 30%; font-size: 80px;" data-76p="top: 1%; font-size: 50px;"></i>
             </div>
         </div>
         <div id="blogHeader" v-if="headerData.type === 'blog'">

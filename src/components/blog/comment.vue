@@ -32,7 +32,7 @@
                 <p><span v-if="comment_list">{{comment_list.length}}</span>条评论</p>
             </header>
             <!-- <h3>最新评论</h3> -->
-            <section class="g-r-center" v-for="item in comment_list">
+            <section class="g-r-center" v-for="item in comment_list" :key="item">
                 <div class="portrait">
                     <i class="iconfont icon-codestore"></i>
                 </div>

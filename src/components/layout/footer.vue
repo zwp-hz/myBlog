@@ -4,14 +4,9 @@
             <div class="g-bolang">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 14" height="70" preserveAspectRatio="none"><path class="g-bolang-svg" d="M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z"></path></svg>
             </div>
-            <div class="container g-r-center clear">
-                <div class="about_me g-box">
-                     <p><span><b>朱为鹏</b>，🥚生于94年<br/><br/>浙江温州苍南人，<br/>现居杭州。<br/>前端菜🐦一枚，<br/>搬砖ing...</span></p>
-                </div>
-                <div class="more g-r-center">
-                    <hotArticle :class="'g-box'" style="flex: 1;" class="hotArticle" v-on:searchCnt="searchList" v-on:articleInfo="articleDeatil"></hotArticle>
-                    <tags :class="'g-box'" style="flex: 1;" class="tags" v-on:searchCnt="searchList"></tags>
-                </div>
+            <div class="container g-r-center">
+                <hotArticle :class="'g-box'" style="flex: 1;" class="hotArticle" v-on:searchCnt="searchList" v-on:articleInfo="articleDeatil"></hotArticle>
+                <tags :class="'g-box'" style="flex: 1;" class="tags" v-on:searchCnt="searchList"></tags>
             </div>
         </div>
         <div class="put-on-record g-c-center">
@@ -63,24 +58,7 @@ export default {
         .container {
             margin: 0 auto;
             padding: 100px 0 0 !important;
-            .about_me {
-                width: 33%;
-                p {
-                    color: #e3e3e3;
-                    text-align: center;
-                    span {
-                        display: inline-block;
-                        text-align: left;
-                        b {
-                            font-size: 25px;
-                        }
-                    }
-                }
-            }
-            .more {
-                width: 66%;
-                align-items: flex-start;
-            }
+            align-items: flex-start;
         }
         .put-on-record {
             height: 85px;
@@ -93,25 +71,15 @@ export default {
         }
     }
 
-    @media (max-width: 800px){
+     @media (min-width: 900px){
         .container {
-            .more {
-                display: block !important;
-            }
+            max-width: 740px !important;
         }
     }
 
     @media (max-width: 550px){
         .container {
             display: block !important;
-            .about_me {
-                width: 100% !important;
-                padding-bottom: 20px;
-            }
-            .more {
-                display: block !important;
-                width: 100% !important;
-            }
         }
     }
 </style>

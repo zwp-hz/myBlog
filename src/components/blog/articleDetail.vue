@@ -11,7 +11,7 @@
                     <span style="padding-left: 13px;">访问数：{{articleParam.browsing}}</span>
                 </p>
                 <div>
-                    <span v-for="(categories,index) in articleParam.categories">
+                    <span v-for="(categories,index) in articleParam.categories" :key="index">
                         {{index == 0 ? '':', '}}
                         <a class="u_transition_300 u_hover_active" @click="search({type: 'Category', text: categories})">
                             {{categories}}
@@ -26,7 +26,7 @@
                 <div class="blog-tags">
                     <h5>Tags In</h5>
                     <div class="blog-tags-list clear">
-                        <a v-for="tag in articleParam.tags" class="fl u_transition_300 u_hover_active_bg" @click="search({type: 'Tag', text: tag})">
+                        <a v-for="tag in articleParam.tags" :key="tag" class="fl u_transition_300 u_hover_active_bg" @click="search({type: 'Tag', text: tag})">
                             {{tag}}
                         </a>
                     </div>
@@ -34,7 +34,7 @@
             </div>
             <comment :commentList="articleParam.review"></comment>
         </div>
-        <footerBox></footerBox>   
+        <footerBox :blogPage="true"></footerBox>   
     </div>
 </template>
 

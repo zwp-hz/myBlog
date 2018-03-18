@@ -3,7 +3,7 @@
         <div class="container">
             <loading :loadStatus="loadStatus"></loading>
             <div class="articleList" v-if="articleList.data.length >= 1">
-                <article class="u_transition_300" v-for="(item,index) in articleList.data">
+                <article class="u_transition_300" v-for="(item,index) in articleList.data" :key="index">
                     <div class="image" v-if="item.images_src.src" @click="toArticleDetail(item)">
                         <a class="progressive--not-loaded" :data-url="item.images_src.src+'500'" :style="item.images_src.status === 2 ? '' : 'background: url('+item.images_src.src+'60)' ">
                             <img v-if="item.images_src.status == 0" style="opacity: 0;" @load="imgLoad(index,'load');" @error="imgLoad(index,'error');" :src="item.images_src.src+'100'" alt="" />
@@ -15,7 +15,7 @@
                         <strong>{{item.describe}}</strong>
                         <p>
                             <b class="article_categories">
-                                <span v-for="(value,index) in item.categories">
+                                <span v-for="(value,index) in item.categories" :key="index">
                                     {{index == 0 ? '':', '}}
                                     <a @click="search({type: 'Category', text: value})" class="u_transition_300 u_hover_active">
                                         {{value}}
@@ -44,7 +44,7 @@
                     <li v-if="articleList.current_page > 1" @click="pageBtn(Number(articleList.current_page)-1)">
                         <a class="next page-numbers u_transition_300 u_hover_active">上一页</a>
                     </li>
-                    <li v-for="(item,index) in articleList.last_page " @click="pageBtn(index+1)">
+                    <li v-for="(item,index) in articleList.last_page " :key="index" @click="pageBtn(index+1)">
                         <span v-if="index + 1 == articleList.current_page" class="page-numbers current">{{index+1}}</span>
                         <a v-else class="page-numbers u_transition_300 u_hover_active">{{index+1}}</a>
                     </li>

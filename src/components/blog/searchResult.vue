@@ -14,7 +14,7 @@
             </div>
         </div>
         <articleList :searchCnt="searchCnt"></articleList>
-        <footerBox></footerBox>
+        <footerBox :blogPage="true"></footerBox>
     </div>
 </template>
 

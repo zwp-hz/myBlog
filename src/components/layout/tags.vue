@@ -1,7 +1,7 @@
 <template>
     <div class="tags clear">
         <h3>tags</h3>
-        <a class="fl u_transition_300 u_button" v-for="item in tags" @click="search({type: 'Tag', text: item.name})">
+        <a class="fl u_transition_300 u_button" v-for="item in tags" :key="item" @click="search({type: 'Tag', text: item.name})">
             {{item.name}}
         </a>
     </div>
