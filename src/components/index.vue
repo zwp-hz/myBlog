@@ -53,7 +53,7 @@ export default {
     data() {
         return {
             loadStatus: false,              // 加载状态。false：加载中。true：加载完成。
-            bg_image_src: this.$store.state.IMGHOST + 'blog_index_bg.jpg?imageView2/2/interlace/1/format/webp',
+            bg_image_src: this.$store.state.IMGHOST + 'blog_index_bg.jpg?imageView2/2/interlace/1/format/webp/w/1080',
             headerData: {                   // 头部出参数
                 searchStatus: false,
                 isStatic: false,

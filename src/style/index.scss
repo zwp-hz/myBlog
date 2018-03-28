@@ -9,7 +9,7 @@
         right: 0;
         bottom: 0;
         left: 0;
-        background: url('http://image.zhuweipeng.me/blog_index_bg.jpg?imageView2/2/interlace/1') no-repeat center bottom;
+        background: url('http://image.zhuweipeng.me/blog_index_bg.jpg?imageView2/2/interlace/1/format/webp/w/1080') no-repeat center bottom;
         background-size: cover !important;
         -webkit-background-size: cover !important;
     }
@@ -21,9 +21,9 @@
             position: fixed;
             top: 30%;
             font-size: 80px;
-            color: rgba(206,206,196,1);
+            color: rgba(206, 206, 196, 1);
         }
-        h1{
+        h1 {
             position: fixed;
             top: 45%;
             font-size: 30px;
@@ -47,7 +47,7 @@
                 width: 0;
                 height: 0;
                 border-right: 25vw solid transparent;
-                border-top: 72vh solid rgba(255,255,255,0.8);
+                border-top: 72vh solid rgba(255, 255, 255, 0.8);
                 #weather {
                     position: absolute;
                     top: -65vh;
@@ -64,7 +64,7 @@
                     padding: 10px 10px 10px 25vw;
                     align-items: flex-end;
                     line-height: 25px;
-                    color: rgba(255,255,255,0.7);
+                    color: rgba(255, 255, 255, 0.7);
                     strong {
                         font-size: 18px;
                     }
@@ -79,11 +79,11 @@
     top: -20px;
 }
 
-@media (max-width: 768px){
+@media (max-width: 768px) {
     #intro {
         .icon-codestore {
             display: block !important;
-        } 
+        }
         h1 {
             font-size: 25px !important;
         }
