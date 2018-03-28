@@ -43,7 +43,7 @@ export default {
                     for (var item of data) {
                         if (item.images_src.length > 0) {
                             item.images_src = {
-                                src: IMGHOST + item.images_src[0] + "?imageView2/2/interlace/1/w/100",
+                                src: IMGHOST + item.images_src[0] + "?imageView2/2/interlace/1/w/100/format/webp",
                                 status: 0   // 0：图片未加载  1：图片加载成功  2：图片加载失败
                             }
                         } else {

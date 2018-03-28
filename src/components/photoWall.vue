@@ -56,6 +56,9 @@ import headerBox   from './layout/header.vue'
 
 export default {
     mounted() {
+        // 设置内容高度
+        document.body.style.cssText = "height: "+ document.body.style.height +" !important";
+
         let { APIHOST, IMGHOST } = this.$store.state,
             json = ['点滴:','风景:'];
 
@@ -69,7 +72,7 @@ export default {
                     let items = res.body.data.items;
 
                     for (let item of items) {
-                        item.key = IMGHOST + item.key + '?imageView2/2/interlace/1/w/220'
+                        item.key = IMGHOST + item.key + '?imageView2/2/interlace/1/w/220//format/webp'
                     }
 
                     this.imgParents[index].items = items;

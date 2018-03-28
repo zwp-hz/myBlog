@@ -1,34 +1,57 @@
-$defaultColor: #cecec4; 
+$defaultColor: #cecec4;
 $activeColor: #1ed9be;
-
-// body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0; box-sizing: border-box; }
-// body, button, input, select, textarea { font:12px/1.5tahoma, arial, \5b8b\4f53; }
-// h1, h2, h3, h4, h5, h6{ font-size:100%; }
-// address, cite, dfn, em, var { font-style:normal; }
-// code, kbd, pre, samp { font-family:couriernew, courier, monospace; }
-// small{ font-size:12px; }
-// ul, ol { list-style:none; }
-// a { text-decoration:none; }
-// a:hover { text-decoration:underline; }
-// sup { vertical-align:text-top; }
-// sub{ vertical-align:text-bottom; }
-// legend { color:#000; }
-// fieldset, img { border:0; }
-// button, input, select, textarea { font-size:100%; }
-// table { border-collapse:collapse; border-spacing:0; }
-
 // 初始化
-*{
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+form,
+button,
+input,
+textarea,
+div {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body { position: relative; color: #333; font-size: 14px; font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif !important; }
-img { border: 0 none; vertical-align: top;}
-a { text-decoration: none !important; cursor: pointer; outline: none; hide-focus: expression(this.hideFocus=true) }
-li { list-style: none; vertical-align:top;}
-input{
+body {
+    position: relative;
+    height: auto !important;
+    color: #333;
+    font-size: 14px;
+    font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif !important;
+}
+
+img {
+    border: 0 none;
+    vertical-align: top;
+}
+
+a {
+    text-decoration: none !important;
+    cursor: pointer;
+    outline: none;
+    hide-focus: expression(this.hideFocus=true);
+}
+
+li {
+    list-style: none;
+    vertical-align: top;
+}
+
+input {
     float: left;
     border: 0;
     background: none;
@@ -37,16 +60,50 @@ input{
         background-color: rgba(192, 192, 192, 0.4) !important;
     }
 }
-strong,b { font-weight: normal; }
-.container { max-width: 1200px; padding: 0 !important;}
-.icon { width: 1em; height: 1em; vertical-align: -0.15em; fill: currentColor; overflow: hidden; }
-[v-cloak] { display: none; }
 
-::-webkit-input-placeholder { color: #999; }
-.clear{ zoom: 1;}
-.clear:after { content: "\20"; clear: both; display: block;}
-.fl{ float: left;}
-.fr{ float: right;}
+strong,
+b {
+    font-weight: normal;
+}
+
+.container {
+    max-width: 1200px;
+    padding: 0 !important;
+}
+
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+::-webkit-input-placeholder {
+    color: #999;
+}
+
+.clear {
+    zoom: 1;
+}
+
+.clear:after {
+    content: "\20";
+    clear: both;
+    display: block;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
 
 // 元件
 .u_transition_300 {
@@ -83,9 +140,10 @@ strong,b { font-weight: normal; }
     border-top-color: $activeColor;
     animation: fade2 1s infinite;
     transition: background .2s;
-    -webkit-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
-    &:after, &:before {
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    &:after,
+    &:before {
         content: '';
         position: absolute;
         display: block;
@@ -98,12 +156,29 @@ strong,b { font-weight: normal; }
         animation: fade1 1s infinite;
         transition: background .2s;
     }
-    &:before { left: 14px; animation: fade3 1s infinite; }
+    &:before {
+        left: 14px;
+        animation: fade3 1s infinite;
+    }
 }
 
-@keyframes fade1 {  0% { background: $activeColor; } }
-@keyframes fade2 {  33% { background: $activeColor; } }
-@keyframes fade3 {  66% { background: $activeColor; } }
+@keyframes fade1 {
+    0% {
+        background: $activeColor;
+    }
+}
+
+@keyframes fade2 {
+    33% {
+        background: $activeColor;
+    }
+}
+
+@keyframes fade3 {
+    66% {
+        background: $activeColor;
+    }
+}
 
 .u_arrow {
     position: fixed;
@@ -119,7 +194,7 @@ strong,b { font-weight: normal; }
     -webkit-transform: rotate(45deg);
     -webkit-animation: arrow_move 1.5s infinite ease-in-out;
 }
- 
+
 @keyframes arrow_move {
     0% {
         opacity: 0;
@@ -143,8 +218,8 @@ strong,b { font-weight: normal; }
     padding: 0 20px;
     border-radius: 4px;
     margin-left: 20px;
-    color: #fff; 
-    background-color: $defaultColor; 
+    color: #fff;
+    background-color: $defaultColor;
     border: 1px solid $defaultColor;
     &:hover {
         color: $activeColor !important;
@@ -175,19 +250,19 @@ strong,b { font-weight: normal; }
 .post-content-container {
     position: relative;
     bottom: -2px;
-    box-shadow: 0px 15px 45px -9px rgba(0,0,0,0.5);
- }
+    box-shadow: 0px 15px 45px -9px rgba(0, 0, 0, 0.5);
+}
 
 .post-content-container:hover {
     bottom: 0;
-    box-shadow: 0 1px 1px 1px rgba(0,0,0,0.15);
- }
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.15);
+}
 
 // 布局
 .g-overflow-hidden {
-	text-overflow:ellipsis;
-	overflow:hidden;
-	white-space:nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .g-c-center {
@@ -258,7 +333,6 @@ strong,b { font-weight: normal; }
     0% {
         d: path("M 27 10C 21 8 14 3 0 3L 0 0L 54 0L 54 14C 40 14 33 12 27 10Z");
     }
-
     50% {
         d: path("M 27 14C 12 14 5 7 0 7L 0 0L 54 0L 54 7C 49 7 42 14 27 14Z");
     }
@@ -278,24 +352,33 @@ strong,b { font-weight: normal; }
     }
 }
 
-
 // 自适应
-@media (max-width: 1250px){
-    .container { max-width: 920px !important; }
+@media (max-width: 1250px) {
+    .container {
+        max-width: 920px !important;
+    }
 }
 
-@media (max-width: 900px){
-    .container { max-width: 740px !important; }
+@media (max-width: 900px) {
+    .container {
+        max-width: 740px !important;
+    }
 }
 
-@media (max-width: 800px){
-    .container { max-width: 600px !important; }
+@media (max-width: 800px) {
+    .container {
+        max-width: 600px !important;
+    }
 }
 
-@media (max-width: 768px){
-    .container { max-width: 468px !important; }
+@media (max-width: 768px) {
+    .container {
+        max-width: 468px !important;
+    }
 }
 
-@media (max-width: 550px){
-    .container { max-width: 320px !important; }
+@media (max-width: 550px) {
+    .container {
+        max-width: 320px !important;
+    }
 }

@@ -35,9 +35,11 @@
 "use strict";
 import headerBox   from './layout/header.vue'
 
+let lazyloads = new lazyload(), timer;
+
 export default {
     mounted() {
-        let { APIHOST, IMGHOST } = this.$store.state,
+        let { APIHOST } = this.$store.state,
             prefix = this.$route.query.prefix;
 
         // 获取对应相册列表
@@ -45,54 +47,25 @@ export default {
             prefix: prefix
         }}).then((res) => {
             if (res.body.code === 0) {
-                let items = res.body.data.items.reverse(),
-                    imgJson = {};
+                this.qn_resource.list = res.body.data.items;
+                this.laodImgs('first');
 
-                for (let item of items) {
-                    let array = item.img_name.match(/.*?(:|-|\.|，)/g),
-                        clientWidth = document.documentElement.clientWidth,
-                        width = parseInt((clientWidth > 767 ? clientWidth/3 : clientWidth/2)*0.8,10);
-
-                    // 数据分割
-                    array.forEach( (val,index) => {
-                        if (index === 0 && !imgJson[val]) {
-                            imgJson[val] = {};
-                        } else if (index === 1 && !imgJson[array[0]][val]) {
-                            imgJson[array[0]][val] = {}
-                        } else if (index === 2 && !imgJson[array[0]][array[1]][val]) {
-                            imgJson[array[0]][array[1]][val] = [];
-                        } else if(index === 3) {
-                            imgJson[array[0]][array[1]][array[2]].push({
-                                city: array[3].replace(/-/g,'') + ' ' + array[4].replace(/，/g,''),
-                                title: array[5].replace(/\./g,''),
-                                src: IMGHOST + item.key + '?imageView2/2/interlace/1/w/' + width,
-                                src_small: IMGHOST + item.key + '?imageView2/2/interlace/1/w/' + 60,
-                                status: 0
-                            })
-                        }
-                    })
-                }
-
-                this.imgList = Object.assign({},this.imgList,imgJson);
-
-                // DOM渲染完成
-                this.$nextTick( () => {
-                    setTimeout( () => {
-                        let lazyloads = new lazyload();
-                        lazyloads.init();
-                    },1000);
-                })
+                document.addEventListener("scroll", this.seeScroll, false);
             }
         },(res) => console.log(res));
     },
     data() {
         return {
-            headerData: {
+            headerData: {                       // 头部配置
                 searchStatus: false,
                 isStatic: true,
                 type: 'static'
             },
-            imgList: {},
+            qn_resource: {                      // 七牛资源
+                list: [],
+                number: 0
+            },
+            imgList: {},                        // 显示的图片列表
             modal: {                            // 弹出层样式、信息
                 html: '',
                 status: false,
@@ -108,22 +81,21 @@ export default {
     },
     methods: {
         /** 图片弹出层
-          * @event      元素属性   
-          * @src        图片地址     
+          * @event      元素属性
+          * @src        图片地址
           * @type       显示隐藏状态。 默认：show。 可选 hide
          */
         img_modal(event,src,type) {
-            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
-                _this = this;
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 
             if (type === 'hide') {
-                _this.modal.move_status = 0;
-                _this.modal.style.top = _this.befoer_modal.top;
-                _this.modal.style.height = _this.befoer_modal.height;
+                this.modal.move_status = 0;
+                this.modal.style.top = this.befoer_modal.top;
+                this.modal.style.height = this.befoer_modal.height;
 
                 setTimeout( () => {
                     document.body.style.overflow = 'auto';
-                    _this.modal.status = false;
+                    this.modal.status = false;
                 },500)
             } else {
                 let obj = event.path ? event.path[0].tagName === 'A' ? event.path[0] : event.path[1] : event.target,
@@ -133,12 +105,12 @@ export default {
                 document.body.style.overflow = 'hidden';
 
                 // 设置modal 样式
-                _this.modal.status = true;
-                _this.befoer_modal = {
+                this.modal.status = true;
+                this.befoer_modal = {
                     top: obj.offsetTop - scrollTop + 'px',
                     height: obj.clientHeight + 'px'
                 };
-                _this.modal.style = {
+                this.modal.style = {
                     width: obj.clientWidth + 'px',
                     height: obj.clientHeight + 'px',
                     top: obj.offsetTop - scrollTop  + 'px',
@@ -152,27 +124,132 @@ export default {
                     img_header = (clientWidth * ratio) / (obj.clientWidth / obj.clientHeight);
 
                 setTimeout( () => {
-                    _this.modal.html = obj.innerHTML;
+                    this.modal.html = obj.innerHTML;
                     setTimeout( () => {
-                        _this.modal.move_status = 1;
-                        _this.modal.style.top = clientHeight - img_header <= 0 ? '1vh' : (clientHeight - img_header) / 2 + 'px';
-                        _this.modal.style.height = img_header + 'px';
+                        this.modal.move_status = 1;
+                        this.modal.style.top = clientHeight - img_header <= 0 ? '1vh' : (clientHeight - img_header) / 2 + 'px';
+                        this.modal.style.height = img_header + 'px';
                     },99)
                 },1)
                 
                 // 加载1080p图片资源
                 setTimeout( () => {
-                    _this.modal.move_status = 2;
-                    _this.modal.load_status = true;
+                    this.modal.move_status = 2;
+                    this.modal.load_status = true;
                     $img.src = src_1080;
                     $img.onload = (e) => {
                         if (e.type === 'load') {
                             document.getElementById('modal').getElementsByTagName('img')[0].src = src_1080;
-                            _this.modal.load_status = false;
+                            this.modal.load_status = false;
                         }
                     }
                 },600);
             }
+        },
+        /** 滚动侦听 */
+        seeScroll() {
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop, // 滚动条距离顶部高度
+                scrollHeight = document.documentElement.scrollHeight, // 内容高度
+                seeHeight = document.documentElement.clientHeight; // 可见区域高度
+            
+            if ( scrollTop >= scrollHeight - seeHeight - 30 ) {
+                clearTimeout(timer);
+                timer = setTimeout( () => {
+                    this.laodImgs();
+                },50);
+            }
+        },
+        /** 加载图片
+          * @type           判断是否第一次加载
+         */
+        laodImgs(type) {
+            // 初始化图片信息
+            let IMGHOST = this.$store.state.IMGHOST,
+                { list, number } = this.qn_resource,
+                n = document.documentElement.clientWidth > 900 ? 4 : 2,
+                imgJson = {}, imgTime = '', imgNumbe = 0, timeNumber = 0;
+
+            // 加载完成  中止运行
+            if (list.slice(number).length <= 0) {
+                document.removeEventListener("scroll", this.seeScroll, false);
+            }
+
+            for (let item of list.slice(number)) {
+                let imgArray = item.img_name.match(/.*?(:|-|\.|，)/g),
+                    timeString = imgArray[0] + imgArray[1] + imgArray[2],
+                    clientWidth = document.documentElement.clientWidth,
+                    imgWidth = parseInt((clientWidth > 767 ? clientWidth/3 : clientWidth/2)*0.8,10);
+
+                // 记录数量
+                timeNumber = timeString !== imgTime ? ++timeNumber : timeNumber;
+
+                // 中断数据遍历
+                if (type !== "first") {
+                    if (timeNumber > 1 || imgNumbe >= n) {
+                        break;
+                    }
+                } else if (imgNumbe >= 15 || timeNumber > 3) {
+                    break;
+                }
+
+                // 数据分割
+                imgArray.forEach( (val,index) => {
+                    if (index === 0 && !imgJson[val]) {
+                        imgJson[val] = {};
+                    } else if (index === 1 && !imgJson[imgArray[0]][val]) {
+                        imgJson[imgArray[0]][val] = {}
+                    } else if (index === 2 && !imgJson[imgArray[0]][imgArray[1]][val]) {
+                        imgJson[imgArray[0]][imgArray[1]][val] = [];
+                    } else if(index === 3) {
+                        imgJson[imgArray[0]][imgArray[1]][imgArray[2]].push({
+                            key: [imgArray[0],imgArray[1],imgArray[2]],
+                            city: imgArray[3].replace(/-/g,'') + ' ' + imgArray[4].replace(/，/g,''),
+                            title: imgArray[5].replace(/\./g,''),
+                            src: IMGHOST + item.key + '?imageView2/2/interlace/1/format/webp/w/' + imgWidth,
+                            src_small: IMGHOST + item.key + '?imageView2/2/interlace/1/format/webp/w/' + 60,
+                            status: 0
+                        })
+                    }
+                });
+
+                // 记录图片信息
+                this.qn_resource.number++; imgNumbe++;
+                imgTime = timeString;
+            };
+
+            if (type === "first") {
+                this.imgList = imgJson;
+            } else {
+                // 列表递归
+                let factorical = (data) => {
+                    if (Array.isArray(data)) {
+                        for (let item of data) {
+                            item.key.forEach( (key,index) => {
+                                if (index === 0 && !this.imgList[key])
+                                    this.imgList[key] = {};
+                                else if (index === 1 && !this.imgList[item.key[0]][key])
+                                    this.imgList[item.key[0]][key] = {};
+                                else if (index === 2 && !this.imgList[item.key[0]][item.key[1]][key])
+                                    this.imgList[item.key[0]][item.key[1]][key] = [];
+                            });
+                            this.imgList[item.key[0]][item.key[1]][item.key[2]].push(item);
+                        }
+                    } else if (typeof data === "object") {
+                        for (let item in data) {
+                            factorical(data[item]);
+                        }
+                    }
+                }
+
+                factorical(imgJson);
+            }
+            
+            // 重定向数据
+            this.imgList = Object.assign({},this.imgList);
+            // DOM渲染完成
+            this.$nextTick( () => {
+                lazyloads.init();
+            })
         }
     },
     components: {
@@ -397,6 +474,19 @@ export default {
         }
     }
 
+    @media (max-width: 900px){
+        ul {
+            -webkit-column-count: 2 !important;
+            column-count: 2!important;
+            padding: 10px 3px 0 6px !important;
+            -webkit-column-gap: 6px !important;
+            column-gap: 6px !important;
+            li {
+                margin-bottom: 6px !important;
+            }
+        }
+    }
+
     @media (max-width: 767px){
         #photoList .main section{
             h2 {
@@ -404,17 +494,6 @@ export default {
             }
             .month_box {
                 padding: 20px 0 0 10px;
-            }
-
-            ul {
-                -webkit-column-count: 2 !important;
-                column-count: 2!important;
-                padding: 10px 3px 0 6px !important;
-                -webkit-column-gap: 3px !important;
-                column-gap:3px !important;
-                li {
-                    margin-bottom: 3px !important;
-                }
             }
         }
     }

@@ -16,10 +16,10 @@
     <script type="text/javascript">
         var _hmt = _hmt || [];
         (function() {
-          var hm = document.createElement("script");
-          hm.src = "https://hm.baidu.com/hm.js?af15b8a3b7300abef2e0ca7b9444bbb9";
-          var s = document.getElementsByTagName("script")[0]; 
-          s.parentNode.insertBefore(hm, s);
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?af15b8a3b7300abef2e0ca7b9444bbb9";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
         })();
     </script>
     <script type="text/javascript">
@@ -31,10 +31,11 @@
                 var _this = this;
 
                 var forEach_envent = function() {
-                        object = document.querySelectorAll('[data-url]'),
-                        scrollTop = document.documentElement.scrollTop || document.body.scrollTop,      // 滚动条距离顶部高度
-                        seeHeight = document.documentElement.clientHeight;                              // 可见区域高度
-                    
+                    var object = document.querySelectorAll('[data-url]'),
+                        scrollTop = document.documentElement.scrollTop || document.body.scrollTop, // 滚动条距离顶部高度
+                        seeHeight = document.documentElement.clientHeight; // 可见区域高度
+
+                    // 解除绑定
                     if (object.length <= 0) {
                         window.removeEventListener("scroll", forEach_envent, false);
                     }
@@ -49,15 +50,15 @@
 
                             item.removeAttribute('data-url');
 
-                            _this.imgLoad(image_url,function(e) {
+                            _this.imgLoad(image_url, function(e) {
                                 if (e.type === 'error') {
                                     item.style.cssText = '';
                                     item.getElementsByTagName('i')[0].style.opacity = '1';
-                                } else if(e.type === 'load') {
+                                } else if (e.type === 'load') {
                                     if (item.getAttribute('data_type') === 'img') {
                                         item.getElementsByTagName('img')[0].src = image_url;
                                     } else {
-                                        item.style.background = "url('"+image_url+"')";
+                                        item.style.background = "url('" + image_url + "')";
                                     }
                                 }
 
@@ -70,10 +71,10 @@
                 forEach_envent();
                 window.addEventListener("scroll", forEach_envent, false);
             },
-            imgLoad: function(url,callback) {
+            imgLoad: function(url, callback) {
                 var img = new Image();
                 img.src = url
-                // 加载成功
+                    // 加载成功
                 img.onload = function(e) {
                     callback(e);
                 };
@@ -85,8 +86,10 @@
             }
         }
     </script>
-<script type="text/javascript" src="http://www.zhuweipeng.me/js/main.build.21ad8c1863622bcc1cc2.js"></script></head>
+<script type="text/javascript" src="http://www.zhuweipeng.me/js/main.build.34227673e0dfebe4668f.js"></script></head>
+
 <body>
     <div id="app"></div>
+
 
 </body></html>

@@ -61,7 +61,7 @@ export default {
             align-items: flex-start;
         }
         .put-on-record {
-            height: 85px;
+            height: 100px;
             color: #fff;
             text-align: center;
             font-size: 10px;
