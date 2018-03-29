@@ -155,7 +155,7 @@ export default {
                 scrollHeight = document.documentElement.scrollHeight, // 内容高度
                 seeHeight = document.documentElement.clientHeight; // 可见区域高度
             
-            if ( scrollTop >= scrollHeight - seeHeight - 30 ) {
+            if ( scrollTop >= scrollHeight - seeHeight - 100 ) {
                 clearTimeout(timer);
                 timer = setTimeout( () => {
                     this.laodImgs();
