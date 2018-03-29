@@ -1,5 +1,6 @@
 <template>
     <div id="photoList">
+        <loading :loadStatus="loadStatus"></loading>
         <headerBox :headerData="headerData"></headerBox>
         <div class="main">
             <section class="container" v-for="(m,y_key) in imgList" :key="y_key">
@@ -33,6 +34,7 @@
 
 <script>
 "use strict";
+import loading      from './layout/loading.vue'
 import headerBox   from './layout/header.vue'
 
 let lazyloads = new lazyload(), timer;
@@ -56,6 +58,7 @@ export default {
     },
     data() {
         return {
+            loadStatus: false,              // 加载状态。false：加载中。true：加载完成。
             headerData: {                       // 头部配置
                 searchStatus: false,
                 isStatic: true,
@@ -164,7 +167,7 @@ export default {
          */
         laodImgs(type) {
             // 初始化图片信息
-            let IMGHOST = this.$store.state.IMGHOST,
+            let { IMGHOST, qnConfig } = this.$store.state,
                 { list, number } = this.qn_resource,
                 n = document.documentElement.clientWidth > 900 ? 4 : 2,
                 imgJson = {}, imgTime = '', imgNumbe = 0, timeNumber = 0;
@@ -205,8 +208,8 @@ export default {
                             key: [imgArray[0],imgArray[1],imgArray[2]],
                             city: imgArray[3].replace(/-/g,'') + ' ' + imgArray[4].replace(/，/g,''),
                             title: imgArray[5].replace(/\./g,''),
-                            src: IMGHOST + item.key + '?imageView2/2/interlace/1/format/webp/w/' + imgWidth,
-                            src_small: IMGHOST + item.key + '?imageView2/2/interlace/1/format/webp/w/' + 60,
+                            src: IMGHOST + item.key + qnConfig + imgWidth,
+                            src_small: IMGHOST + item.key + qnConfig + 60,
                             status: 0
                         })
                     }
@@ -219,6 +222,7 @@ export default {
 
             if (type === "first") {
                 this.imgList = imgJson;
+                this.loadStatus = true;
             } else {
                 // 列表递归
                 let factorical = (data) => {
@@ -253,6 +257,7 @@ export default {
         }
     },
     components: {
+        loading,
         headerBox
     }
 }

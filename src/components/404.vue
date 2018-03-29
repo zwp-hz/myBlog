@@ -14,9 +14,14 @@
 <script>
 "use strict";
 export default {
+	mounted() {
+		let { IMGHOST, qnConfig} = this.$store.state;
+
+		this.img_404_url = IMGHOST + 'error_404.png' + qnConfig + parseInt(document.documentElement.clientWidth*0.35)
+	},
     data() {
         return {
-        	img_404_url: this.$store.state.IMGHOST + 'error_404.png?imageView2/2/w/' + parseInt(document.documentElement.clientWidth*0.35) + '/interlace/1/format/webp&v=1'
+        	img_404_url: ''
         }
     }
 }

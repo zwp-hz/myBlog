@@ -1,5 +1,6 @@
 <template>
     <div id="lived">
+        <loading :loadStatus="loadStatus"></loading>
         <headerBox :headerData="headerData"></headerBox>
         <div id="col-md">
             <div class="main container">
@@ -13,7 +14,7 @@
                 <div class="wrap box1" data-0="display: none;" data-500="left: -75px;opacity: 0;display: block;" data-1250="left: -55px;opacity: 1;">
                     <div class="row">
                         <router-link class="set" :to="{path: '/photoList',query: {prefix: imgParents[0].prefix}}">
-                            <span v-for="(item,index) in imgParents[0].items"  :key="index" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key"></span>
+                            <span v-for="(item,index) in imgParents[0].items"  :key="index" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key+'200'"></span>
                             <span class="layer three">{{imgParents[0].prefix.replace(/:/g,'')}}</span>
                         </router-link>
                     </div>
@@ -21,7 +22,7 @@
                 <div class="wrap box2" data-0="display: none;" data-1350="left: 193px;opacity: 0;display: block;" data-2100="left: 213px;opacity: 1;">
                     <div class="row">
                         <router-link class="set" :to="{path: '/photoList',query: {prefix: imgParents[1].prefix}}">
-                            <span v-for="(item,index) in imgParents[1].items" :key="index" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key"></span>
+                            <span v-for="(item,index) in imgParents[1].items" :key="index" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key+'200'"></span>
                             <span class="layer three">{{imgParents[1].prefix}}</span>
                         </router-link>
                     </div>
@@ -52,6 +53,7 @@
 
 <script>
 "use strict";
+import loading      from './layout/loading.vue'
 import headerBox   from './layout/header.vue'
 
 export default {
@@ -59,7 +61,7 @@ export default {
         // 设置内容高度
         document.body.style.cssText = "height: "+ document.body.style.height +" !important";
 
-        let { APIHOST, IMGHOST } = this.$store.state,
+        let { APIHOST, IMGHOST, qnConfig } = this.$store.state,
             json = ['点滴:','风景:'];
 
         // 获取对应相册3条数据
@@ -72,16 +74,18 @@ export default {
                     let items = res.body.data.items;
 
                     for (let item of items) {
-                        item.key = IMGHOST + item.key + '?imageView2/2/interlace/1/w/220//format/webp'
+                        item.key = IMGHOST + item.key + qnConfig
                     }
 
                     this.imgParents[index].items = items;
+                    this.loadStatus = true;
                 }
             },(res) => console.log(res));
         });
     },
     data() {
         return {
+            loadStatus: false,              // 加载状态。false：加载中。true：加载完成。
             headerData: {
                 searchStatus: false,
                 isStatic: true,
@@ -93,9 +97,8 @@ export default {
             ]
         }
     },
-    methods: {
-    },
     components: {
+        loading,
         headerBox
     }
 }

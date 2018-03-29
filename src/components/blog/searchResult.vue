@@ -47,8 +47,6 @@ export default {
             routeQuery: {}
         }
     },
-    methods: {
-    },
     computed: {
         searchCnt() {
             return this.$store.state.searchCnt;

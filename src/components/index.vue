@@ -1,5 +1,5 @@
 <template>
-    <div id="index">
+    <div id="index" :class="{isSupportWebp: !$store.state.isSupportWebp}">
         <loading :loadStatus="loadStatus"></loading>
         <headerBox :headerData="headerData"></headerBox>
         <section id="intro" class="g-r-center" data-0="opacity: 1" data-50p="opacity: 0;">
@@ -33,11 +33,13 @@ import Weather      from './layout/weather.vue'
 
 export default {
     mounted() {
-    	let { APIHOST } = this.$store.state,
+    	let { APIHOST, IMGHOST, isSupportWebp } = this.$store.state,
             img = new Image();
 
+        console.log(this.$store.state.qnConfig)
+
         // 判断背景图片是否加载完成
-        img.src = this.bg_image_src;
+        img.src = IMGHOST + 'blog_index_bg.jpg?imageView2/2/interlace/1/'+(isSupportWebp?'format/webp':'')+'/w/1080';
         img.onload = img.onerror = () => this.loadStatus = true;
 
     	// 获取必应图片
@@ -53,7 +55,6 @@ export default {
     data() {
         return {
             loadStatus: false,              // 加载状态。false：加载中。true：加载完成。
-            bg_image_src: this.$store.state.IMGHOST + 'blog_index_bg.jpg?imageView2/2/interlace/1/format/webp/w/1080',
             headerData: {                   // 头部出参数
                 searchStatus: false,
                 isStatic: false,

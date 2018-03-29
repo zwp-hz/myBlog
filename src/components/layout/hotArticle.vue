@@ -32,7 +32,7 @@
 "use strict";
 export default {
     mounted() {
-        let { IMGHOST, APIHOST, articleList_hot } = this.$store.state;
+        let { IMGHOST, APIHOST, articleList_hot, qnConfig } = this.$store.state;
 
         if (!articleList_hot) {
             //获取热门文章
@@ -43,7 +43,7 @@ export default {
                     for (var item of data) {
                         if (item.images_src.length > 0) {
                             item.images_src = {
-                                src: IMGHOST + item.images_src[0] + "?imageView2/2/interlace/1/w/100/format/webp",
+                                src: IMGHOST + item.images_src[0] + qnConfig + '100',
                                 status: 0   // 0：图片未加载  1：图片加载成功  2：图片加载失败
                             }
                         } else {

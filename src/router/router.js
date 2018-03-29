@@ -1,6 +1,6 @@
 "use strict";
-import Vue      from 'vue';
-import Router   from 'vue-router';
+import Vue from 'vue';
+import Router from 'vue-router';
 
 const index = r => require.ensure([], () => r(require('../components/index.vue')), 'index');
 const blog = r => require.ensure([], () => r(require('../components/blog/blog.vue')), 'blog');
@@ -9,26 +9,23 @@ const articleDetail = r => require.ensure([], () => r(require('../components/blo
 const author = r => require.ensure([], () => r(require('../components/author.vue')), 'author');
 const photoWall = r => require.ensure([], () => r(require('../components/photoWall.vue')), 'photoWall');
 const photoList = r => require.ensure([], () => r(require('../components/photoList.vue')), 'photoList');
-// 海贝网络科技有限公司测试
-const prod = r => require.ensure([], () => r(require('../components/prod.vue')), 'prod');
 const error = r => require.ensure([], () => r(require('../components/404.vue')), 'error');
 
 Vue.use(Router);
 
 export default new Router({
-	mode: 'history',
-	routes: [
-	    { path: "/", component: index, name: "index", meta: {title: "朱为鹏的网站"}},
-	    { path: "/blog", component: blog, name: "blog", meta: {title: "朱为鹏的博客"}},
-	    { path: "/searchResult", component: searchResult, name: "blog_searchResult", meta: {title: "搜索结果"}},
-	    { path: "/articleDetail", component: articleDetail, name: "blog_articleDetail", meta: {title: "文章详情"}},
-	    { path: "/photoWall", component: photoWall, name: "photoWall", meta: {title: "照片墙"}},
-	    { path: "/photoList", component: photoList, name: "photoWall_list", meta: {title: "照片列表"}},
-	    { path: "/author", component: author, name: "author", meta: {title: "个人信息"}},
-	    { path: "/prod", component: prod, name: "prod", meta: {title: "海贝网络科技有限公司测试"}},
-	    { path: "*", component: error, name: "404", meta: {title: "404"}}
+    mode: 'history',
+    routes: [
+        { path: "/", component: index, name: "index", meta: { title: "朱为鹏的网站" } },
+        { path: "/blog", component: blog, name: "blog", meta: { title: "朱为鹏的博客" } },
+        { path: "/searchResult", component: searchResult, name: "blog_searchResult", meta: { title: "搜索结果" } },
+        { path: "/articleDetail", component: articleDetail, name: "blog_articleDetail", meta: { title: "文章详情" } },
+        { path: "/photoWall", component: photoWall, name: "photoWall", meta: { title: "照片墙" } },
+        { path: "/photoList", component: photoList, name: "photoWall_list", meta: { title: "照片列表" } },
+        { path: "/author", component: author, name: "author", meta: { title: "个人信息" } },
+        { path: "*", component: error, name: "404", meta: { title: "404" } }
     ],
-    scrollBehavior (to, from, savedPosition) {
-	    return {x: 0,y: 0}
-	}
+    scrollBehavior(to, from, savedPosition) {
+        return { x: 0, y: 0 }
+    }
 });

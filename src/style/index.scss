@@ -13,6 +13,9 @@
         background-size: cover !important;
         -webkit-background-size: cover !important;
     }
+    &.isSupportWebp:before {
+        background: url('http://image.zhuweipeng.me/blog_index_bg.jpg?imageView2/2/interlace/1/w/1080') no-repeat center bottom;
+    }
     #intro {
         position: relative;
         height: 100vh;
