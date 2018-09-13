@@ -5,7 +5,7 @@
         <div id="col-md">
             <div class="main container">
                 <h1>旧日回忆</h1>
-                <svg width="100%" height="100%"> 
+                <svg width="100%" height="100%">
                     <path data-0="stroke-dashoffset:1595;" data-3000="stroke-dashoffset:0;" d="M 22.889 -0.081 C 37.105 73.303 95.589 160.569 130.634 199.774 L 143.534 180.315 L 151.408 191.6 L 132.771 219.677 L 140.526 208.145 L 153.074 198.439 L 156.048 203.21 L 132.43 219.477 L 124.991 208.751 L 130.676 199.754 C 174.962 257.544 259.804 310.349 357.546 341.933 L 364.817 321.954 L 376.834 325.991 L 365.088 356.373 L 369.117 345.748 L 382.102 334.924 L 385.668 339.835 L 364.953 356.289 L 353.575 352.629 L 357.564 341.995 C 421.891 364.701 595.217 373.528 650.147 372.534 L 650.147 350.29 L 662.959 350.29 L 662.959 385.151 L 662.959 372.534 L 671.552 354.738 L 676.649 357.993 L 662.959 385.151 L 649.971 385.151 L 650.147 372.534 C 747.145 368.5 861.563 364.793 912.801 346.71 C 912.802 346.71 913.056 386.542 913.153 386.542 L 915.95 386.542 L 910.393 386.542 L 910.426 389.573 L 915.88 389.58 L 915.806 386.542 L 916.313 386.542" style="fill: none; stroke: rgba(255,255,255,0.7);stroke-width:2px;stroke-dasharray:1595px;stroke-dashoffset:0;"></path>
                     <!-- 娃娃path -->
                     <path data-3000="stroke-dashoffset:500;" data-4500="stroke-dashoffset:0;" d="M 913.29 390.379 C 866.296 392.641 863.415 440.568 863.57 440.596 C 865.244 488.683 912.765 490.175 913.025 490.149 C 912.989 490.113 890.445 487.159 880.334 493.665 C 875.036 497.074 874.333 511.367 881.32 513.86 C 891.395 517.454 897.798 505.919 912.805 500.727 L 912.932 491.331 C 912.776 491.019 887.863 497.854 880.475 502.568 C 875.374 505.823 862.699 520.436 862.766 520.453 C 862.766 520.453 833.473 550.607 836.326 584.285 C 836.78 589.643 846.85 593.784 852.159 584.285 C 856.718 576.128 867.034 568.563 873.138 584.285 C 876.822 597.401 885.017 597.794 886.616 597.401 C 899.754 594.17 899.541 581.729 913.29 583.151" transform="matrix(1, 0, 0, 1, 0, 0)" style="fill: none; stroke: rgba(255,255,255,0.7);stroke-width:2px;stroke-dasharray:500px;stroke-dashoffset:0;"></path>
@@ -14,15 +14,31 @@
                 <div class="wrap box1" data-0="display: none;" data-500="left: -75px;opacity: 0;display: block;" data-1250="left: -55px;opacity: 1;">
                     <div class="row">
                         <router-link class="set" :to="{path: '/photoList',query: {prefix: imgParents[0].prefix}}">
-                            <span v-for="(item,index) in imgParents[0].items"  :key="index" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key+'200'"></span>
+                            <span
+                                v-for="(item,index) in imgParents[0].items"
+                                :key="index"
+                                :class="{layer: index!=2,one: index==0,two: index==1}">
+                                <img :src="item.key+'200'">
+                            </span>
                             <span class="layer three">{{imgParents[0].prefix.replace(/:/g,'')}}</span>
                         </router-link>
                     </div>
                 </div>
-                <div class="wrap box2" data-0="display: none;" data-1350="left: 193px;opacity: 0;display: block;" data-2100="left: 213px;opacity: 1;">
+                <div
+                    class="wrap box2"
+                    data-0="display: none;"
+                    data-1350="left: 193px;opacity: 0;display: block;"
+                    data-2100="left: 213px;opacity: 1;"
+                >
                     <div class="row">
                         <router-link class="set" :to="{path: '/photoList',query: {prefix: imgParents[1].prefix}}">
-                            <span v-for="(item,index) in imgParents[1].items" :key="index" :class="{layer: index!=2,one: index==0,two: index==1}"><img :src="item.key+'200'"></span>
+                            <span
+                                v-for="(item,index) in imgParents[1].items"
+                                :key="index"
+                                :class="{layer: index!=2,one: index==0,two: index==1}"
+                            >
+                                <img :src="item.key+'200'">
+                            </span>
                             <span class="layer three">{{imgParents[1].prefix}}</span>
                         </router-link>
                     </div>
@@ -42,67 +58,75 @@
         </div>
         <div id="col-sm">
             <h1>旧日回忆</h1>
-            <section v-for="item in imgParents" :key="item" v-if="item.items[1]">
+            <section v-for="(item, index) in imgParents" :key="index" v-if="item.items[1]">
                 <router-link class="g-c-center" :to="{path: '/photoList',query: {prefix: item.prefix}}" :style="'background: url('+item.items[1].key+'500)'">
                     {{item.prefix.replace(/:/g,'')}}
-                </router-link> 
+                </router-link>
             </section>
         </div>
     </div>
 </template>
 
 <script>
-"use strict";
-import loading      from './layout/loading.vue'
-import headerBox   from './layout/header.vue'
+    "use strict";
+    import loading from '../components/loading.vue'
+    import headerBox from '../components/header.vue'
 
-export default {
-    mounted() {
-        // 设置内容高度
-        document.body.style.cssText = "height: "+ document.body.style.height +" !important";
+    export default {
+        mounted() {
+            // 设置内容高度
+            document.body.style.cssText = "height: " + document.body.style.height + " !important";
 
-        let { APIHOST, IMGHOST, qnConfig } = this.$store.state,
-            json = ['点滴:','风景:'];
+            let {
+                APIHOST,
+                IMGHOST,
+                qnConfig
+            } = this.$store.state,
+                json = ['点滴:', '风景:'];
 
-        // 获取对应相册3条数据
-        json.forEach( (item,index) => {
-            this.$http.jsonp(APIHOST + 'api/getQiniuList',{params: {
-                prefix: item,
-                limit: 3
-            }}).then((res) => {
-                if (res.body.code === 0) {
-                    let items = res.body.data.items;
-
-                    for (let item of items) {
-                        item.key = IMGHOST + item.key + qnConfig
+            // 获取对应相册3条数据
+            json.forEach((item, index) => {
+                this.$http.jsonp(APIHOST + 'api/getQiniuList', {
+                    params: {
+                        prefix: item,
+                        limit: 3
                     }
+                }).then((res) => {
+                    if (res.body.code === 0) {
+                        let items = res.body.data.items;
 
-                    this.imgParents[index].items = items;
-                    this.loadStatus = true;
-                }
-            },(res) => console.log(res));
-        });
-    },
-    data() {
-        return {
-            loadStatus: false,              // 加载状态。false：加载中。true：加载完成。
-            headerData: {
-                searchStatus: false,
-                isStatic: true,
-                type: "photoWall"
-            },
-            imgParents: [
-                {prefix: '点滴:',items: []},
-                {prefix: '风景:',items: []},
-            ]
+                        for (let item of items) {
+                            item.key = IMGHOST + item.key + qnConfig
+                        }
+
+                        this.imgParents[index].items = items;
+                        this.loadStatus = true;
+                    }
+                }, (res) => console.log(res));
+            });
+        },
+        data() {
+            return {
+                loadStatus: false, // 加载状态。false：加载中。true：加载完成。
+                headerData: {
+                    searchStatus: false,
+                    isStatic: true,
+                    type: "photoWall"
+                },
+                imgParents: [{
+                    prefix: '点滴:',
+                    items: []
+                }, {
+                    prefix: '风景:',
+                    items: []
+                }, ]
+            }
+        },
+        components: {
+            loading,
+            headerBox
         }
-    },
-    components: {
-        loading,
-        headerBox
     }
-}
-
 </script>
 
 <style lang="scss" scoped>
@@ -114,7 +138,7 @@ export default {
         width: 100vw;
         background: #363638;
         min-width: 1200px;
-        box-shadow: inset 0 0 100px hsla(0,0,0,.3);
+        box-shadow: inset 0 0 100px hsla(0, 0, 0, .3);
         background-image: linear-gradient(45deg, rgba(194, 233, 221, 0.5) 1%, rgba(104, 119, 132, 0.5) 100%), linear-gradient(-45deg, #494d71 0%, rgba(217, 230, 185, 0.5) 80%);
         .main {
             position: fixed;
@@ -266,7 +290,8 @@ export default {
             }
         }
     }
-    @media (max-width: 767px){
+    
+    @media (max-width: 767px) {
         #lived {
             position: static;
             height: auto;
@@ -275,7 +300,6 @@ export default {
             #col-md {
                 display: none;
             }
-
             #col-sm {
                 display: block;
             }

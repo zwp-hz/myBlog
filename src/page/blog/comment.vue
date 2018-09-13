@@ -32,7 +32,7 @@
                 <p><span v-if="comment_list">{{comment_list.length}}</span>条评论</p>
             </header>
             <!-- <h3>最新评论</h3> -->
-            <section class="g-r-center" v-for="item in comment_list" :key="item">
+            <section class="g-r-center" v-for="(item, index) in comment_list" :key="index">
                 <div class="portrait">
                     <i class="iconfont icon-codestore"></i>
                 </div>
@@ -52,80 +52,77 @@
 </template>
 
 <script>
-"use strict";
+    "use strict";
 
-export default {
-    props: ["commentList"],
-    mounted() {
-    },
-    data () {
-        return {
-            comment_data: {                 // 评论数据
-                nickname: localStorage.nickname || ''
-            },               
-            comment_list: [],               // 评论列表
-            comment_msg: "",                // 提交评论 提示信息
-            comment_msg_status: false,      // 提示信息状态
-            request_status: false,          // 请求状态
-            checkbox_status: true
-        }
-    },
-    methods: {
-        // 发表评论
-        submit() {
-            this.request_status = true;
-            if (!this.checkbox_status) delete this.comment_data.nickname;
-
-            // 添加评论
-            this.$http.jsonp(this.$store.state.APIHOST + 'api/setComment',{
-                params: Object.assign(this.comment_data,{
-                    id: this.$route.query.id
-                })
-            }).then((res) => {
-                if (res.body.code === 0) {
-                    // 记录用户昵称
-                    localStorage.nickname = this.comment_data.nickname || '';
-                    this.comment_list.push(res.body.data);
-                    this.comment_data.content = '';
-                    this.setCommentMsg(res.body.message);
-                } else {
-                    this.comment_msg = res.body.message;
-                    this.setCommentMsg(res.body.message);
-                }
-            },(res) => {
-                this.setCommentMsg('评论失败');
-            });
+    export default {
+        props: ["commentList"],
+        mounted() {},
+        data() {
+            return {
+                comment_data: { // 评论数据
+                    nickname: localStorage.nickname || ''
+                },
+                comment_list: [], // 评论列表
+                comment_msg: "", // 提交评论 提示信息
+                comment_msg_status: false, // 提示信息状态
+                request_status: false, // 请求状态
+                checkbox_status: true
+            }
         },
-        // 设置评论提示信息
-        setCommentMsg(text) {
-            let _this = this;
+        methods: {
+            // 发表评论
+            submit() {
+                this.request_status = true;
+                if (!this.checkbox_status) delete this.comment_data.nickname;
 
-            _this.comment_msg = text;
-            _this.request_status = false;
+                // 添加评论
+                this.$http.jsonp(this.$store.state.APIHOST + 'api/setComment', {
+                    params: Object.assign(this.comment_data, {
+                        id: this.$route.query.id
+                    })
+                }).then((res) => {
+                    if (res.body.code === 0) {
+                        // 记录用户昵称
+                        localStorage.nickname = this.comment_data.nickname || '';
+                        this.comment_list.push(res.body.data);
+                        this.comment_data.content = '';
+                        this.setCommentMsg(res.body.message);
+                    } else {
+                        this.comment_msg = res.body.message;
+                        this.setCommentMsg(res.body.message);
+                    }
+                }, (res) => {
+                    this.setCommentMsg('评论失败');
+                });
+            },
+            // 设置评论提示信息
+            setCommentMsg(text) {
+                let _this = this;
 
-            setTimeout(() => {
-                _this.comment_msg_status = true;
-                
+                _this.comment_msg = text;
+                _this.request_status = false;
+
                 setTimeout(() => {
-                    _this.comment_msg = "";
-                    _this.comment_msg_status = false;
-                },300);
-            },1000);
-        }
-   	},
-    watch: {
-        commentList(val) {
-            this.comment_list = val;
+                    _this.comment_msg_status = true;
+
+                    setTimeout(() => {
+                        _this.comment_msg = "";
+                        _this.comment_msg_status = false;
+                    }, 300);
+                }, 1000);
+            }
+        },
+        watch: {
+            commentList(val) {
+                this.comment_list = val;
+            }
         }
     }
-}
-
 </script>
 
 <style lang="scss" scoped>
     $defaultColor: #1ed9be;
-
-    #comment{
+    #comment {
         position: relative;
         margin-top: 40px;
         .comment-form {
@@ -150,7 +147,7 @@ export default {
                     }
                 }
             }
-            form{
+            form {
                 .form-row {
                     position: relative;
                     margin-bottom: 5px;
@@ -160,7 +157,7 @@ export default {
                         left: 50%;
                         padding: 5px 20px;
                         color: #fff;
-                        background-color: rgba(0,0,0,.5);
+                        background-color: rgba(0, 0, 0, .5);
                         border-radius: 6px;
                         -webkit-transform: translate(-50%, -50%);
                         transform: translate(-50%, -50%);
@@ -186,14 +183,12 @@ export default {
                         outline: none;
                         width: 100%;
                     }
-
-                    label{
+                    label {
                         color: #555f77;
                         font-family: inherit;
                         font-size: 14px;
                     }
-
-                    textarea.input{
+                    textarea.input {
                         height: 100px;
                         padding: 20px 10px 15px;
                         resize: none;
@@ -261,7 +256,7 @@ export default {
             }
             h3 {
                 margin-top: 15px;
-                padding-left: 10px;  
+                padding-left: 10px;
                 font-size: 15px;
                 color: $defaultColor;
                 border-left: 4px solid $defaultColor;

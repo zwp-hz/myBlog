@@ -34,83 +34,95 @@
             </div>
             <comment :commentList="articleParam.review"></comment>
         </div>
-        <footerBox :blogPage="true"></footerBox>   
+        <footerBox :blogPage="true"></footerBox>
     </div>
 </template>
 
 <script>
-"use strict";
-import loading      from '../layout/loading.vue'
-import headerBox    from '../layout/header.vue'
-import footerBox    from '../layout/footer.vue'
-import comment      from './comment.vue'
+    "use strict";
+    import loading from '../../components/loading.vue'
+    import headerBox from '../../components/header.vue'
+    import footerBox from '../../components/footer.vue'
+    import comment from './comment.vue'
 
-const Remarkable = require('remarkable');
-const md = new Remarkable();
+    const Remarkable = require('remarkable');
+    const md = new Remarkable();
 
-export default {
-    mounted() {
-        this.articleInfo = {
-            _id: this.$route.query.id
-        };
-
-        this.getArticleDetail();
-    },
-    data() {
-        return {
-            loadStatus: false,              // 加载状态。false：加载中。true：加载完成。
-            headerData: {                   // 头部参数
-                title: '',
-                searchStatus: true,
-                isStatic: true,
-                type: 'blog',
-                images_src: {}
-            },
-            articleInfo: {},                // 文章信息
-            articleParam: {                 // 文章内容
-                categories: [],
-                review: []
-            }
-        }
-    },
-    methods: {
-        //获取文章详情
-        getArticleDetail() {
-            let { APIHOST, IMGHOST } = this.$store.state;
-
-            this.articleParam = {
-                categories: []
+    export default {
+        mounted() {
+            this.articleInfo = {
+                _id: this.$route.query.id
             };
 
-            this.$http.jsonp(APIHOST + 'api/getArticlesList',{params: {_id: this.articleInfo._id}}).then((res) => {
-                if (res.body.code === 0) {
-                    let param = res.body.data;
-                    this.loadStatus = true;
-                    this.headerData.images_src = {
-                        src: IMGHOST + param.images_src + '?imageView2/2/interlace/1/w/',
-                        status: 0   // 0：图片未加载  1：图片加载成功  2：图片加载失败
-                    }
-
-                    param.content = md.render(param.content);
-                    this.articleParam = param;
-                }
-            });
+            this.getArticleDetail();
         },
-        /** 标签搜索
-          * @data   搜索参数
-         */
-        search(data) {
-            this.$store.commit('searchChange', data);
-            this.$router.push({path: '/searchResult', query: {Category: data.text}});
-        }   
-    },
-    components: {
-        loading,
-        headerBox,
-        footerBox,
-        comment
+        data() {
+            return {
+                loadStatus: false, // 加载状态。false：加载中。true：加载完成。
+                headerData: { // 头部参数
+                    title: '',
+                    searchStatus: true,
+                    isStatic: true,
+                    type: 'blog',
+                    images_src: {}
+                },
+                articleInfo: {}, // 文章信息
+                articleParam: { // 文章内容
+                    categories: [],
+                    review: []
+                }
+            }
+        },
+        methods: {
+            //获取文章详情
+            getArticleDetail() {
+                let {
+                    APIHOST,
+                    IMGHOST
+                } = this.$store.state;
+
+                this.articleParam = {
+                    categories: []
+                };
+
+                this.$http.jsonp(APIHOST + 'api/getArticlesList', {
+                    params: {
+                        _id: this.articleInfo._id
+                    }
+                }).then((res) => {
+                    if (res.body.code === 0) {
+                        let param = res.body.data;
+                        this.loadStatus = true;
+                        this.headerData.images_src = {
+                            src: IMGHOST + param.images_src + '?imageView2/2/interlace/1/w/',
+                            status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
+                        }
+
+                        param.content = md.render(param.content);
+                        this.articleParam = param;
+                    }
+                });
+            },
+            /** 标签搜索
+             * @data   搜索参数
+             */
+            search(data) {
+                this.$store.commit('searchChange', data);
+                this.$router.push({
+                    path: '/searchResult',
+                    query: {
+                        Category: data.text
+                    }
+                });
+            }
+        },
+        components: {
+            loading,
+            headerBox,
+            footerBox,
+            comment
+        }
     }
-}
 </script>
 
 <style lang="scss">
@@ -118,7 +130,8 @@ export default {
 </style>
 <style lang="scss" scoped>
     #articleDetail {
-        position: relative;;
+        position: relative;
+        ;
         .header {
             position: absolute;
             top: 25vh;
@@ -127,8 +140,8 @@ export default {
             max-width: 800px;
             padding: 50px 30px;
             color: #fff;
-            -webkit-transform: translate(-50%,-50%);
-            transform: translate(-50%,-50%);
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
             h1 {
                 position: relative;
                 top: -50px;
@@ -145,7 +158,6 @@ export default {
                 margin-bottom: 15px;
                 border-bottom: 1px solid #ebebeb;
             }
-
             section {
                 display: flex;
                 position: relative;
@@ -166,17 +178,17 @@ export default {
                     padding-left: 5px;
                     text-align: right;
                 }
-                a { color: #fff; }
+                a {
+                    color: #fff;
+                }
             }
         }
-
         .content {
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 0 30px;   
+            padding: 0 30px;
         }
-
         .blog-tags {
             padding: 32px 0;
             h5 {
@@ -197,8 +209,8 @@ export default {
             }
         }
     }
-
-    @media (max-width: 767px){
+    
+    @media (max-width: 767px) {
         #articleDetail .header h1 {
             font-size: 25px;
         }

@@ -2,14 +2,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-const index = r => require.ensure([], () => r(require('../components/index.vue')), 'index');
-const blog = r => require.ensure([], () => r(require('../components/blog/blog.vue')), 'blog');
-const searchResult = r => require.ensure([], () => r(require('../components/blog/searchResult.vue')), 'searchResult');
-const articleDetail = r => require.ensure([], () => r(require('../components/blog/articleDetail.vue')), 'articleDetail');
-const author = r => require.ensure([], () => r(require('../components/author.vue')), 'author');
-const photoWall = r => require.ensure([], () => r(require('../components/photoWall.vue')), 'photoWall');
-const photoList = r => require.ensure([], () => r(require('../components/photoList.vue')), 'photoList');
-const error = r => require.ensure([], () => r(require('../components/404.vue')), 'error');
+const index = r => require.ensure([], () => r(require('../page/index.vue')), 'index');
+const blog = r => require.ensure([], () => r(require('../page/blog/blog.vue')), 'blog');
+const searchResult = r => require.ensure([], () => r(require('../page/blog/searchResult.vue')), 'searchResult');
+const articleDetail = r => require.ensure([], () => r(require('../page/blog/articleDetail.vue')), 'articleDetail');
+const author = r => require.ensure([], () => r(require('../page/author.vue')), 'author');
+const photoWall = r => require.ensure([], () => r(require('../page/photoWall.vue')), 'photoWall');
+const photoList = r => require.ensure([], () => r(require('../page/photoList.vue')), 'photoList');
+const error = r => require.ensure([], () => r(require('../page/404.vue')), 'error');
 
 Vue.use(Router);
 
