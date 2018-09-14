@@ -56,7 +56,6 @@
 
     export default {
         props: ["commentList"],
-        mounted() {},
         data() {
             return {
                 comment_data: { // 评论数据

@@ -88,16 +88,6 @@
 
     export default {
         props: ["categoriesName", "searchCnt"],
-        mounted() {
-            let page = this.$route.query.page ? Number(this.$route.query.page) : 1;
-
-            for (var i in this.$route.query) {
-                if (i === "_s" || i === "Tag" || i === "Category")
-                    this.searchText = this.$route.query[i];
-            };
-
-            this.getArticlesList(page, this.searchText);
-        },
         data() {
             return {
                 loadStatus: false, // 加载状态。false：加载中。true：加载完成。
@@ -107,6 +97,16 @@
                     data: []
                 }
             }
+        },
+        mounted() {
+            let page = this.$route.query.page ? Number(this.$route.query.page) : 1;
+
+            for (var i in this.$route.query) {
+                if (i === "_s" || i === "Tag" || i === "Category")
+                    this.searchText = this.$route.query[i];
+            };
+
+            this.getArticlesList(page, this.searchText);
         },
         methods: {
             toArticleDetail(data) {

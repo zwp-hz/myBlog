@@ -11,11 +11,11 @@
     "use strict";
     export default {
         props: ["loadStatus"],
-        mounted() {
-            document.body.style.overflow = 'hidden';
-        },
         data() {
             return {}
+        },
+        mounted() {
+            document.body.style.overflow = 'hidden';
         },
         watch: {
             loadStatus(val) {

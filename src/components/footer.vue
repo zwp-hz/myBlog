@@ -75,11 +75,12 @@
         }
         .put-on-record {
             height: 100px;
-            color: #fff;
+            line-height: 22px;
+            color: #cecec4;
             text-align: center;
             font-size: 10px;
             a {
-                color: #cecec4;
+                color: #fff;
             }
         }
     }

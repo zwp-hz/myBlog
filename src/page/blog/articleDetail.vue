@@ -1,7 +1,7 @@
 <template>
     <div id="articleDetail" v-title="$route.query.title">
         <loading :loadStatus="loadStatus"></loading>
-        <headerBox :headerData="headerData"></headerBox>
+        <header-box :headerData="headerData"></header-box>
         <div class="header">
             <h1 class="u_transition_700" :class="{active: articleParam.title}">{{articleParam.title}}</h1>
             <h3></h3>
@@ -34,7 +34,7 @@
             </div>
             <comment :commentList="articleParam.review"></comment>
         </div>
-        <footerBox :blogPage="true"></footerBox>
+        <footer-box :blogPage="true"></footer-box>
     </div>
 </template>
 
@@ -49,13 +49,6 @@
     const md = new Remarkable();
 
     export default {
-        mounted() {
-            this.articleInfo = {
-                _id: this.$route.query.id
-            };
-
-            this.getArticleDetail();
-        },
         data() {
             return {
                 loadStatus: false, // 加载状态。false：加载中。true：加载完成。
@@ -72,6 +65,13 @@
                     review: []
                 }
             }
+        },
+        mounted() {
+            this.articleInfo = {
+                _id: this.$route.query.id
+            };
+
+            this.getArticleDetail();
         },
         methods: {
             //获取文章详情

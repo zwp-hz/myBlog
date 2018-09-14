@@ -44,6 +44,11 @@
 <script>
     "use strict";
     export default {
+        data() {
+            return {
+                articleList_hot: this.$store.state.articleList_hot || []
+            }
+        },
         mounted() {
             let {
                 IMGHOST,
@@ -82,11 +87,6 @@
                         });
                     }
                 });
-            }
-        },
-        data() {
-            return {
-                articleList_hot: this.$store.state.articleList_hot || []
             }
         },
         methods: {

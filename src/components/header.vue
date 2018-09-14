@@ -1,6 +1,13 @@
 <template>
   	<header>
-        <div id="header" class="u_transition_300" :class="[ headerData.type, scrollStatus ]" data-0="background-color: rgba(255,255,255,0);" data-50p="background-color: rgba(255,255,255,0);" data-76p="background-color: rgba(255,255,255,1);">
+        <div
+            id="header"
+            class="u_transition_300"
+            :class="[ headerData.type, scrollStatus ]"
+            data-0="background-color: rgba(255,255,255,0);"
+            data-50p="background-color: rgba(255,255,255,0);"
+            data-76p="background-color: rgba(255,255,255,1);"
+        >
             <div class="container headerBox g-r-center" data--0="color: rgba(206,206,196,1);" data-50p="color: rgba(206,206,196,1);" data-76p="color: rgba(53, 58, 64,1);">
                 <nav class="g-r-center" style="justify-content: flex-end;">
                     <div class="menuList">
@@ -57,17 +64,6 @@
 
     export default {
         props: ["headerData"],
-        mounted() {
-            if (!/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-                skrollr.init({
-                    smoothScrollingDuration: 200
-                });
-            }
-
-            this.handleScroll();
-
-            this.scrollStatus = document.documentElement.scrollTop || document.body.scrollTop > 50 ? 'down' : '';
-        },
         data() {
             return {
                 menuSwitch: false,
@@ -96,6 +92,17 @@
                 curRoute: this.$route.name,
                 searchCnt: ""
             }
+        },
+        mounted() {
+            if (!this.$store.state.isMoblie) {
+                skrollr.init({
+                    smoothScrollingDuration: 200
+                });
+            }
+
+            this.handleScroll();
+
+            this.scrollStatus = document.documentElement.scrollTop || document.body.scrollTop > 50 ? 'down' : '';
         },
         methods: {
             search() {

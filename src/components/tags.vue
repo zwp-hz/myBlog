@@ -15,6 +15,11 @@
 <script>
     "use strict";
     export default {
+        data() {
+            return {
+                tags: this.$store.state.tags || []
+            }
+        },
         mounted() {
             if (!this.$store.state.tags) {
                 //获取标签列表
@@ -27,11 +32,6 @@
                         });
                     }
                 });
-            }
-        },
-        data() {
-            return {
-                tags: this.$store.state.tags || []
             }
         },
         methods: {

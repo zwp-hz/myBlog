@@ -1,6 +1,6 @@
 <template>
     <div id="author">
-      <headerBox :headerData="headerData"></headerBox>
+      <header-box :headerData="headerData"></header-box>
     </div>
 </template>
 
@@ -9,9 +9,6 @@
     import headerBox from "../components/header.vue";
 
     export default {
-        mounted() {
-            let that = this;
-        },
         data() {
             return {
                 headerData: {

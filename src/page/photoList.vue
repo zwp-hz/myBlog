@@ -1,7 +1,7 @@
 <template>
     <div id="photoList">
         <loading :loadStatus="loadStatus"></loading>
-        <headerBox :headerData="headerData"></headerBox>
+        <header-box :headerData="headerData"></header-box>
         <div class="main">
             <section class="container" v-for="(m,y_key) in imgList" :key="y_key">
                 <h2>{{y_key.replace(/:/g,'')}}</h2>
@@ -14,7 +14,12 @@
                                 <a href="javaScript:void(0);" data_type="img" :data-url="item.src" class="progressive--not-loaded">
                                     <img :style="'opacity:'+(item.status === 2 ? 0 : 1)" @load="item.status=1" @error="item.status=2" :src="item.src_small" alt="" />
                                     <i class="iconfont icon-codestore" :style="'display:'+(item.status === 2 ? 'block' : 'none')"></i>
-                                    <span class="u_transition_300"><b class="iconfont icon-time"></b>{{y_key.replace(/:/g,'')+'-'+m_key+d_key.replace(/:/g,'')}}<br/><b class="iconfont icon-dingwei"></b>{{item.city}}<br/><b class="iconfont icon-biaoqian"></b>{{item.title}}</span>
+                                    <span class="u_transition_300">
+                                        <b class="iconfont icon-time"></b>
+                                        {{ y_key.replace(/:/g,'')+'-'+m_key+d_key.replace(/:/g,'') }}<br/>
+                                        <b class="iconfont icon-dingwei"></b>{{ item.city }}<br/>
+                                        <b class="iconfont icon-biaoqian"></b>{{ item.title }}
+                                    </span>
                                 </a>
                             </li>
                         </ul>
@@ -24,7 +29,11 @@
         </div>
         <div id="modal" v-if="modal.status">
             <div class="mask" @click="img_modal('','','hide')"></div>
-            <div class="centent" :class="{active: modal.move_status !== 0,textShow: modal.move_status === 2}" :style="modal.style">
+            <div
+                class="centent"
+                :class="{active: modal.move_status !== 0,textShow: modal.move_status === 2}"
+                :style="modal.style"
+            >
                 <div class="box"  v-html="modal.html"></div>
             </div>
             <div class="u_loading" v-if="modal.load_status"></div>
@@ -41,26 +50,6 @@
         timer;
 
     export default {
-        mounted() {
-            let {
-                APIHOST
-            } = this.$store.state,
-                prefix = this.$route.query.prefix;
-
-            // 获取对应相册列表
-            this.$http.jsonp(APIHOST + 'api/getQiniuList', {
-                params: {
-                    prefix: prefix
-                }
-            }).then((res) => {
-                if (res.body.code === 0) {
-                    this.qn_resource.list = res.body.data.items;
-                    this.laodImgs('first');
-
-                    document.addEventListener("scroll", this.seeScroll, false);
-                }
-            }, (res) => console.log(res));
-        },
         data() {
             return {
                 loadStatus: false, // 加载状态。false：加载中。true：加载完成。
@@ -86,6 +75,26 @@
                     height: ''
                 }
             }
+        },
+        mounted() {
+            let {
+                APIHOST
+            } = this.$store.state,
+                prefix = this.$route.query.prefix;
+
+            // 获取对应相册列表
+            this.$http.jsonp(APIHOST + 'api/getQiniuList', {
+                params: {
+                    prefix: prefix
+                }
+            }).then((res) => {
+                if (res.body.code === 0) {
+                    this.qn_resource.list = res.body.data.items;
+                    this.laodImgs('first');
+
+                    document.addEventListener("scroll", this.seeScroll, false);
+                }
+            }, (res) => console.log(res));
         },
         methods: {
             /** 图片弹出层
@@ -422,7 +431,6 @@
             .centent {
                 position: fixed;
                 max-height: 98vh;
-                overflow: auto;
                 z-index: 100;
                 transition: 0.5s all ease;
                 -webkit-transition: 0.5s all ease;
@@ -436,7 +444,9 @@
                         left: 0;
                         width: 100%;
                         height: 100%;
+                        opacity: 0;
                         box-shadow: 0 -120px 100px -60px hsla(0, 0, 0, .8) inset;
+                        border-radius: 0 0 10px 10px;
                     }
                     img {
                         width: 100%;
@@ -467,7 +477,7 @@
                     left: 25% !important;
                     width: 50% !important;
                 }
-                &.textShow span {
+                &.textShow span{
                     opacity: 1;
                 }
             }
@@ -476,18 +486,19 @@
             }
         }
     }
-    
+
     @media (min-width: 1110px) {
         #photoList #modal {
             .centent {
+                overflow: auto;
                 &.active {
-                    left: 30% !important;
-                    width: 40% !important;
+                    left: 32% !important;
+                    width: 36% !important;
                 }
             }
         }
     }
-    
+
     @media (max-width: 900px) {
         ul {
             -webkit-column-count: 2 !important;
@@ -500,7 +511,7 @@
             }
         }
     }
-    
+
     @media (max-width: 767px) {
         #photoList .main section {
             h2 {
@@ -511,7 +522,7 @@
             }
         }
     }
-    
+
     @media (max-width: 700px) {
         #photoList #modal {
             .centent {

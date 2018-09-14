@@ -23,6 +23,11 @@
     "use strict";
 
     export default {
+        data() {
+            return {
+                sunlightStatus: null
+            }
+        },
         mounted() {
             let {
                 APIHOST
@@ -35,11 +40,6 @@
                     this.sunlightStatus = this.getSunlightStatus(res.body.data);
                 }
             })
-        },
-        data() {
-            return {
-                sunlightStatus: null
-            }
         },
         methods: {
             /* 获取日出落状态

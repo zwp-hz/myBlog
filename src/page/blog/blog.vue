@@ -38,17 +38,6 @@
     import articleList from './articleList.vue'
 
     export default {
-        mounted() {
-            let {
-                APIHOST
-            } = this.$store.state,
-                github_code = this.$route.query.code;
-
-            // 获取分类列表
-            this.$http.jsonp(APIHOST + 'api/getCategoryList').then((res) => {
-                if (res.body.code == 0) this.categories = res.body.data;
-            });
-        },
         data() {
             return {
                 headerData: {
@@ -60,6 +49,17 @@
                 categories: [],
                 categoriesName: (typeof this.$route.query.categories === "undefined" ? "全部" : this.$route.query.categories)
             }
+        },
+        mounted() {
+            let {
+                APIHOST
+            } = this.$store.state,
+                github_code = this.$route.query.code;
+
+            // 获取分类列表
+            this.$http.jsonp(APIHOST + 'api/getCategoryList').then((res) => {
+                if (res.body.code == 0) this.categories = res.body.data;
+            });
         },
         methods: {
 

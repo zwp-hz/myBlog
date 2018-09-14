@@ -1,7 +1,7 @@
 <template>
     <div id="lived">
         <loading :loadStatus="loadStatus"></loading>
-        <headerBox :headerData="headerData"></headerBox>
+        <header-box :headerData="headerData"></header-box>
         <div id="col-md">
             <div class="main container">
                 <h1>旧日回忆</h1>
@@ -73,6 +73,23 @@
     import headerBox from '../components/header.vue'
 
     export default {
+        data() {
+            return {
+                loadStatus: false, // 加载状态。false：加载中。true：加载完成。
+                headerData: {
+                    searchStatus: false,
+                    isStatic: true,
+                    type: "photoWall"
+                },
+                imgParents: [{
+                    prefix: '点滴:',
+                    items: []
+                }, {
+                    prefix: '风景:',
+                    items: []
+                }, ]
+            }
+        },
         mounted() {
             // 设置内容高度
             document.body.style.cssText = "height: " + document.body.style.height + " !important";
@@ -104,23 +121,6 @@
                     }
                 }, (res) => console.log(res));
             });
-        },
-        data() {
-            return {
-                loadStatus: false, // 加载状态。false：加载中。true：加载完成。
-                headerData: {
-                    searchStatus: false,
-                    isStatic: true,
-                    type: "photoWall"
-                },
-                imgParents: [{
-                    prefix: '点滴:',
-                    items: []
-                }, {
-                    prefix: '风景:',
-                    items: []
-                }, ]
-            }
         },
         components: {
             loading,

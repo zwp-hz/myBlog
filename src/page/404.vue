@@ -12,50 +12,52 @@
 </template>
 
 <script>
-"use strict";
-export default {
-	mounted() {
-		let { IMGHOST, qnConfig} = this.$store.state;
+    "use strict";
+    export default {
+        data() {
+            return {
+                img_404_url: ''
+            }
+        },
+        mounted() {
+            let {
+                IMGHOST,
+                qnConfig
+            } = this.$store.state;
 
-		this.img_404_url = IMGHOST + 'error_404.png' + qnConfig + parseInt(document.documentElement.clientWidth*0.35)
-	},
-    data() {
-        return {
-        	img_404_url: ''
+            this.img_404_url = IMGHOST + 'error_404.png' + qnConfig + parseInt(document.documentElement.clientWidth * 0.35)
         }
     }
-}
-
 </script>
 
 <style lang="scss" scoped>
-	.error404 {
-		width: 100vw;
-		height: 100vh;
-		background-color: #f6f6f6;
-		.img_404 {
-			display: block;
-			width: 35%;
-			margin: 0 auto;
-			padding-top: 10%;
-		}
-		p {
-			padding-top: 30px;
-			font-size: 30px;
-			text-align: center;
-		}
-		.buttonBox {
-			text-align: center;
-			a {
-				display: inline-block;
-				height: 40px;
-				margin: 30px 15px 0;
-				padding: 0 30px;
-				line-height: 40px;
-				color: #fff;
-				background-color: #c80f05;
-				border-radius: 5px;
-			}
-		}
-	}
+    .error404 {
+        width: 100vw;
+        height: 100vh;
+        background-color: #f6f6f6;
+        .img_404 {
+            display: block;
+            width: 35%;
+            margin: 0 auto;
+            padding-top: 10%;
+        }
+        p {
+            padding-top: 30px;
+            font-size: 30px;
+            text-align: center;
+        }
+        .buttonBox {
+            text-align: center;
+            a {
+                display: inline-block;
+                height: 40px;
+                margin: 30px 15px 0;
+                padding: 0 30px;
+                line-height: 40px;
+                color: #fff;
+                background-color: #c80f05;
+                border-radius: 5px;
+            }
+        }
+    }
 </style>

@@ -1,20 +1,26 @@
 <template>
     <div id="search">
-        <headerBox :headerData="headerData"></headerBox>
+        <header-box :headerData="headerData"></header-box>
         <div class="titlebar">
             <div class="container clear">
-                <h1 v-if="(searchCnt.type || routeQuery.type) == '_s'">"{{searchCnt.text || routeQuery.text}}"的搜索结果</h1>
-                <h1 v-else>{{(searchCnt.type || routeQuery.type) == 'Category' ? '分类' : (searchCnt.type || routeQuery.type)}}：{{searchCnt.text || routeQuery.text}}</h1>
+                <h1 v-if="(searchCnt.type || routeQuery.type) == '_s'">
+                    "{{searchCnt.text || routeQuery.text}}"的搜索结果
+                </h1>
+                <h1 v-else>
+                    {{(searchCnt.type || routeQuery.type) == 'Category' ? '分类' : (searchCnt.type || routeQuery.type)}}：{{searchCnt.text || routeQuery.text}}
+                </h1>
                 <p class="breadcrumbs">
                     <router-link class="u_transition_300 u_hover_active" :to="{path: '/blog'}">博客</router-link>
                     <span>&gt;</span>
-                    <strong v-if="(searchCnt.type || routeQuery.type) == '_s'">"{{searchCnt.text || routeQuery.text}}"</strong>
+                    <strong v-if="(searchCnt.type || routeQuery.type) == '_s'">
+                        "{{searchCnt.text || routeQuery.text}}"
+                    </strong>
                     <strong v-else>{{searchCnt.text || routeQuery.text}}</strong>
                 </p>
             </div>
         </div>
-        <articleList :searchCnt="searchCnt"></articleList>
-        <footerBox :blogPage="true"></footerBox>
+        <article-list :searchCnt="searchCnt"></article-list>
+        <footer-box :blogPage="true"></footer-box>
     </div>
 </template>
 
@@ -25,6 +31,17 @@
     import articleList from './articleList.vue'
 
     export default {
+        data() {
+            return {
+                headerData: {
+                    title: 'Search Result',
+                    searchStatus: true,
+                    isStatic: true,
+                    type: 'blog'
+                },
+                routeQuery: {}
+            }
+        },
         mounted() {
             // 判断 搜索记录是否存在
             if (!this.$store.state.searchCnt.text) {
@@ -41,17 +58,6 @@
                         text: "全部"
                     };
             };
-        },
-        data() {
-            return {
-                headerData: {
-                    title: 'Search Result',
-                    searchStatus: true,
-                    isStatic: true,
-                    type: 'blog'
-                },
-                routeQuery: {}
-            }
         },
         computed: {
             searchCnt() {
