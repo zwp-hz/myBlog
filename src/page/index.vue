@@ -4,7 +4,7 @@
         <header-box :headerData="headerData"></header-box>
         <section id="intro" class="g-r-center" data-0="opacity: 1" data-50p="opacity: 0;">
             <i class="iconfont icon-codestore"></i>
-            <h1>Welcome to visit My Blog</h1>
+            <h1 ref="h1">Welcome to visit My Blog</h1>
         </section>
         <section id="indexMain">
             <div class="u_arrow" data-0="opacity: block;" data-30p="display: none;"></div>
@@ -20,6 +20,7 @@
                 </div>
             </div>
         </section>
+        <footer-box></footer-box>
     </div>
 </template>
 
@@ -31,6 +32,16 @@
     import Weather from '../components/weather.vue'
 
     export default {
+        data() {
+            return {
+                loadStatus: false, // 加载状态。false：加载中。true：加载完成。
+                headerData: { // 头部出参数
+                    searchStatus: false,
+                    isStatic: false,
+                },
+                biying_images: sessionStorage.biying_images ? JSON.parse(sessionStorage.biying_images) : {}
+            }
+        },
         mounted() {
             let {
                 APIHOST,
@@ -52,15 +63,20 @@
                     }
                 }, (res) => console.log(res));
             }
-        },
-        data() {
-            return {
-                loadStatus: false, // 加载状态。false：加载中。true：加载完成。
-                headerData: { // 头部出参数
-                    searchStatus: false,
-                    isStatic: false,
-                },
-                biying_images: sessionStorage.biying_images ? JSON.parse(sessionStorage.biying_images) : {}
+
+            // 根据鼠标位置改变标签位置  移动端不侦听
+            if (!this.$store.state.isMoblie) {
+                let h1 = this.$refs.h1,
+                    clientWidth_half = parseInt(document.body.clientWidth / 2, 10),
+                    clientHeight_half = parseInt(document.body.clientHeight / 2, 10);
+
+                document.onmousemove = (e) => {
+                    let ev = e || window.event,
+                        pageX = ev.pageX,
+                        pageY = ev.pageY;
+
+                    h1.style.cssText = `transform: translate(${(pageX - clientWidth_half) / 80}px,${(pageY - clientHeight_half) / 80}px);`;
+                }
             }
         },
         methods: {
@@ -79,6 +95,9 @@
             headerBox,
             footerBox,
             Weather
+        },
+        beforeDestroy() {
+            document.onmousemove = null;
         }
     }
 </script>
