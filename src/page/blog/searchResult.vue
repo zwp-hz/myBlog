@@ -7,7 +7,8 @@
                     "{{searchCnt.text || routeQuery.text}}"的搜索结果
                 </h1>
                 <h1 v-else>
-                    {{(searchCnt.type || routeQuery.type) == 'Category' ? '分类' : (searchCnt.type || routeQuery.type)}}：{{searchCnt.text || routeQuery.text}}
+                    {{(searchCnt.type || routeQuery.type) == 'Category' ? '分类' :
+                    (searchCnt.type || routeQuery.type)}}：{{searchCnt.text || routeQuery.text}}
                 </h1>
                 <p class="breadcrumbs">
                     <router-link class="u_transition_300 u_hover_active" :to="{path: '/blog'}">博客</router-link>
@@ -100,7 +101,7 @@
             }
         }
     }
-    
+
     #rightBox .box {
         background-color: null;
     }

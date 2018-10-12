@@ -1,11 +1,14 @@
-"use strict";
-import Vue 				from 'vue'
-import App 				from './App.vue'
-import VueResource 		from 'vue-resource'
+"use strict"
 
-import store        	from './store/store'
-import router       	from './router/router'
-import * as filters 	from './filter/filter'
+import Vue from 'vue'
+import App from './App.vue'
+import VueResource from 'vue-resource'
+
+import store from './store/store'
+import router from './router/router'
+import * as filters from './filter/filter'
+import Es6Promise from 'es6-promise'
+Es6Promise.polyfill()
 
 Vue.use(VueResource);
 Vue.http.options.emulateJSON = true;
@@ -17,19 +20,19 @@ Object.keys(filters).forEach(key => {
 
 // 标题设置
 Vue.directive('title', {
-    inserted: function (el, binding) {
+    inserted: function(el, binding) {
         document.title = binding.value
     }
 });
 
-router.afterEach(to =>{document.title = to.meta.title})
+router.afterEach(to => { document.title = to.meta.title })
 
 const app = new Vue({
-	store,
-	router,
-  	render: h => h(App)
+    store,
+    router,
+    render: h => h(App)
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  app.$mount('#app')
-})
+document.addEventListener('DOMContentLoaded', function() {
+    app.$mount('#app')
+});

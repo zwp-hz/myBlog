@@ -26,7 +26,12 @@
                 <div class="blog-tags">
                     <h5>Tags In</h5>
                     <div class="blog-tags-list clear">
-                        <a v-for="tag in articleParam.tags" :key="tag" class="fl u_transition_300 u_hover_active_bg" @click="search({type: 'Tag', text: tag})">
+                        <a
+                            v-for="tag in articleParam.tags"
+                            :key="tag"
+                            class="fl u_transition_300 u_hover_active_bg"
+                            @click="search({type: 'Tag', text: tag})"
+                        >
                             {{tag}}
                         </a>
                     </div>
@@ -74,7 +79,9 @@
             this.getArticleDetail();
         },
         methods: {
-            //获取文章详情
+            /**
+             * 获取文章详情
+            */
             getArticleDetail() {
                 let {
                     APIHOST,
@@ -104,7 +111,7 @@
                 });
             },
             /** 标签搜索
-             * @data   搜索参数
+             * @param {data}    搜索参数
              */
             search(data) {
                 this.$store.commit('searchChange', data);
@@ -209,7 +216,7 @@
             }
         }
     }
-    
+
     @media (max-width: 767px) {
         #articleDetail .header h1 {
             font-size: 25px;

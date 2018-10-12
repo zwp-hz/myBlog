@@ -1,5 +1,6 @@
 <template>
-    <div id="index" :class="{isSupportWebp: !$store.state.isSupportWebp}">
+    <!-- :style="{backgroundImage: 'url(' + IMGHOST +'blog_index_bg.jpg?imageView2/2/interlace/1/format/webp/w/1080'+')'}" -->
+    <div id="index" :class="{isWebp: isSupportWebp}">
         <loading :loadStatus="loadStatus"></loading>
         <header-box :headerData="headerData"></header-box>
         <section id="intro" class="g-r-center" data-0="opacity: 1" data-50p="opacity: 0;">
@@ -26,6 +27,9 @@
 
 <script>
     "use strict";
+    import {
+        mapState
+    } from 'vuex'
     import loading from '../components/loading.vue'
     import headerBox from '../components/header.vue'
     import footerBox from '../components/footer.vue'
@@ -42,12 +46,19 @@
                 biying_images: sessionStorage.biying_images ? JSON.parse(sessionStorage.biying_images) : {}
             }
         },
+        computed: {
+            ...mapState([
+                'APIHOST',
+                'IMGHOST',
+                'isSupportWebp'
+            ])
+        },
         mounted() {
             let {
                 APIHOST,
                 IMGHOST,
                 isSupportWebp
-            } = this.$store.state,
+            } = this,
                 img = new Image();
 
             // 判断背景图片是否加载完成

@@ -21,7 +21,11 @@
                 <span>{{item.review.length}}</span>
                 <b class="backImg u_transition_300 u_hover_show"><i class="iconfont icon-lianjie"></i></b>
             </router-link>
-            <router-link v-else :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" ondragstart="return false;" class="images">
+            <router-link v-else
+                :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}"
+                ondragstart="return false;"
+                class="images"
+            >
                 <i class="iconfont icon-codestore"></i>
                 <span>{{item.review.length}}</span>
                 <b class="backImg u_transition_300 u_hover_show"><i class="iconfont icon-lianjie"></i></b>
@@ -35,7 +39,11 @@
                         </a>
                     </span>
                 </div>
-                <router-link :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}" class="title u_transition_300 u_hover_active">{{item.title}}</router-link>
+                <router-link
+                    :to="{path: '/articleDetail',query: {id: item._id, title: item.title}}"
+                    class="title u_transition_300 u_hover_active">
+                    {{item.title}}
+                </router-link>
             </div>
         </div>
     </div>

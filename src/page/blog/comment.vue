@@ -8,20 +8,44 @@
             </div>
             <form class="clear" @submit.prevent="submit">
                 <div class="form-row clear">
-                    <span class="comment_msg u_transition_300" :class="{show: comment_msg,hide: comment_msg_status}">{{comment_msg}}</span>
-                    <textarea class="input" v-model="comment_data.content" maxlength="200" placeholder="说点什么吧..." required></textarea>
+                    <span
+                        class="comment_msg u_transition_300"
+                        :class="{show: comment_msg,hide: comment_msg_status}">
+                        {{comment_msg}}
+                    </span>
+                    <textarea
+                        class="input"
+                        v-model="comment_data.content"
+                        maxlength="200"
+                        placeholder="说点什么吧..." required>
+                    </textarea>
                 </div>
                 <div class="form-row clear">
-                    <input v-if="checkbox_status" class="input" v-model="comment_data.nickname" placeholder="昵称" required/>
+                    <input
+                        v-if="checkbox_status"
+                        class="input"
+                        v-model="comment_data.nickname"
+                        placeholder="昵称"
+                        required
+                    />
                     <input v-else class="input" disabled placeholder="昵称" />
                 </div>
                 <div class="form-row text-right">
                     <label for="comment-anonymous">
-                        <input id="comment-anonymous" type="checkbox" @click="checkbox_status = !checkbox_status" style="float: inherit;"  />
+                        <input
+                            id="comment-anonymous"
+                            type="checkbox"
+                            @click="checkbox_status = !checkbox_status"
+                            style="float: inherit;"
+                        />
                         匿名发表
                     </label>
                 </div>
-                <div class="form-row submit-btn u_transition_300" :class="{u_in_request: request_status}" style="float: right;" >
+                <div
+                    class="form-row submit-btn u_transition_300"
+                    :class="{u_in_request: request_status}"
+                    style="float: right;"
+                >
                     <i></i>
                     <input type="submit" value="发表评论" />
                 </div>

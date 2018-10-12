@@ -3,7 +3,7 @@
         <div id="loader"></div>
         <div class="loader-section section-left"></div>
         <div class="loader-section section-right"></div>
-        <div class="load_title">正在 💪 加载ing</div>
+        <div class="load_title"></div>
     </div>
 </template>
 
@@ -21,7 +21,7 @@
             loadStatus(val) {
                 if (val) {
                     document.body.style.overflow = 'auto';
-                    //动画结束后。更改首次加载状态
+
                     setTimeout(() => {
                         this.$store.commit('loadChange');
                     }, 1000)
@@ -104,7 +104,7 @@
             }
         }
     }
-    
+
     #loader {
         display: block;
         position: relative;
@@ -129,13 +129,13 @@
         animation: spin 2s linear infinite;
         /* Chrome, Firefox 16+, IE 10+, Opera */
     }
-    
+
     .loaded #loader {
         opacity: 0;
         -webkit-transition: all 0.3s ease-out;
         transition: all 0.3s ease-out;
     }
-    
+
     #loader:before {
         content: "";
         position: absolute;
@@ -158,7 +158,7 @@
         animation: spin 3s linear infinite;
         /* Chrome, Firefox 16+, IE 10+, Opera */
     }
-    
+
     #loader:after {
         content: "";
         position: absolute;
@@ -181,7 +181,7 @@
         animation: spin 1.5s linear infinite;
         /* Chrome, Firefox 16+, IE 10+, Opera */
     }
-    
+
     @-webkit-keyframes spin {
         0% {
             -webkit-transform: rotate(0deg);
@@ -200,7 +200,7 @@
             /* Firefox 16+, IE 10+, Opera */
         }
     }
-    
+
     @keyframes spin {
         0% {
             -webkit-transform: rotate(0deg);

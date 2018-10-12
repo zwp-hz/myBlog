@@ -12,7 +12,12 @@
                         <ul>
                            <li v-for="(item, index) in list" :key="index" @click="img_modal($event,item.src)">
                                 <a href="javaScript:void(0);" data_type="img" :data-url="item.src" class="progressive--not-loaded">
-                                    <img :style="'opacity:'+(item.status === 2 ? 0 : 1)" @load="item.status=1" @error="item.status=2" :src="item.src_small" alt="" />
+                                    <img
+                                        :style="'opacity:'+(item.status === 2 ? 0 : 1)"
+                                        @load="item.status=1"
+                                        @error="item.status=2"
+                                        :src="item.src_small"
+                                        alt="" />
                                     <i class="iconfont icon-codestore" :style="'display:'+(item.status === 2 ? 'block' : 'none')"></i>
                                     <span class="u_transition_300">
                                         <b class="iconfont icon-time"></b>
@@ -247,20 +252,21 @@
                     // 列表递归
                     let factorical = (data) => {
                         if (Array.isArray(data)) {
-                            for (let item of data) {
-                                item.key.forEach((key, index) => {
-                                    if (index === 0 && !this.imgList[key])
+                            for (let i of data) {
+                                i.key.forEach((key, index) => {
+                                    if (index === 0 && !this.imgList[key]){
                                         this.imgList[key] = {};
-                                    else if (index === 1 && !this.imgList[item.key[0]][key])
-                                        this.imgList[item.key[0]][key] = {};
-                                    else if (index === 2 && !this.imgList[item.key[0]][item.key[1]][key])
-                                        this.imgList[item.key[0]][item.key[1]][key] = [];
+                                    } else if (index === 1 && !this.imgList[i.key[0]][key]){
+                                        this.imgList[i.key[0]][key] = {};
+                                    } else if (index === 2 && !this.imgList[i.key[0]][i.key[1]][key]) {
+                                        this.imgList[i.key[0]][i.key[1]][key] = [];
+                                    }
                                 });
-                                this.imgList[item.key[0]][item.key[1]][item.key[2]].push(item);
+                                this.imgList[i.key[0]][i.key[1]][i.key[2]].push(i);
                             }
                         } else if (typeof data === "object") {
-                            for (let item in data) {
-                                factorical(data[item]);
+                            for (let i in data) {
+                                factorical(data[i]);
                             }
                         }
                     }

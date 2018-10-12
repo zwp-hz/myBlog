@@ -42,20 +42,22 @@
             })
         },
         methods: {
-            /* 获取日出落状态
-                params:   info: 天气信息。
-                return:   1: 日出。   2: 日落。
+            /** 区分白天的晚上
+             * @param {info}    天气信息。
+             * @return   1: 白天   2: 晚上
             */
             getSunlightStatus(info) {
                 let date = new Date(info.time), //系统时间
                     cur_hh = date.getHours(), //当前时
                     cur_mm = date.getMinutes(), //当前分
                     sunrise_hh = Number(info.sunrise_1[0].substring(0, 2)), //日出时
-                    sunset_hh = Number(info.sunset_1[0].substring(0, 2)), //日落时
                     sunrise_mm = Number(info.sunrise_1[0].substring(3, 5)), //日出分
+                    sunset_hh = Number(info.sunset_1[0].substring(0, 2)), //日落时
                     sunset_mm = Number(info.sunset_1[0].substring(3, 5)); //日落分
 
-                if ((cur_hh > sunrise_hh && cur_hh < sunset_hh) || (cur_hh == sunrise_hh && cur_mm >= sunrise_mm) || (cur_hh == sunset_hh && cur_mm < sunset_mm)) {
+                if ((cur_hh > sunrise_hh && cur_hh < sunset_hh) ||
+                    (cur_hh == sunrise_hh && cur_mm >= sunrise_mm) ||
+                    (cur_hh == sunset_hh && cur_mm < sunset_mm)) {
                     return 1;
                 } else {
                     return 2;
@@ -100,7 +102,7 @@
             }
         }
     }
-    
+
     @media (max-width: 375px) {
         #weather {
             .iconfont {
@@ -119,7 +121,7 @@
             }
         }
     }
-    
+
     @media (max-width: 635px) {
         #weather {
             .iconfont {

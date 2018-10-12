@@ -8,7 +8,11 @@
             data-50p="background-color: rgba(255,255,255,0);"
             data-76p="background-color: rgba(255,255,255,1);"
         >
-            <div class="container headerBox g-r-center" data--0="color: rgba(206,206,196,1);" data-50p="color: rgba(206,206,196,1);" data-76p="color: rgba(53, 58, 64,1);">
+            <div class="container headerBox g-r-center"
+                data--0="color: rgba(206,206,196,1);"
+                data-50p="color: rgba(206,206,196,1);"
+                data-76p="color: rgba(53, 58, 64,1);"
+            >
                 <nav class="g-r-center" style="justify-content: flex-end;">
                     <div class="menuList">
                         <ul class="g-r-center">
@@ -25,14 +29,22 @@
                             <router-link
                                 class="u_transition_300 iconfont"
                                 :class="[item.icon,{active: curRoute.indexOf(item.name) != -1 }]"
-                                v-for="(item, index in navArray" :key="index"
+                                v-for="(item, index) in navArray" :key="index"
                                 :to="{path: item.route}"
                             >
                             </router-link>
                         </div>
                     </div>
                     <div v-if="headerData.searchStatus" class="searchBox u_transition_300">
-                        <input @keyup.enter="search" ref="search" v-model="searchCnt" class="fl u_transition_300" type="text" name="search" placeholder="search" />
+                        <input
+                            @keyup.enter="search"
+                            ref="search"
+                            v-model="searchCnt"
+                            class="fl u_transition_300"
+                            type="text"
+                            name="search"
+                            placeholder="search"
+                        />
                         <span class="fl g-c-center" @click="search">
                             <i class="fr iconfont icon-search"></i>
                         </span>
@@ -43,17 +55,35 @@
                     <i style="margin-left: 10px;">Hi 你好</i>
                 </nav>
                 <i v-if="headerData.isStatic" class="iconfont icon-codestore u_transition_300"></i>
-                <i v-else class="iconfont icon-codestore active" data-0="top: 30%; font-size: 80px;" data-30p="top: 30%; font-size: 80px;" data-76p="top: 1%; font-size: 50px;"></i>
+                <i v-else
+                    class="iconfont icon-codestore active"
+                    data-0="top: 30%; font-size: 80px;"
+                    data-30p="top: 30%; font-size: 80px;"
+                    data-76p="top: 1%; font-size: 50px;">
+                </i>
             </div>
         </div>
         <div id="blogHeader" v-if="headerData.type === 'blog'">
             <div class="g-bolang">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 14" height="70" preserveAspectRatio="none"><path class="g-bolang-svg" d="M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z"></path></svg>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 54 14" height="70"
+                    preserveAspectRatio="none">
+                    <path class="g-bolang-svg" d="M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z"></path>
+                </svg>
             </div>
             <h1>{{headerData.title}}</h1>
         </div>
-        <div v-if="headerData.images_src" class="detail_bg u_transition_300" :class="[{'img-progressive--not-loaded': headerData.images_src.status == 0},{'img-progressive--is-loaded': headerData.images_src.status == 1}]">
-            <img v-if="headerData.images_src.status == 0" @load="imgLoad('load');" @error="imgLoad('error');" :src="headerData.images_src.src+'100'" alt="" />
+        <div
+            v-if="headerData.images_src"
+            class="detail_bg u_transition_300"
+            :class="[{'img-progressive--not-loaded': headerData.images_src.status == 0},{'img-progressive--is-loaded': headerData.images_src.status == 1}]">
+            <img
+                v-if="headerData.images_src.status == 0"
+                @load="imgLoad('load');"
+                @error="imgLoad('error');"
+                :src="headerData.images_src.src+'100'"
+                alt="" />
             <img v-if="headerData.images_src.status == 1" :src="headerData.images_src.src+'500'" alt="" />
         </div>
   	</header>
@@ -105,6 +135,7 @@
             this.scrollStatus = document.documentElement.scrollTop || document.body.scrollTop > 50 ? 'down' : '';
         },
         methods: {
+            // 搜索
             search() {
                 if (this.searchCnt && this.searchCnt != this.$store.state.searchCnt.text) {
                     let data = {
@@ -144,7 +175,7 @@
                 }, false);
             },
             /** 图片加载
-             * @type   load：加载成功  error：加载失败
+             * @param {type}    load：加载成功  error：加载失败
              */
             imgLoad(type) {
                 this.headerData.images_src.status = type == 'load' ? 1 : 0;

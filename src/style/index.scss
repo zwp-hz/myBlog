@@ -1,6 +1,10 @@
+$imghost: 'http://omdiu1qhf.bkt.clouddn.com/';
 #index {
     position: relative;
     height: 100vh;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
     &:before {
         content: ' ';
         position: fixed;
@@ -9,12 +13,13 @@
         right: 0;
         bottom: 0;
         left: 0;
-        background: url('http://image.zhuweipeng.me/blog_index_bg.jpg?imageView2/2/interlace/1/format/webp/w/1080') no-repeat center bottom;
-        background-size: cover !important;
-        -webkit-background-size: cover !important;
+        background-image: url($imghost + 'blog_index_bg.jpg?imageView2/2/interlace/1/format/webp/w/1080');
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
-    &.isSupportWebp:before {
-        background: url('http://image.zhuweipeng.me/blog_index_bg.jpg?imageView2/2/interlace/1/w/1080') no-repeat center bottom;
+    &.isWebp:before {
+        background-image: url($imghost + 'blog_index_bg.jpg?imageView2/2/interlace/1/format/jpg/w/1080');
     }
     #intro {
         position: relative;
