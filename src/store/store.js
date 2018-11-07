@@ -12,7 +12,7 @@ const state = {
     APIHOST: process.env.NODE_ENV === 'production' ? 'http://api.zhuweipeng.me/' : 'http://localhost:8989/',
     IMGHOST: 'http://omdiu1qhf.bkt.clouddn.com/', // 七牛图片host
     isSupportWebp: isWebp,
-    qnConfig: '?imageView2/2/interlace/1' + (isWebp ? '/format/webp' : '') + '/w/',
+    QN_POSTFIX: '?imageView2/2/interlace/1' + (isWebp ? '/format/webp' : '') + '/w/',
     isMoblie: /(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent),
     searchCnt: {}, // 搜索内容
     first_load: true, // 是否第一次加载

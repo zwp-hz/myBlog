@@ -48,6 +48,7 @@
 
 <script>
     "use strict";
+    import { mapState } from 'vuex'
     import loading from '../components/loading.vue'
     import headerBox from '../components/header.vue'
 
@@ -81,31 +82,36 @@
                 }
             }
         },
+        computed: {
+            ...mapState([
+                'APIHOST',
+                'IMGHOST',
+                'QN_POSTFIX'
+            ])
+        },
         mounted() {
-            let {
-                APIHOST
-            } = this.$store.state,
-                prefix = this.$route.query.prefix;
+            let prefix = this.$route.query.prefix;
 
             // 获取对应相册列表
-            this.$http.jsonp(APIHOST + 'api/getQiniuList', {
+            this.$http.jsonp(this.APIHOST + 'api/getQiniuList', {
                 params: {
                     prefix: prefix
                 }
-            }).then((res) => {
+            }).then(res => {
                 if (res.body.code === 0) {
                     this.qn_resource.list = res.body.data.items;
                     this.laodImgs('first');
 
                     document.addEventListener("scroll", this.seeScroll, false);
                 }
-            }, (res) => console.log(res));
+            }, res => console.log(res));
         },
         methods: {
-            /** 图片弹出层
-             * @event      元素属性
-             * @src        图片地址
-             * @type       显示隐藏状态。 默认：show。 可选 hide
+            /**
+             * 图片弹出层
+             * @param {event}   元素属性
+             * @param {src}     图片地址
+             * @param {type}    显示隐藏状态。 默认：show。 可选 hide
              */
             img_modal(event, src, type) {
                 let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -120,7 +126,7 @@
                         this.modal.status = false;
                     }, 500)
                 } else {
-                    let obj = event.path ? event.path[0].tagName === 'A' ? event.path[0] : event.path[1] : event.target,
+                    let obj = event.path ? (event.path[0].tagName === 'A' ? event.path[0] : event.path[1]) : event.target,
                         src_1080 = src.replace(/w\/(.*)/g, 'w/1080'),
                         $img = new Image();
 
@@ -168,7 +174,9 @@
                     }, 600);
                 }
             },
-            /** 滚动侦听 */
+            /**
+             * 滚动侦听
+            */
             seeScroll() {
                 let scrollTop = document.documentElement.scrollTop || document.body.scrollTop, // 滚动条距离顶部高度
                     scrollHeight = document.documentElement.scrollHeight, // 内容高度
@@ -181,20 +189,19 @@
                     }, 50);
                 }
             },
-            /** 加载图片
-             * @type           判断是否第一次加载
+            /**
+             * 加载图片
+             * @param {type}    判断是否第一次加载
              */
             laodImgs(type) {
-                // 初始化图片信息
-                let {
-                    IMGHOST,
-                    qnConfig
-                } = this.$store.state, {
-                        list,
-                        number
-                    } = this.qn_resource,
-                    n = document.documentElement.clientWidth > 900 ? 4 : 2,
-                    imgJson = {}, imgTime = '', imgNumbe = 0, timeNumber = 0;
+                // 初始化数据
+                let { IMGHOST, QN_POSTFIX} = this,
+                    { list, number } = this.qn_resource, // 七牛图片数据
+                    row_size = document.documentElement.clientWidth > 900 ? 4 : 2, // 每行个数
+                    img_json = {}, // 记录图片数据
+                    img_time = '',
+                    img_number = 0,
+                    time_number = 0;
 
                 // 加载完成  中止运行
                 if (list.slice(number).length <= 0) {
@@ -202,38 +209,38 @@
                 }
 
                 for (let item of list.slice(number)) {
-                    let imgArray = item.img_name.match(/.*?(:|-|\.|，)/g),
-                        timeString = imgArray[0] + imgArray[1] + imgArray[2],
+                    let img_array = item.img_name.match(/.*?(:|-|\.|，)/g),
+                        time_string = img_array[0] + img_array[1] + img_array[2],
                         clientWidth = document.documentElement.clientWidth,
-                        imgWidth = parseInt((clientWidth > 767 ? clientWidth / 3 : clientWidth / 2) * 0.8, 10);
+                        img_width = parseInt((clientWidth > 767 ? clientWidth / 3 : clientWidth / 2) * 0.8, 10);
 
                     // 记录数量
-                    timeNumber = timeString !== imgTime ? ++timeNumber : timeNumber;
+                    time_number = time_string !== img_time ? ++time_number : time_number;
 
                     // 中断数据遍历
                     if (type !== "first") {
-                        if (timeNumber > 1 || imgNumbe >= n) {
+                        if (time_number > 1 || img_number >= row_size) {
                             break;
                         }
-                    } else if (imgNumbe >= 15 || timeNumber > 3) {
+                    } else if (img_number >= 15 || time_number > 3) {
                         break;
                     }
 
                     // 数据分割
-                    imgArray.forEach((val, index) => {
-                        if (index === 0 && !imgJson[val]) {
-                            imgJson[val] = {};
-                        } else if (index === 1 && !imgJson[imgArray[0]][val]) {
-                            imgJson[imgArray[0]][val] = {}
-                        } else if (index === 2 && !imgJson[imgArray[0]][imgArray[1]][val]) {
-                            imgJson[imgArray[0]][imgArray[1]][val] = [];
+                    img_array.forEach((val, index) => {
+                        if (index === 0 && !img_json[val]) {
+                            img_json[val] = {};
+                        } else if (index === 1 && !img_json[img_array[0]][val]) {
+                            img_json[img_array[0]][val] = {}
+                        } else if (index === 2 && !img_json[img_array[0]][img_array[1]][val]) {
+                            img_json[img_array[0]][img_array[1]][val] = [];
                         } else if (index === 3) {
-                            imgJson[imgArray[0]][imgArray[1]][imgArray[2]].push({
-                                key: [imgArray[0], imgArray[1], imgArray[2]],
-                                city: imgArray[3].replace(/-/g, '') + ' ' + imgArray[4].replace(/，/g, ''),
-                                title: imgArray[5].replace(/\./g, ''),
-                                src: IMGHOST + item.key + qnConfig + imgWidth,
-                                src_small: IMGHOST + item.key + qnConfig + 60,
+                            img_json[img_array[0]][img_array[1]][img_array[2]].push({
+                                key: [img_array[0], img_array[1], img_array[2]],
+                                city: img_array[3].replace(/-/g, '') + ' ' + img_array[4].replace(/，/g, ''),
+                                title: img_array[5].replace(/\./g, ''),
+                                src: IMGHOST + item.key + QN_POSTFIX + img_width,
+                                src_small: IMGHOST + item.key + QN_POSTFIX + 60,
                                 status: 0
                             })
                         }
@@ -241,12 +248,12 @@
 
                     // 记录图片信息
                     this.qn_resource.number++;
-                    imgNumbe++;
-                    imgTime = timeString;
+                    img_number++;
+                    img_time = time_string;
                 };
 
                 if (type === "first") {
-                    this.imgList = imgJson;
+                    this.imgList = img_json;
                     this.loadStatus = true;
                 } else {
                     // 列表递归
@@ -271,7 +278,7 @@
                         }
                     }
 
-                    factorical(imgJson);
+                    factorical(img_json);
                 }
 
                 // 重定向数据

@@ -58,12 +58,7 @@
             }
         },
         mounted() {
-            let {
-                IMGHOST,
-                APIHOST,
-                articleList_hot,
-                qnConfig
-            } = this.$store.state;
+            let { IMGHOST, APIHOST, articleList_hot, QN_POSTFIX } = this.$store.state;
 
             if (!articleList_hot) {
                 //获取热门文章
@@ -79,7 +74,7 @@
                         for (var item of data) {
                             if (item.images_src.length > 0) {
                                 item.images_src = {
-                                    src: IMGHOST + item.images_src[0] + qnConfig + '100',
+                                    src: IMGHOST + item.images_src[0] + QN_POSTFIX + '100',
                                     status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
                                 }
                             } else {
@@ -98,15 +93,17 @@
             }
         },
         methods: {
-            /** 图片加载
-             * @index  下标
-             * @type   load：加载成功  error：加载失败
+            /**
+             * 图片加载
+             * @param {index}   下标
+             * @param {type}    'load' 加载成功  'error' 加载失败
              */
             imgLoad(index, type) {
                 this.articleList_hot[index].images_src.status = type == 'load' ? 1 : 2;
             },
-            /** 标签搜索
-             * @data   搜索参数
+            /**
+             * 标签搜索
+             * @param {data}    搜索参数
              */
             search(data) {
                 this.$store.commit('searchChange', data);

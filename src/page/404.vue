@@ -13,19 +13,24 @@
 
 <script>
     "use strict";
+    import { mapState } from 'vuex'
+
     export default {
         data() {
             return {
                 img_404_url: ''
             }
         },
+        computed: {
+            ...mapState([
+                'IMGHOST',
+                'QN_POSTFIX'
+            ])
+        },
         mounted() {
-            let {
-                IMGHOST,
-                qnConfig
-            } = this.$store.state;
+            let clientWidth = document.documentElement.clientWidth;
 
-            this.img_404_url = IMGHOST + 'error_404.png' + qnConfig + parseInt(document.documentElement.clientWidth * 0.35)
+            this.img_404_url = this.IMGHOST + 'error_404.png' + this.QN_POSTFIX + parseInt(clientWidth * 0.35, 10);
         }
     }
 </script>

@@ -174,7 +174,8 @@
                         this.scrollStatus = delta > 0 ? 'down' : 'up';
                 }, false);
             },
-            /** 图片加载
+            /**
+             * 图片加载
              * @param {type}    load：加载成功  error：加载失败
              */
             imgLoad(type) {

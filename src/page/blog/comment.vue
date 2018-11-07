@@ -120,17 +120,15 @@
             },
             // 设置评论提示信息
             setCommentMsg(text) {
-                let _this = this;
-
-                _this.comment_msg = text;
-                _this.request_status = false;
+                this.comment_msg = text;
+                this.request_status = false;
 
                 setTimeout(() => {
-                    _this.comment_msg_status = true;
+                    this.comment_msg_status = true;
 
                     setTimeout(() => {
-                        _this.comment_msg = "";
-                        _this.comment_msg_status = false;
+                        this.comment_msg = "";
+                        this.comment_msg_status = false;
                     }, 300);
                 }, 1000);
             }

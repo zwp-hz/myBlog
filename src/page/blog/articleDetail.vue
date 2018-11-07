@@ -83,10 +83,7 @@
              * 获取文章详情
             */
             getArticleDetail() {
-                let {
-                    APIHOST,
-                    IMGHOST
-                } = this.$store.state;
+                let { APIHOST, IMGHOST } = this.$store.state;
 
                 this.articleParam = {
                     categories: []

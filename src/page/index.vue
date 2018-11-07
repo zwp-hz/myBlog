@@ -27,9 +27,7 @@
 
 <script>
     "use strict";
-    import {
-        mapState
-    } from 'vuex'
+    import { mapState } from 'vuex'
     import loading from '../components/loading.vue'
     import headerBox from '../components/header.vue'
     import footerBox from '../components/footer.vue'

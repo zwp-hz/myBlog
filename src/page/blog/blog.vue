@@ -51,9 +51,7 @@
             }
         },
         mounted() {
-            let {
-                APIHOST
-            } = this.$store.state,
+            let { APIHOST } = this.$store.state,
                 github_code = this.$route.query.code;
 
             // 获取分类列表

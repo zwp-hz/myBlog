@@ -102,31 +102,24 @@
             let page = this.$route.query.page ? Number(this.$route.query.page) : 1;
 
             for (var i in this.$route.query) {
-                if (i === "_s" || i === "Tag" || i === "Category")
+                if (i === "_s" || i === "Tag" || i === "Category") {
                     this.searchText = this.$route.query[i];
+                }
             };
 
             this.getArticlesList(page, this.searchText);
         },
         methods: {
-            toArticleDetail(data) {
-                this.$router.push({
-                    path: '/articleDetail',
-                    query: {
-                        id: data._id,
-                        title: data.title
-                    }
-                });
-            },
-            /** 获取文章列表
-             * @data   page: 分页, searchCnt: 搜索内容
+            /**
+             * 获取文章列表
+             * @param {page}        分页数值
+             * @param {searchCnt}   搜索内容
              */
             getArticlesList(page, searchCnt) {
-
                 let {
                     IMGHOST,
                     APIHOST,
-                    qnConfig
+                    QN_POSTFIX
                 } = this.$store.state;
 
                 this.articleList = {
@@ -151,7 +144,7 @@
                         for (let item of data.data) {
                             if (item.images_src.length > 0) {
                                 item.images_src = {
-                                    src: IMGHOST + item.images_src + qnConfig,
+                                    src: IMGHOST + item.images_src + QN_POSTFIX,
                                     status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
                                 };
                             } else {
@@ -170,8 +163,9 @@
                     }
                 });
             },
-            /** 分页
-             * @data   num: 分页
+            /**
+             * 分页
+             * @param {num} 分页数值
              */
             pageBtn(num) {
                 let data = {
@@ -186,8 +180,9 @@
                 });
                 this.getArticlesList(num, this.searchText);
             },
-            /** 标签搜索
-             * @data   搜索参数
+            /**
+             * 标签搜索
+             * @param {data}    搜索参数
              */
             search(data) {
                 this.$store.commit('searchChange', data);
@@ -198,22 +193,24 @@
                     }
                 });
             },
-            /** 图片加载
-             * @index  下标
-             * @type   load：加载成功  error：加载失败
+            /**
+             * 图片加载
+             * @param {index}   下标
+             * @param {type}    'load' 加载成功  'error' 加载失败
              */
             imgLoad(index, type) {
                 this.articleList.data[index].images_src.status = type == 'load' ? 1 : 2;
             },
-            /** 跳转详情页
-             *. @text 	_id: 文章id,	title: 文章标题
+            /**
+             * 跳转详情页
+             * @param {data}    文章参数
              */
-            articleDetail(text) {
+            toArticleDetail(data) {
                 this.$router.push({
                     path: '/articleDetail',
                     query: {
-                        articleId: text._id,
-                        title: text.title
+                        id: data._id,
+                        title: data.title
                     }
                 });
             }

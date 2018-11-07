@@ -35,8 +35,9 @@
             }
         },
         methods: {
-            /** 标签搜索
-             * @data   搜索参数
+            /**
+             * 标签搜索
+             * @param {data}    搜索参数
              */
             search(data) {
                 this.$store.commit('searchChange', data);
