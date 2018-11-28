@@ -1,13 +1,32 @@
-# 🐷的个人博客
+# 🐷 的个人网站
 
 ## 目录结构介绍
 
-    |-- assest                        	  // 资源文件
-    |-- components                    	  // 组件
+    |-- assest
+    |   |-- css                           // 样式表
+    |   |-- font                          // 字体库
+    |   |-- js
+    |   |   |-- skrollr.min.js            // 视觉滚动差插件
+    |   |   |-- utils.js                  // 通用函数、方法
+    |-- components
+    |   |-- articleList                   // 文章列表组件
+    |   |-- comment                       // 评论组件
+    |   |-- footer                        // 底部组件
+    |   |-- header                        // 头部组件
+    |   |-- hotArticle                    // 热门文章组件
+    |   |-- loading                       // 加载组件
+    |   |-- tags                          // 文章标签组件
+    |   |-- weather                       // 天气组件
     |-- layouts                           // 默认布局
-    |-- middleware                        // 中间件
-    |-- pages                             // 路由页面
-    |-- plugins                           // 插件
+    |-- middleware
+    |-- pages
+    |   |-- author                        // 个人页面
+    |   |-- blog                          // 博客页面
+    |   |-- photos                        // 相册页面
+    |-- plugins
+    |   |-- axios.js                      // axios 过滤器
+    |   |-- directive.js                  // 自定义指令
+    |   |-- filters.js                    // vue 过滤器
     |-- static                            // 静态文件
     |-- store                             // Vuex 状态树
     |-- .eslintrc.js                      // eslint 配置文件
@@ -18,22 +37,13 @@
 
 ## 构建生产
 
+    // 安装
+    npm install
+
     // 本地环境
     npm run dev
 
-    // 开发环境
-    npm run generate
-
-    // 测试环境
-    npm run development
-
-    // 预发环境
-    npm run pre
-
-    // 线上环境
-    npm run online
-
-### 任何通过 axios 请求接口？
+### 如何通过 axios 请求接口？
 
 ```javascript
 this.$axios
@@ -41,3 +51,7 @@ this.$axios
   .then(res => {})
   .catch(err => {})
 ```
+
+### 网站效果图
+#### 首页
+	![h5](https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_h5.gif)
