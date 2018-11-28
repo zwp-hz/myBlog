@@ -47,10 +47,10 @@
 
 #### 首页
 
-<center class="half">
+<p>
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_h5.gif" width="30%"/>
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_pc.gif" width="50%"/>
-</center>
+</p>
 
 #### 照片墙
 
