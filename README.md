@@ -49,14 +49,14 @@
 
 <center class="half">
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_h5.gif" width="30%"/>
-    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_pc.gif" width="60%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_pc.gif" width="50%"/>
 </center>
 
 #### 照片墙
 
 <center class="half">
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_h5.gif" width="30%"/>
-    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_pc.gif" width="60%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_pc.gif" width="50%"/>
 </center>
 
 ### 如何通过 axios 请求接口？
