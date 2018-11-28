@@ -47,14 +47,14 @@
 
 #### 首页
 
-<p style="text-align: center;">
+<p>
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_h5.gif" width="30%"/>
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_pc.gif" width="60%"/>
 </p>
 
 #### 照片墙
 
-<p style="text-align: center;">
+<p>
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_h5.gif" width="30%"/>
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_pc.gif" width="60%"/>
 </p>
