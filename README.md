@@ -43,6 +43,22 @@
     // 本地环境
     npm run dev
 
+### 效果图
+
+#### 首页
+
+<center class="half">
+    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_h5.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_pc.gif" width="60%"/>
+</center>
+
+#### 照片墙
+
+<center class="half">
+    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_h5.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_pc.gif" width="60%"/>
+</center>
+
 ### 如何通过 axios 请求接口？
 
 ```javascript
@@ -51,7 +67,3 @@ this.$axios
   .then(res => {})
   .catch(err => {})
 ```
-
-### 网站效果图
-#### 首页
-	![h5](https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_h5.gif)
