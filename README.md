@@ -47,17 +47,17 @@
 
 #### 首页
 
-<p>
+<p style="text-align: center;">
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_h5.gif" width="30%"/>
-    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_pc.gif" width="50%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_pc.gif" width="60%"/>
 </p>
 
 #### 照片墙
 
-<center class="half">
+<p style="text-align: center;">
     <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_h5.gif" width="30%"/>
-    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_pc.gif" width="50%"/>
-</center>
+    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_pc.gif" width="60%"/>
+</p>
 
 ### 如何通过 axios 请求接口？
 
