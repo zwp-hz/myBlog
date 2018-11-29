@@ -15,9 +15,6 @@ module.exports = {
         innerHTML:
           'window.isWebp = document.createElement("canvas").toDataURL("image/webp").indexOf("data:image/webp") == 0',
         type: 'text/javascript'
-      },
-      {
-        src: 'http://pv.sohu.com/cityjson?ie=utf-8'
       }
     ],
     __dangerouslyDisableSanitizers: ['script']
