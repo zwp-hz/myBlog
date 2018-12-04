@@ -2,8 +2,16 @@
   <footer id="footer">
     <div v-if="blogPage">
       <div class="g-bolang">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 14" height="70" preserveAspectRatio="none">
-          <path class="g-bolang-svg" d="M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z"/>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 54 14"
+          height="70"
+          preserveAspectRatio="none"
+        >
+          <path
+            class="g-bolang-svg"
+            d="M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z"
+          ></path>
         </svg>
       </div>
       <div class="container g-r-center">
@@ -12,16 +20,22 @@
           :class="'g-box'"
           style="flex: 1;"
           @searchCnt="searchList"
-          @articleInfo="articleDeatil"/>
+          @articleInfo="articleDeatil"
+        />
         <tags :class="'g-box'" style="flex: 1;" class="tags" @searchCnt="searchList"/>
       </div>
     </div>
     <div class="put-on-record g-c-center">
       <p>
         ©2017-2018&nbsp;&nbsp;朱为鹏&nbsp;&nbsp;
-        <a href="http://www.miitbeian.gov.cn/" target="_blank">浙ICP备17031040号</a>
+        <a
+          href="http://www.miitbeian.gov.cn/"
+          target="_blank"
+        >浙ICP备17031040号-3</a>
       </p>
-      <p>感谢 <a href="https://www.qiniu.com/" target="_blank">七牛云存储</a> 提供图片存储空间</p>
+      <p>感谢
+        <a href="https://www.qiniu.com/" target="_blank">七牛云存储</a> 提供图片存储空间
+      </p>
       <p>
         服务器、域名购置于
         <a href="https://www.aliyun.com/" target="_blank">阿里云</a>&nbsp;&nbsp;&nbsp;&nbsp;icon图标来源于

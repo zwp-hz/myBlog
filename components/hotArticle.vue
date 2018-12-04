@@ -151,13 +151,6 @@ export default {
         left: 21px;
         font-size: 34px;
       }
-      .icon-lietu {
-        position: absolute;
-        top: 21px;
-        left: 26px;
-        font-size: 24px;
-        color: #000;
-      }
       span {
         position: absolute;
         top: 2px;

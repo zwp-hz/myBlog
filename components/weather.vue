@@ -2,13 +2,8 @@
   <div id="weather" :class="{isMobile: device.isMobile}">
     <section class="g-c-center" v-if="sunlightStatus">
       <i
-        v-if="sunlightStatus == 1"
-        :class="'iconfont icon-' + weatherInfo.forecast[0].weather[0].day[0].type_py.pinyin"
-      />
-      <i
-        v-else
-        :class="'iconfont icon-night-' + weatherInfo.forecast[0].weather[0].night[0].type_py.pinyin"
-      />
+        :class="`iconfont icon-${sunlightStatus === 1 ? '' : 'n-' }${weatherInfo.forecast[0].weather[0][sunlightStatus === 1 ? 'day' : 'night'][0].type_py.pinyin}`"
+      ></i>
       <p class="cityName">{{ weatherInfo.city[0] }}</p>
       <div class="info g-r-center">
         <p>
@@ -35,7 +30,7 @@ export default {
   },
   mounted() {
     //获取天气信息
-    this.$axios.post('api/getWeather').then(res => {
+    this.$axios.get('api/getWeather').then(res => {
       if (res.code === 0) {
         this.weatherInfo = res.data
         this.sunlightStatus = this.getSunlightStatus(res.data)
