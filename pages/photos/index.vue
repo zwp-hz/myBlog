@@ -140,6 +140,12 @@ export default {
     ...mapState(['IMGHOST', 'M_QN_POSTFIX', 'device'])
   },
   mounted() {
+    this.$nextTick(() => {
+      document.body.style.cssText = `height: ${
+        document.body.style.height
+      } !important`
+    })
+
     let json = ['点滴:', '风景:']
 
     // 获取对应相册3条数据

@@ -42,7 +42,7 @@
           </div>
           <div v-if="headerData.searchStatus" class="searchBox u_transition_300">
             <input
-              @keyup.enter="search"
+              @keyup.enter="searchFn"
               ref="search"
               v-model="searchCnt"
               class="fl u_transition_300"

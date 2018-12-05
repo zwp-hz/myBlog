@@ -25,7 +25,7 @@ let state = {
   default_avator:
     'http://flashfish.oss-cn-hangzhou.aliyuncs.com/CDN/Images/avator/mrtx.png',
   QN_POSTFIX: '?imageView2/2/interlace/1/format/jpg/w/',
-  IMGHOST: 'http://pij3uggxu.bkt.clouddn.com/',
+  IMGHOST: 'http://image.zhuweipeng.top/',
   search: {},
   first_load: true,
   articleList_hot: [],
