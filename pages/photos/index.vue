@@ -4,7 +4,6 @@
     <header-box :header-data="headerData"/>
     <div id="col-md" v-if="!device.isMobile">
       <div class="main container">
-        <h1>旧日回忆</h1>
         <svg width="100%" height="100%">
           <path
             data-0="stroke-dashoffset: 1595;"
@@ -94,7 +93,6 @@
       <div class="u_arrow"/>
     </div>
     <div id="col-sm" v-else>
-      <h1>旧日回忆</h1>
       <section v-for="(item, index) in imgParents" :key="index" v-if="item.items[1]">
         <nuxt-link
           class="g-c-center"
@@ -181,13 +179,25 @@ export default {
   width: 100vw;
   background: #363638;
   min-width: 1200px;
-  box-shadow: inset 0 0 100px hsla(0, 0, 0, 0.3);
-  background-image: linear-gradient(
-      45deg,
-      rgba(194, 233, 221, 0.5) 1%,
-      rgba(104, 119, 132, 0.5) 100%
-    ),
-    linear-gradient(-45deg, #494d71 0%, rgba(217, 230, 185, 0.5) 80%);
+  #col-md,
+  #col-sm {
+    min-height: 100vh;
+    background-image: url('http://unsplash.it/1200x800');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: -10;
+      background-image: linear-gradient(to bottom right, #002f4b, #dc4225);
+      opacity: 0.6;
+    }
+  }
   .main {
     position: fixed;
     left: 50%;
@@ -195,17 +205,6 @@ export default {
     height: 100%;
     min-width: 1000px;
     transform: translate(-50%, 0);
-    h1 {
-      position: absolute;
-      left: 50%;
-      top: 23%;
-      transform: translate(-50%, -50%);
-      color: #fff;
-      font-size: 35px;
-      opacity: 0.8;
-      text-shadow: 1px 1px 0 #ccc, 2px 2px 0 #ccc, 3px 3px 0 #444,
-        4px 4px 0 #444, 5px 5px 0 #444, 6px 6px 0 #444;
-    }
     .wrap {
       position: absolute;
       display: block;
@@ -312,13 +311,6 @@ export default {
   #col-sm {
     display: none;
     padding-top: 70px;
-    h1 {
-      padding: 0 0 10px 4%;
-      color: #fff;
-      font-size: 25px;
-      opacity: 0.8;
-      text-shadow: 1px 1px 0 #ccc, 2px 2px 0 #ccc;
-    }
     section {
       width: 92%;
       height: 50vh;
