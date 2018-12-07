@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import loading from '~/components/loading'
 import { lazyload } from '~/assets/js/utils'
 
@@ -99,6 +100,9 @@ export default {
         data: []
       }
     }
+  },
+  computed: {
+    ...mapState(['IMGHOST', 'M_QN_POSTFIX'])
   },
   watch: {
     // 标签切换
@@ -127,8 +131,6 @@ export default {
      * @param {searchCnt}   搜索内容
      */
     getArticlesList(page, searchCnt) {
-      let { IMGHOST, M_QN_POSTFIX } = this.$store.state
-
       this.articleList = {
         data: []
       }
@@ -151,7 +153,7 @@ export default {
             for (let item of data.data) {
               if (item.images_src.length > 0) {
                 item.images_src = {
-                  src: IMGHOST + item.images_src + M_QN_POSTFIX,
+                  src: this.IMGHOST + item.images_src + this.M_QN_POSTFIX,
                   status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
                 }
               } else {
