@@ -181,6 +181,8 @@ export default {
   min-width: 1200px;
   #col-md,
   #col-sm {
+    position: relative;
+    z-index: -11;
     min-height: 100vh;
     background-image: url('http://unsplash.it/1200x800');
     background-position: center center;
