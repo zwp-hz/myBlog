@@ -1,6 +1,11 @@
 <template>
   <div id="author">
     <header-box :header-data="headerData"/>
+    <p>3十多年富士康的奶粉进口的十年房价可能的师傅你的空间内房价快速的奶粉是你付款时都能付款</p>
+    <p>3十多年富士康的奶粉进口的十年房价可能的师傅你的空间内房价快速的奶粉是你付款时都能付款</p>
+    <p>3十多年富士康的奶粉进口的十年房价可能的师傅你的空间内房价快速的奶粉是你付款时都能付款</p>
+    <p>3十多年富士康的奶粉进口的十年房价可能的师傅你的空间内房价快速的奶粉是你付款时都能付款</p>
+    <p>3十多年富士康的奶粉进口的十年房价可能的师傅你的空间内房价快速的奶粉是你付款时都能付款</p>
   </div>
 </template>
 
@@ -9,6 +14,9 @@
 import headerBox from '~/components/header.vue'
 
 export default {
+  head: {
+    title: '作者'
+  },
   components: {
     headerBox
   },

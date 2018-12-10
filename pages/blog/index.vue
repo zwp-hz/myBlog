@@ -37,6 +37,9 @@ import footerBox from '~/components/footer'
 import articleList from '~/components/articleList'
 
 export default {
+  head: {
+    title: '博客'
+  },
   components: {
     headerBox,
     footerBox,

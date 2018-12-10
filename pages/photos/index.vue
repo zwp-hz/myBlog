@@ -2,7 +2,7 @@
   <div id="lived">
     <loading :load-status="loadStatus"/>
     <header-box :header-data="headerData"/>
-    <div id="col-md" v-if="!device.isMobile">
+    <div class="pc-view" v-if="!device.isMobile">
       <div class="main container">
         <svg width="100%" height="100%">
           <path
@@ -33,18 +33,15 @@
           data-1250="left: -55px; opacity: 1;"
         >
           <div class="row">
-            <nuxt-link
-              class="set"
-              :to="{path: '/photos/list',query: {prefix: imgParents[0].prefix}}"
-            >
+            <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[0].prefix}}">
               <span
-                v-for="(item,index) in imgParents[0].items"
+                v-for="(item,index) in imgs[0].list"
                 :key="index"
                 :class="{layer: index!=2,one: index==0,two: index==1}"
               >
                 <img :src="item.key+'200'">
               </span>
-              <span class="layer three">{{ imgParents[0].prefix.replace(/:/g,'') }}</span>
+              <span class="layer three">{{ imgs[0].prefix }}</span>
             </nuxt-link>
           </div>
         </div>
@@ -55,49 +52,46 @@
           data-2100="left: 213px; opacity: 1;"
         >
           <div class="row">
-            <nuxt-link
-              class="set"
-              :to="{path: '/photos/list',query: {prefix: imgParents[1].prefix}}"
-            >
+            <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[1].prefix}}">
               <span
-                v-for="(item,index) in imgParents[1].items"
+                v-for="(item,index) in imgs[1].list"
                 :key="index"
                 :class="{layer: index!=2,one: index==0,two: index==1}"
               >
                 <img :src="item.key+'200'">
               </span>
-              <span class="layer three">{{ imgParents[1].prefix }}</span>
+              <span class="layer three">{{ imgs[1].prefix }}</span>
             </nuxt-link>
           </div>
         </div>
-        <!-- <div
-            class="wrap box3"
-            data-0="display: none;"
-            data-2150="top: 403px; opacity: 0; display: block;"
-            data-3000="top: 383px; opacity: 1;"
+        <div
+          class="wrap box3"
+          data-0="display: none;"
+          data-2150="top: 403px; opacity: 0; display: block;"
+          data-3000="top: 383px; opacity: 1;"
         >
-            <div class="row">
-                <a class="set" href="javaScript:void(0);">
-                    <span class="layer one">
-                        <img src="https://placeimg.com/256/256/arch" alt="" />
-                    </span>
-                    <span class="layer two">
-                        <img src="https://placeimg.com/256/256/animals" alt="" />
-                    </span>
-                    <span class="layer three">One</span>
-                    <img src="https://placeimg.com/256/256/tech" alt="">
-                </a>
-            </div>
-        </div>-->
+          <div class="row">
+            <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[2].prefix}}">
+              <span
+                v-for="(item,index) in imgs[2].list"
+                :key="index"
+                :class="{layer: index!=2,one: index==0,two: index==1}"
+              >
+                <img :src="item.key+'200'">
+              </span>
+              <span class="layer three">{{ imgs[2].prefix }}</span>
+            </nuxt-link>
+          </div>
+        </div>
       </div>
       <div class="u_arrow"/>
     </div>
-    <div id="col-sm" v-else>
-      <section v-for="(item, index) in imgParents" :key="index" v-if="item.items[1]">
+    <div v-else>
+      <section v-for="(item, index) in imgs" :key="index" v-if="item.list[1]">
         <nuxt-link
           class="g-c-center"
           :to="{path: '/photos/list',query: {prefix: item.prefix}}"
-          :style="'background: url('+item.items[1].key+'750)'"
+          :style="'background: url('+item.list[1].key+'750)'"
         >{{ item.prefix.replace(/:/g,'') }}</nuxt-link>
       </section>
     </div>
@@ -110,6 +104,9 @@ import loading from '~/components/loading.vue'
 import headerBox from '~/components/header.vue'
 
 export default {
+  head: {
+    title: '照片墙'
+  },
   components: {
     loading,
     headerBox
@@ -122,14 +119,18 @@ export default {
         isStatic: true,
         type: 'photoWall'
       },
-      imgParents: [
+      imgs: [
         {
-          prefix: '点滴:',
-          items: []
+          prefix: '点滴',
+          list: []
         },
         {
-          prefix: '风景:',
-          items: []
+          prefix: '风景',
+          list: []
+        },
+        {
+          prefix: '猫咪',
+          list: []
         }
       ]
     }
@@ -144,13 +145,11 @@ export default {
       } !important`
     })
 
-    let json = ['点滴:', '风景:']
-
     // 获取对应相册3条数据
-    json.forEach((item, index) => {
+    this.imgs.forEach((item, index) => {
       this.$axios
         .post('api/getQiniuList', {
-          prefix: item,
+          prefix: item.prefix + ':',
           limit: 3
         })
         .then(res => {
@@ -161,7 +160,7 @@ export default {
               item.key = this.IMGHOST + item.key + this.M_QN_POSTFIX
             }
 
-            this.imgParents[index].items = items
+            this.imgs[index].list = items
             this.loadStatus = true
           }
         })
@@ -179,12 +178,11 @@ export default {
   width: 100vw;
   background: #363638;
   min-width: 1200px;
-  #col-md,
-  #col-sm {
+  .pc-view {
     position: relative;
     z-index: -11;
     min-height: 100vh;
-    background-image: url('http://unsplash.it/1200x800');
+    background-image: url('http://image.zhuweipeng.top/photoBg.jpeg');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -340,12 +338,6 @@ export default {
     height: auto;
     min-height: 100vh;
     min-width: auto;
-    #col-md {
-      display: none;
-    }
-    #col-sm {
-      display: block;
-    }
   }
 }
 </style>

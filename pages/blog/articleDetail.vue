@@ -13,9 +13,10 @@
         <div>
           <span v-for="(categories,index) in articleParam.categories" :key="index">
             {{ index == 0 ? '':', ' }}
-            <a class="u_transition_300 u_hover_active" @click="search({type: 'Category', text: categories})">
-              {{ categories }}
-            </a>
+            <a
+              class="u_transition_300 u_hover_active"
+              @click="search({type: 'Category', text: categories})"
+            >{{ categories }}</a>
           </span>
         </div>
       </section>
@@ -31,9 +32,7 @@
               :key="tag"
               class="fl u_transition_300 u_hover_active_bg"
               @click="search({type: 'Tag', text: tag})"
-            >
-              {{ tag }}
-            </a>
+            >{{ tag }}</a>
           </div>
         </div>
       </div>
@@ -53,6 +52,23 @@ const Remarkable = require('remarkable')
 const md = new Remarkable()
 
 export default {
+  async asyncData(app) {
+    let data = await app.$axios
+      .post('api/getArticlesDetail', {
+        _id: app.query.id
+      })
+      .then(res => {
+        if (res.code === 0) {
+          return res.data
+        }
+      })
+    return {
+      articleInfo: data
+    }
+  },
+  head: {
+    title: '文章详情'
+  },
   components: {
     loading,
     headerBox,
@@ -77,11 +93,7 @@ export default {
       }
     }
   },
-  mounted() {
-    this.articleInfo = {
-      _id: this.$route.query.id
-    }
-
+  created() {
     this.getArticleDetail()
   },
   methods: {
@@ -89,31 +101,25 @@ export default {
      * 获取文章详情
      */
     getArticleDetail() {
-      let { IMGHOST, M_QN_POSTFIX, first_load } = this.$store.state
+      let { IMGHOST, QN_POSTFIX, first_load } = this.$store.state,
+        param = this.articleInfo
 
       this.articleParam = {
         categories: []
       }
 
-      this.$axios
-        .post('api/getArticlesDetail', {
-          _id: this.articleInfo._id
-        })
-        .then(res => {
-          if (res.code === 0) {
-            let param = res.data
-            this.loadStatus = true
-            this.headerData.images_src = {
-              src: IMGHOST + param.images_src + M_QN_POSTFIX,
-              status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-            }
+      this.headerData.images_src = {
+        src: IMGHOST + param.images_src + QN_POSTFIX,
+        status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
+      }
 
-            param.content = md.render(param.content)
-            setTimeout(() => {
-              this.articleParam = param
-            }, first_load ? 500 : 0)
-          }
-        })
+      param.content = md.render(param.content)
+      setTimeout(() => {
+        this.loadStatus = true
+      }, 0)
+      setTimeout(() => {
+        this.articleParam = param
+      }, first_load ? 500 : 0)
     },
     /** 标签搜索
      * @param {data}    搜索参数

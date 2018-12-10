@@ -224,6 +224,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" src="~/assets/css/header.scss">
-</style>

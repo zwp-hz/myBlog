@@ -75,6 +75,9 @@ import { lazyload } from '~/assets/js/utils'
 let timer
 
 export default {
+  head: {
+    title: '照片列表'
+  },
   components: {
     loading,
     headerBox
@@ -118,7 +121,7 @@ export default {
     // 获取对应相册列表
     this.$axios
       .post('api/getQiniuList', {
-        prefix: prefix
+        prefix: prefix + ':'
       })
       .then(res => {
         if (res.code === 0) {
@@ -302,7 +305,7 @@ export default {
         this.imgList = img_json
         this.loadStatus = true
       } else {
-        // 列表递归
+        // 数据组合
         let factorical = data => {
           if (Array.isArray(data)) {
             for (let i of data) {
@@ -579,6 +582,11 @@ export default {
         width: 80% !important;
       }
     }
+  }
+}
+@media (max-width: 550px) {
+  section.container {
+    max-width: 380px !important;
   }
 }
 </style>

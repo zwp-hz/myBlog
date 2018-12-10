@@ -33,6 +33,9 @@ import footerBox from '~/components/footer.vue'
 import Weather from '~/components/weather.vue'
 
 export default {
+  head: {
+    title: '朱为鹏的个人网站'
+  },
   components: {
     loading,
     headerBox,
