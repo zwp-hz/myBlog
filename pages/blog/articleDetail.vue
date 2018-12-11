@@ -1,43 +1,48 @@
 <template>
-  <div id="articleDetail" v-title="$route.query.title">
+  <div id="articleDetail">
     <loading :load-status="loadStatus"/>
     <header-box :header-data="headerData"/>
-    <div class="header">
-      <h1 class="u_transition_700" :class="{active: articleParam.title}">{{ articleParam.title }}</h1>
-      <h3/>
-      <section class="u_transition_700" :class="{active: articleParam.creation_at}">
-        <p>
-          <span>{{ articleParam.creation_at | dateFormat('YYYY年MM月DD日') }}</span>
-          <span style="padding-left: 13px;">访问数：{{ articleParam.browsing }}</span>
-        </p>
-        <div>
-          <span v-for="(categories,index) in articleParam.categories" :key="index">
-            {{ index == 0 ? '':', ' }}
-            <a
-              class="u_transition_300 u_hover_active"
-              @click="search({type: 'Category', text: categories})"
-            >{{ categories }}</a>
-          </span>
-        </div>
-      </section>
-    </div>
-    <div class="content">
-      <div class="articleContent">
-        <article id="markDown" v-html="articleParam.content"/>
-        <div class="blog-tags">
-          <h5>Tags In</h5>
-          <div class="blog-tags-list clear">
-            <a
-              v-for="tag in articleParam.tags"
-              :key="tag"
-              class="fl u_transition_300 u_hover_active_bg"
-              @click="search({type: 'Tag', text: tag})"
-            >{{ tag }}</a>
+    <template>
+      <div class="header">
+        <h1
+          class="u_transition_700"
+          :class="{active: showStatus}"
+        >{{ articleDetail.title }}</h1>
+        <h3/>
+        <section class="u_transition_700" :class="{active: showStatus}">
+          <p>
+            <span>{{ articleDetail.creation_at | dateFormat('YYYY年MM月DD日') }}</span>
+            <span style="padding-left: 13px;">访问数：{{ articleDetail.browsing }}</span>
+          </p>
+          <div>
+            <span v-for="(categories,index) in articleDetail.categories" :key="index">
+              {{ index == 0 ? '':', ' }}
+              <a
+                class="u_transition_300 u_hover_active"
+                @click="search({type: 'Category', text: categories})"
+              >{{ categories }}</a>
+            </span>
+          </div>
+        </section>
+      </div>
+      <div class="content">
+        <div class="articleContent">
+          <article id="markDown" v-html="articleDetail.content"/>
+          <div class="blog-tags">
+            <h5>Tags In</h5>
+            <div class="blog-tags-list clear">
+              <a
+                v-for="tag in articleDetail.tags"
+                :key="tag"
+                class="fl u_transition_300 u_hover_active_bg"
+                @click="search({type: 'Tag', text: tag})"
+              >{{ tag }}</a>
+            </div>
           </div>
         </div>
+        <comment :comment-list="articleDetail.review"/>
       </div>
-      <comment :comment-list="articleParam.review"/>
-    </div>
+    </template>
     <footer-box :blog-page="true"/>
   </div>
 </template>
@@ -63,11 +68,13 @@ export default {
         }
       })
     return {
-      articleInfo: data
+      articleDetail: data
     }
   },
-  head: {
-    title: '文章详情'
+  head() {
+    return {
+      title: this.title
+    }
   },
   components: {
     loading,
@@ -77,20 +84,17 @@ export default {
   },
   data() {
     return {
+      title: this.$route.query.title,
       loadStatus: false, // 加载状态。false：加载中。true：加载完成。
+      showStatus: false, // 判断动画是否执行
       headerData: {
         title: '',
         searchStatus: true,
         isStatic: true,
         type: 'blog',
-        images_src: {}
+        image_src: {}
       },
-      articleInfo: {}, // 文章信息
-      articleParam: {
-        // 文章内容
-        categories: [],
-        review: []
-      }
+      articleDetail: {} // 文章详情
     }
   },
   created() {
@@ -102,23 +106,19 @@ export default {
      */
     getArticleDetail() {
       let { IMGHOST, QN_POSTFIX, first_load } = this.$store.state,
-        param = this.articleInfo
+        param = this.articleDetail
 
-      this.articleParam = {
-        categories: []
-      }
-
-      this.headerData.images_src = {
-        src: IMGHOST + param.images_src + QN_POSTFIX,
+      this.headerData.image_src = {
+        src: IMGHOST + param.image_src + QN_POSTFIX,
         status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
       }
 
-      param.content = md.render(param.content)
       setTimeout(() => {
         this.loadStatus = true
+        param.content = md.render(param.content)
       }, 0)
       setTimeout(() => {
-        this.articleParam = param
+        this.showStatus = true
       }, first_load ? 500 : 0)
     },
     /** 标签搜索

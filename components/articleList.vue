@@ -4,40 +4,42 @@
       <loading :load-status="loadStatus"/>
       <div class="articleList" v-if="articleList.data.length >= 1">
         <article class="u_transition_300" v-for="(item,index) in articleList.data" :key="index">
-          <div class="image" v-if="item.images_src.src" @click="toArticleDetail(item)">
+          <div class="image" v-if="item.image_src" @click="toArticleDetail(item)">
             <a
               class="progressive--not-loaded"
-              :data-url="item.images_src.src+'500'"
-              :style="item.images_src.status === 2 ? '' : 'background: url('+item.images_src.src+'60)' "
+              :data-url="IMGHOST+item.image_src+QN_POSTFIX+'500'"
+              :style="item.image_status === 2 ? '' : 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+'60)' "
             >
               <img
-                v-if="item.images_src.status == 0"
+                v-if="item.image_status == 0"
                 style="opacity: 0;"
                 @load="imgLoad(index,'load');"
                 @error="imgLoad(index,'error');"
-                :src="item.images_src.src+'100'"
-                alt="" >
+                :src="IMGHOST+item.image_src+QN_POSTFIX+'100'"
+                alt
+              >
               <i
                 class="iconfont icon-codestore"
-                :style="'opacity:'+(item.images_src.status == 2 ? 1 : 0)"/>
+                :style="'opacity:'+(item.image_status == 2 ? 1 : 0)"
+              />
             </a>
           </div>
           <div class="info">
             <h2>
               <nuxt-link
                 :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
-                class="u_transition_300 u_hover_active">
-                {{ item.title }}
-              </nuxt-link>
+                class="u_transition_300 u_hover_active"
+              >{{ item.title }}</nuxt-link>
             </h2>
             <strong>{{ item.describe }}</strong>
             <p>
               <b class="article_categories">
                 <span v-for="(value,index) in item.categories" :key="index">
                   {{ index == 0 ? '':', ' }}
-                  <a @click="search({type: 'Category', text: value})" class="u_transition_300 u_hover_active">
-                    {{ value }}
-                  </a>
+                  <a
+                    @click="search({type: 'Category', text: value})"
+                    class="u_transition_300 u_hover_active"
+                  >{{ value }}</a>
                 </span>
               </b>
               <nuxt-link
@@ -52,7 +54,10 @@
                   <i class="iconfont icon-time"/>
                   {{ item.creation_at | dateFormat('YYYY/MM/DD') }}
                 </span>
-                <span><i class="iconfont icon-chakan"/>{{ item.browsing }}</span>
+                <span>
+                  <i class="iconfont icon-chakan"/>
+                  {{ item.browsing }}
+                </span>
               </time>
             </p>
           </div>
@@ -65,14 +70,23 @@
       <!-- 分页 -->
       <div v-if="articleList.last_page > 1" class="pagination g-c-center">
         <ul class="page-numbers g-c-center">
-          <li v-if="articleList.current_page > 1" @click="pageBtn(Number(articleList.current_page)-1)">
+          <li
+            v-if="articleList.current_page > 1"
+            @click="pageBtn(Number(articleList.current_page)-1)"
+          >
             <a class="next page-numbers u_transition_300 u_hover_active">上一页</a>
           </li>
           <li v-for="(item,index) in articleList.last_page " :key="index" @click="pageBtn(index+1)">
-            <span v-if="index + 1 == articleList.current_page" class="page-numbers current">{{ index+1 }}</span>
+            <span
+              v-if="index + 1 == articleList.current_page"
+              class="page-numbers current"
+            >{{ index+1 }}</span>
             <a v-else class="page-numbers u_transition_300 u_hover_active">{{ index+1 }}</a>
           </li>
-          <li v-if="articleList.last_page > articleList.current_page" @click="pageBtn(Number(articleList.current_page)+1)">
+          <li
+            v-if="articleList.last_page > articleList.current_page"
+            @click="pageBtn(Number(articleList.current_page)+1)"
+          >
             <a class="next page-numbers u_transition_300 u_hover_active">下一页</a>
           </li>
         </ul>
@@ -90,7 +104,7 @@ export default {
   components: {
     loading
   },
-  props: ['categoriesName', 'searchCnt'],
+  props: ['categoriesName', 'searchCnt', 'initList'],
   data() {
     return {
       loadStatus: false, // 加载状态。false：加载中。true：加载完成。
@@ -102,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['IMGHOST', 'M_QN_POSTFIX'])
+    ...mapState(['IMGHOST', 'QN_POSTFIX', 'M_QN_POSTFIX'])
   },
   watch: {
     // 标签切换
@@ -113,27 +127,56 @@ export default {
       this.getArticlesList(1, data.text)
     }
   },
-  mounted() {
-    let page = this.$route.query.page ? Number(this.$route.query.page) : 1
-
-    for (var i in this.$route.query) {
-      if (i === '_s' || i === 'Tag' || i === 'Category') {
-        this.searchText = this.$route.query[i]
-      }
+  created() {
+    if (this.initList) {
+      this.listFormat(this.initList, true)
     }
+  },
+  mounted() {
+    // 如果有初始数据就初始化状态否则请求文章列表
+    if (this.initList) {
+      this.loadStatus = true
+      this.$nextTick(() => {
+        new lazyload().init()
+      })
+    } else {
+      let query = this.$route.query
 
-    this.getArticlesList(page, this.searchText)
+      this.getArticlesList(
+        Number(query.page) || 1,
+        query._s || query.Tag || queryCategory
+      )
+    }
   },
   methods: {
+    /**
+     * 列表格式化
+     * @param {data} 数据
+     * @param {isFirst} 是否第一次加载
+     */
+    listFormat(data, isFirst) {
+      let src = data.data.image_src
+
+      for (let item of data.data) {
+        item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
+      }
+
+      this.articleList = data
+
+      // DOM渲染完成
+      this.$nextTick(() => {
+        this.requestStatus = true
+        if (!isFirst) {
+          new lazyload().init()
+        }
+      })
+    },
     /**
      * 获取文章列表
      * @param {page}        分页数值
      * @param {searchCnt}   搜索内容
      */
     getArticlesList(page, searchCnt) {
-      this.articleList = {
-        data: []
-      }
       this.requestStatus = false
       this.searchText = searchCnt || this.categoriesName
 
@@ -148,26 +191,7 @@ export default {
         .then(res => {
           this.loadStatus = true
           if (res.code == 0) {
-            let data = res.data
-
-            for (let item of data.data) {
-              if (item.images_src.length > 0) {
-                item.images_src = {
-                  src: this.IMGHOST + item.images_src + this.M_QN_POSTFIX,
-                  status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-                }
-              } else {
-                item.images_src = {}
-              }
-            }
-
-            this.articleList = data
-
-            // DOM渲染完成
-            this.$nextTick(() => {
-              this.requestStatus = true
-              new lazyload().init()
-            })
+            this.listFormat(res.data)
           }
         })
     },
@@ -206,7 +230,7 @@ export default {
      * @param {type}    'load' 加载成功  'error' 加载失败
      */
     imgLoad(index, type) {
-      this.articleList.data[index].images_src.status = type == 'load' ? 1 : 2
+      this.articleList.data[index].image_status = type == 'load' ? 1 : 2
     },
     /**
      * 跳转详情页

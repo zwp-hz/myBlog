@@ -3,23 +3,25 @@
     <h3>最新动态</h3>
     <div class="article g-r-center" v-for="(item,index) in articleList_hot" :key="index">
       <nuxt-link
-        v-if="item.images_src.src"
+        v-if="item.image_src"
         :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
         ondragstart="return false;"
         class="images"
-        :style="item.images_src.status == 1 ? 'background: url('+item.images_src.src+') no-repeat center bottom' : ''"
+        :style="item.image_status == 1 ? 'background: url('+item.image_src+') no-repeat center bottom' : ''"
       >
         <img
-          v-if="item.images_src.status == 0"
+          v-if="item.image_status == 0"
           style="opacity: 0;"
           @load="imgLoad(index,'load');"
           @error="imgLoad(index,'error');"
-          :src="item.images_src.src"
-          alt=""
+          :src="item.image_src"
+          alt
         >
-        <i v-if="item.images_src.status == 2" class="iconfont icon-codestore"/>
+        <i v-if="item.image_status == 2" class="iconfont icon-codestore"/>
         <span>{{ item.review.length }}</span>
-        <b class="backImg u_transition_300 u_hover_show"><i class="iconfont icon-lianjie"/></b>
+        <b class="backImg u_transition_300 u_hover_show">
+          <i class="iconfont icon-lianjie"/>
+        </b>
       </nuxt-link>
       <nuxt-link
         v-else
@@ -29,22 +31,24 @@
       >
         <i class="iconfont icon-codestore"/>
         <span>{{ item.review.length }}</span>
-        <b class="backImg u_transition_300 u_hover_show"><i class="iconfont icon-lianjie"/></b>
+        <b class="backImg u_transition_300 u_hover_show">
+          <i class="iconfont icon-lianjie"/>
+        </b>
       </nuxt-link>
       <div style="flex: 1;">
         <div class="categories">
           <span v-for="(value,index) in item.categories" :key="index">
             {{ index > 0 ? ', ':'' }}
-            <a @click="search({type: 'Category', text: value})" class="u_transition_300 u_hover_active">
-              {{ value }}
-            </a>
+            <a
+              @click="search({type: 'Category', text: value})"
+              class="u_transition_300 u_hover_active"
+            >{{ value }}</a>
           </span>
         </div>
         <nuxt-link
           :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
-          class="title u_transition_300 u_hover_active">
-          {{ item.title }}
-        </nuxt-link>
+          class="title u_transition_300 u_hover_active"
+        >{{ item.title }}</nuxt-link>
       </div>
     </div>
   </div>
@@ -68,19 +72,10 @@ export default {
           if (res.code == 0) {
             let data = res.data.data
 
-            for (var item of data) {
-              if (item.images_src.length > 0) {
-                item.images_src = {
-                  src:
-                    this.IMGHOST +
-                    item.images_src[0] +
-                    this.M_QN_POSTFIX +
-                    '100',
-                  status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-                }
-              } else {
-                item.images_src = {}
-              }
+            for (let item of data) {
+              item.image_src =
+                this.IMGHOST + item.image_src + this.M_QN_POSTFIX + '100'
+              item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
             }
 
             this.$store.commit('setFooterData', {
@@ -98,7 +93,7 @@ export default {
      * @param {type}    'load' 加载成功  'error' 加载失败
      */
     imgLoad(index, type) {
-      this.articleList_hot[index].images_src.status = type == 'load' ? 1 : 2
+      this.articleList_hot[index].image_status = type == 'load' ? 1 : 2
     },
     /**
      * 标签搜索

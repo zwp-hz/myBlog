@@ -8,25 +8,20 @@
             <nuxt-link
               class="u_transition_300 u_hover_active_bg"
               :class="{cur: categoriesName === '全部'}"
-              :to="{path: '/blog'}">
-              全部
-            </nuxt-link>
+              :to="{path: '/blog'}"
+            >全部</nuxt-link>
           </li>
-          <li
-            @click="categoriesName = item.name"
-            v-for="(item, index) in categories"
-            :key="index">
+          <li @click="categoriesName = item.name" v-for="(item, index) in categories" :key="index">
             <nuxt-link
               class="u_transition_300 u_hover_active_bg"
               :class="{cur: categoriesName === item.name}"
-              :to="{path: '/blog', query: {categories: item.name}}">
-              {{ item.name }}
-            </nuxt-link>
+              :to="{path: '/blog', query: {categories: item.name}}"
+            >{{ item.name }}</nuxt-link>
           </li>
         </ul>
       </div>
     </div>
-    <article-list :categories-name="categoriesName"/>
+    <article-list :categories-name="categoriesName" :init-list="list"/>
     <footer-box :blog-page="true"/>
   </div>
 </template>
@@ -37,8 +32,26 @@ import footerBox from '~/components/footer'
 import articleList from '~/components/articleList'
 
 export default {
+  async asyncData(app) {
+    let data = await app.$axios
+      .post('api/getArticlesList', {
+        page: Number(app.query.page) || 1,
+        release: true,
+        searchCnt: app.query._s || app.query.Tag || app.queryCategory,
+        categories: app.query.categories || '全部'
+      })
+      .then(res => {
+        if (res.code === 0) {
+          return res.data
+        }
+      })
+
+    return {
+      list: data
+    }
+  },
   head: {
-    title: '博客'
+    title: '朱为鹏的博客'
   },
   components: {
     headerBox,
@@ -53,20 +66,19 @@ export default {
         isStatic: true,
         type: 'blog'
       },
+      list: [],
       categories: [],
-      categoriesName:
-        typeof this.$route.query.categories === 'undefined'
-          ? '全部'
-          : this.$route.query.categories
+      categoriesName: this.$route.query.categories || '全部'
     }
   },
   mounted() {
     // 获取分类列表
     this.$axios.post('api/getCategoryList').then(res => {
-      if (res.code == 0) this.categories = res.data
+      if (res.code === 0) {
+        this.categories = res.data
+      }
     })
-  },
-  methods: {}
+  }
 }
 </script>
 

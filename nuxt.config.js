@@ -46,7 +46,6 @@ module.exports = {
   plugins: [
     '~/plugins/axios',
     '~/plugins/filters',
-    '~/plugins/directive',
     { src: '~/assets/js/skrollr.min.js', ssr: false }
   ],
   modules: ['@nuxtjs/axios'],

@@ -86,18 +86,18 @@
       <h1>{{ headerData.title }}</h1>
     </div>
     <div
-      v-if="headerData.images_src"
+      v-if="headerData.image_src"
       class="detail_bg u_transition_300"
-      :class="[{'img-progressive--not-loaded': headerData.images_src.status == 0},{'img-progressive--is-loaded': headerData.images_src.status == 1}]"
+      :class="[{'img-progressive--not-loaded': headerData.image_src.status == 0},{'img-progressive--is-loaded': headerData.image_src.status == 1}]"
     >
       <img
-        v-if="headerData.images_src.status == 0"
+        v-if="headerData.image_src.status == 0"
         @load="imgLoad('load');"
         @error="imgLoad('error');"
-        :src="headerData.images_src.src+'100'"
+        :src="headerData.image_src.src+'100'"
         alt
       >
-      <img v-if="headerData.images_src.status == 1" :src="headerData.images_src.src+'500'" alt>
+      <img v-if="headerData.image_src.status == 1" :src="headerData.image_src.src+'500'" alt>
     </div>
   </header>
 </template>
@@ -219,7 +219,7 @@ export default {
      * @param {type}    load：加载成功  error：加载失败
      */
     imgLoad(type) {
-      this.headerData.images_src.status = type == 'load' ? 1 : 0
+      this.headerData.image_src.status = type == 'load' ? 1 : 0
     }
   }
 }
