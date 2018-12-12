@@ -86,7 +86,7 @@
       </div>
       <div class="u_arrow"/>
     </div>
-    <div v-else>
+    <div class="m-view" v-else>
       <section v-for="(item, index) in imgs" :key="index" v-if="item.list[1]">
         <nuxt-link
           class="g-c-center"
@@ -176,7 +176,6 @@ export default {
   left: 0;
   height: 5280px;
   width: 100vw;
-  background: #363638;
   min-width: 1200px;
   .pc-view {
     position: relative;
@@ -308,12 +307,19 @@ export default {
   .u_arrow {
     bottom: 20px;
   }
-  #col-sm {
-    display: none;
+  .m-view {
+    min-height: 100vh;
     padding-top: 70px;
+    box-shadow: inset 0 0 100px hsla(0, 0, 0, 0.3);
+    background-image: linear-gradient(
+        45deg,
+        rgba(194, 233, 221, 0.5) 1%,
+        rgba(104, 119, 132, 0.5) 100%
+      ),
+      linear-gradient(-45deg, #494d71 0%, rgba(217, 230, 185, 0.5) 80%);
     section {
-      width: 92%;
-      height: 50vh;
+      width: 90%;
+      height: 260px;
       margin: 0 auto;
       padding-bottom: 20px;
       a {
@@ -326,7 +332,7 @@ export default {
         background-position: center bottom;
         background-size: cover !important;
         -webkit-background-size: cover !important;
-        border-radius: 6px;
+        border-radius: 10px;
       }
     }
   }
