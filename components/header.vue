@@ -86,18 +86,22 @@
       <h1>{{ headerData.title }}</h1>
     </div>
     <div
-      v-if="headerData.image_src"
+      v-if="headerData.image && headerData.image.src"
       class="detail_bg u_transition_300"
-      :class="[{'img-progressive--not-loaded': headerData.image_src.status == 0},{'img-progressive--is-loaded': headerData.image_src.status == 1}]"
+      :class="[{'img-progressive--not-loaded': headerData.image.status == 0},{'img-progressive--is-loaded': headerData.image.status == 1}]"
     >
       <img
-        v-if="headerData.image_src.status == 0"
+        v-if="headerData.image.status == 0"
         @load="imgLoad('load');"
         @error="imgLoad('error');"
-        :src="headerData.image_src.src+'100'"
+        :src="IMGHOST+headerData.image.src+QN_POSTFIX+'100'"
         alt
       >
-      <img v-if="headerData.image_src.status == 1" :src="headerData.image_src.src+'500'" alt>
+      <img
+        v-if="headerData.image.status == 1"
+        :src="IMGHOST+headerData.image.src+QN_POSTFIX+'500'"
+        alt
+      >
     </div>
   </header>
 </template>
@@ -141,7 +145,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['device', 'search'])
+    ...mapState(['device', 'search', 'IMGHOST', 'QN_POSTFIX'])
   },
   mounted() {
     this.$nextTick(() => {
@@ -219,7 +223,7 @@ export default {
      * @param {type}    load：加载成功  error：加载失败
      */
     imgLoad(type) {
-      this.headerData.image_src.status = type == 'load' ? 1 : 0
+      this.headerData.image.status = type == 'load' ? 1 : 0
     }
   }
 }

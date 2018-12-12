@@ -92,7 +92,7 @@ export default {
         searchStatus: true,
         isStatic: true,
         type: 'blog',
-        image_src: {}
+        image: {}
       },
       articleDetail: {} // 文章详情
     }
@@ -105,11 +105,10 @@ export default {
      * 获取文章详情
      */
     getArticleDetail() {
-      let { IMGHOST, QN_POSTFIX, first_load } = this.$store.state,
-        param = this.articleDetail
+      let param = this.articleDetail
 
-      this.headerData.image_src = {
-        src: IMGHOST + param.image_src + QN_POSTFIX,
+      this.headerData.image = {
+        src: param.image_src,
         status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
       }
 
@@ -119,7 +118,7 @@ export default {
       }, 0)
       setTimeout(() => {
         this.showStatus = true
-      }, first_load ? 500 : 0)
+      }, this.$store.state.first_load ? 500 : 0)
     },
     /** 标签搜索
      * @param {data}    搜索参数

@@ -8,7 +8,7 @@
             <a
               class="progressive--not-loaded"
               :data-url="IMGHOST+item.image_src+QN_POSTFIX+'500'"
-              :style="item.image_status === 2 ? '' : 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+'60)' "
+              :style="item.image_status === 2 ? '' : 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+'100)' "
             >
               <img
                 v-if="item.image_status == 0"

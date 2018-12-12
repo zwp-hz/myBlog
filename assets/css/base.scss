@@ -322,15 +322,17 @@ b {
 
 .progressive--is-loaded {
   filter: blur(20px);
-  animation: sharpen 0.8s ease-out both;
-  -webkit-animation: sharpen 0.8s ease-out both;
+  animation: sharpen 1.2s ease-out both;
 }
 
 @keyframes sharpen {
-  from {
+  0% {
     filter: blur(15px);
   }
-  to {
+  80% {
+    filter: blur(0px);
+  }
+  100%{
     filter: blur(0px);
   }
 }
@@ -351,11 +353,9 @@ b {
 @keyframes ball-clip-rotate {
   from {
     transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
   }
 }
 
@@ -395,10 +395,13 @@ b {
   font-family: 'iconfont';
   src: url('../font/iconfont.eot?t=1502357518313');
   /* IE9*/
-  src: url('../font/iconfont.eot?t=1502357518313#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../font/iconfont.woff?t=1502357518313') format('woff'), /* chrome, firefox */
-  url('../font/iconfont.ttf?t=1502357518313') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('../font/iconfont.svg?t=1502357518313#iconfont') format('svg');
+  src: url('../font/iconfont.eot?t=1502357518313#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('../font/iconfont.woff?t=1502357518313') format('woff'),
+    /* chrome, firefox */ url('../font/iconfont.ttf?t=1502357518313')
+      format('truetype'),
+    /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+      url('../font/iconfont.svg?t=1502357518313#iconfont') format('svg');
   /* iOS 4.1- */
 }
 
@@ -599,37 +602,37 @@ b {
 }
 
 .icon-n-xiaoxue:before {
-  content: "\e601" !important;
+  content: '\e601' !important;
 }
 
 .icon-n-zhongxue:before {
-  content: "\e602" !important;
+  content: '\e602' !important;
 }
 
 .icon-n-daxue:before {
-  content: "\e620" !important;
+  content: '\e620' !important;
 }
 
 .icon-n-dayu:before {
-  content: "\e621" !important;
+  content: '\e621' !important;
 }
 
 .icon-n-baoyu:before {
-  content: "\e622" !important;
+  content: '\e622' !important;
 }
 
 .icon-n-xiaoyu:before {
-  content: "\e623" !important;
+  content: '\e623' !important;
 }
 
 .icon-n-tedabaoyu:before {
-  content: "\e624" !important;
+  content: '\e624' !important;
 }
 
 .icon-n-zhongyu:before {
-  content: "\e625" !important;
+  content: '\e625' !important;
 }
 
 .icon-n-tedabaoxue:before {
-  content: "\e626" !important;
+  content: '\e626' !important;
 }

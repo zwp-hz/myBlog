@@ -7,17 +7,17 @@
         :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
         ondragstart="return false;"
         class="images"
-        :style="item.image_status == 1 ? 'background: url('+item.image_src+') no-repeat center bottom' : ''"
+        :style="item.image_status == 1 ? 'background: url('+IMGHOST+item.image_src+M_QN_POSTFIX+100+') no-repeat center bottom' : ''"
       >
         <img
           v-if="item.image_status == 0"
           style="opacity: 0;"
           @load="imgLoad(index,'load');"
           @error="imgLoad(index,'error');"
-          :src="item.image_src"
+          :src="IMGHOST+item.image_src+M_QN_POSTFIX+100"
           alt
         >
-        <i v-if="item.image_status == 2" class="iconfont icon-codestore"/>
+        <i v-if="item.image_status == 2 || !item.image_src" class="iconfont icon-codestore"/>
         <span>{{ item.review.length }}</span>
         <b class="backImg u_transition_300 u_hover_show">
           <i class="iconfont icon-lianjie"/>
@@ -73,8 +73,6 @@ export default {
             let data = res.data.data
 
             for (let item of data) {
-              item.image_src =
-                this.IMGHOST + item.image_src + this.M_QN_POSTFIX + '100'
               item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
             }
 
