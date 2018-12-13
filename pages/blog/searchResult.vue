@@ -33,7 +33,7 @@ import articleList from '~/components/articleList'
 
 export default {
   head: {
-    title: '搜索结果'
+    title: '搜索-朱为鹏的网站'
   },
   components: {
     headerBox,

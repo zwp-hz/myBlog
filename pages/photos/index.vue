@@ -105,7 +105,7 @@ import headerBox from '~/components/header.vue'
 
 export default {
   head: {
-    title: '照片墙'
+    title: '照片墙-朱为鹏的网站'
   },
   components: {
     loading,

@@ -75,8 +75,10 @@ import { lazyload } from '~/assets/js/utils'
 let timer
 
 export default {
-  head: {
-    title: '照片列表'
+  head() {
+    return {
+      title: this.title + '-朱为鹏的网站'
+    }
   },
   components: {
     loading,
@@ -84,6 +86,7 @@ export default {
   },
   data() {
     return {
+      title: this.$route.query.prefix,
       loadStatus: false, // 加载状态。false：加载中。true：加载完成。
       headerData: {
         // 头部配置

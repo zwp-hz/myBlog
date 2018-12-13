@@ -12,7 +12,7 @@
         <section class="u_transition_700" :class="{active: showStatus}">
           <p>
             <span>{{ articleDetail.creation_at | dateFormat('YYYY年MM月DD日') }}</span>
-            <span style="padding-left: 13px;">访问数：{{ articleDetail.browsing }}</span>
+            <span style="padding-left: 13px;">访问：{{ articleDetail.browsing }}</span>
           </p>
           <div>
             <span v-for="(categories,index) in articleDetail.categories" :key="index">

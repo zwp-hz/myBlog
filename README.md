@@ -20,7 +20,7 @@
     |-- layouts                           // 默认布局
     |-- middleware
     |-- pages
-    |   |-- author                        // 个人页面
+    |   |-- about                        // 个人页面
     |   |-- blog                          // 博客页面
     |   |-- photos                        // 相册页面
     |-- plugins

@@ -25,19 +25,21 @@
                 <nuxt-link class="u_transition_300" :to="{path: item.route}">{{ item.title }}</nuxt-link>
               </li>
             </ul>
+            <!-- 菜单 屏幕小于767px显示 -->
             <div
               class="hamburger-menu"
               :class="{active: menuSwitch}"
               @click="menuSwitch = !menuSwitch"
             >
               <div class="bar"/>
-              <nuxt-link
-                class="u_transition_300 iconfont"
-                :class="[item.icon,{active: curRoute.indexOf(item.name) != -1 }]"
-                v-for="(item, index) in navArray"
-                :key="index"
-                :to="{path: item.route}"
-              />
+              <div class="m-menu u_transition_300">
+                <nuxt-link
+                  v-for="(item, index) in navArray"
+                  :key="index"
+                  :to="{path: item.route}"
+                  :class="{active: curRoute.indexOf(item.name) != -1 }"
+                >{{ item.title }}</nuxt-link>
+              </div>
             </div>
           </div>
           <div v-if="headerData.searchStatus" class="searchBox u_transition_300">
@@ -54,9 +56,6 @@
               <i class="fr iconfont icon-search"/>
             </span>
           </div>
-          <!--<button class="u_button u_transition_300" href="javaScript: void(0);" data-0="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-50p="background-color: rgba(206,206,196,1); border: 1px solid rgb(206,206,196);" data-76p="background-color: rgba(30,217,190,1); border: 1px solid rgb(30,217,190);">
-              登录
-          </button>-->
           <i style="margin-left: 10px;">Hi 你好</i>
         </nav>
         <i v-if="headerData.isStatic" class="iconfont icon-codestore u_transition_300"/>
@@ -69,6 +68,7 @@
         />
       </div>
     </div>
+    <!-- 博客头部菜单 -->
     <div id="blogHeader" v-if="headerData.type === 'blog'">
       <div class="g-bolang">
         <svg
@@ -133,9 +133,9 @@ export default {
           icon: 'icon-zhaopianqiang'
         },
         {
-          route: '/author',
-          name: 'author',
-          title: '作者',
+          route: '/about',
+          name: 'about',
+          title: '关于',
           icon: 'icon-zuozhe'
         }
       ],
@@ -156,9 +156,7 @@ export default {
       }
     })
 
-    if (this.headerData.type === 'blog') {
-      this.handleScroll()
-    }
+    this.handleScroll()
 
     this.scrollStatus =
       document.documentElement.scrollTop || document.body.scrollTop > 50
@@ -166,7 +164,9 @@ export default {
         : ''
   },
   methods: {
-    // 搜索
+    /**
+     * 搜索
+     */
     searchFn() {
       if (this.searchCnt && this.searchCnt != this.search.text) {
         let data = {
@@ -183,6 +183,9 @@ export default {
         })
       }
     },
+    /**
+     * 滚动侦听
+     */
     handleScroll(e) {
       let beforeScrollTop =
         document.documentElement.scrollTop || document.body.scrollTop
@@ -190,28 +193,31 @@ export default {
       window.addEventListener(
         'scroll',
         () => {
-          let afterScrollTop =
-              document.documentElement.scrollTop || document.body.scrollTop,
-            delta = afterScrollTop - beforeScrollTop
-
+          // 滚动的时候隐藏菜单
           if (this.menuSwitch) this.menuSwitch = false
 
-          beforeScrollTop = afterScrollTop
+          if (this.headerData.type === 'blog') {
+            let afterScrollTop =
+                document.documentElement.scrollTop || document.body.scrollTop,
+              delta = afterScrollTop - beforeScrollTop
 
-          if (afterScrollTop <= 50) {
-            this.scrollStatus = ''
-            return false
-          }
+            beforeScrollTop = afterScrollTop
 
-          if (delta <= 0 && delta > -3) {
-            return false
-          } else {
-            let type = delta > 0 ? 'down' : 'up'
+            if (afterScrollTop <= 50) {
+              this.scrollStatus = ''
+              return false
+            }
 
-            if (this.scrollStatus === type) {
+            if (delta <= 0 && delta > -3) {
               return false
             } else {
-              this.scrollStatus = type
+              let type = delta > 0 ? 'down' : 'up'
+
+              if (this.scrollStatus === type) {
+                return false
+              } else {
+                this.scrollStatus = type
+              }
             }
           }
         },

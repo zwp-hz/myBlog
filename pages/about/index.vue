@@ -1,5 +1,5 @@
 <template>
-  <div id="author">
+  <div id="about">
     <header-box :header-data="headerData"/>
   </div>
 </template>
@@ -10,7 +10,7 @@ import headerBox from '~/components/header.vue'
 
 export default {
   head: {
-    title: '作者'
+    title: '关于-朱为鹏的网站'
   },
   components: {
     headerBox
@@ -20,7 +20,7 @@ export default {
       headerData: {
         searchStatus: false,
         isStatic: true,
-        type: 'author'
+        type: 'about'
       }
     }
   },
@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#author {
+#about {
   position: relative;
   height: 3000px;
   overflow: hidden;
