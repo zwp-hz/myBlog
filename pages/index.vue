@@ -66,7 +66,7 @@
         data-2800="transform: translate3d(0, 100vh, 0) scale(0.6); opacity: 0;"
         data-3800="transform: translate3d(0, 80vh, 0) scale(1); opacity: 1;"
         data-4000="transform: translate3d(0, 80vh, 0) scale(1); opacity: 1;"
-        data-5000="transform: translate3d(0, 90vh, 0) scale(0.8); opacity: 0;"
+        data-4800="transform: translate3d(0, 90vh, 0) scale(0.8); opacity: 0;"
         data-6000="transform: translate3d(0, 100vh, 0) scale(0.6); opacity: 0;"
       >跳转github可查看源代码~</p>
     </section>

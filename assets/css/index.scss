@@ -42,12 +42,13 @@
       left: 50%;
       width: 45%;
       max-width: 585px;
-      border-radius: 10px;
+      border-radius: 6px;
       box-shadow: inset 0 0 1px rgba(255, 255, 255, .3);
       background-color: #ccc;
       transform: translateY(100vh);
       img {
         width: 100%;
+        border-radius: 6px;
       }
     }
     .iphonex {
@@ -175,8 +176,11 @@
 }
 
 @media (min-width: 1300px) {
-  .mobile_box {
+  .iphonex {
     margin-left: -117px !important;
+    .iphone-viewport {
+      border-radius: 14px !important;
+    }
   }
 }
 

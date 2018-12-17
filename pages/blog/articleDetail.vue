@@ -4,10 +4,7 @@
     <header-box :header-data="headerData"/>
     <template>
       <div class="header">
-        <h1
-          class="u_transition_700"
-          :class="{active: showStatus}"
-        >{{ articleDetail.title }}</h1>
+        <h1 class="u_transition_700" :class="{active: showStatus}">{{ articleDetail.title }}</h1>
         <h3/>
         <section class="u_transition_700" :class="{active: showStatus}">
           <p>
@@ -27,7 +24,34 @@
       </div>
       <div class="content">
         <div class="articleContent">
-          <article id="markDown" v-html="articleDetail.content"/>
+          <article id="markDown" ref="markDown" v-html="articleDetail.content"/>
+          <div
+            class="catalog"
+            ref="catalog"
+            data-0="position: absolute; top: 0px;"
+            data-458="position: fixed; top: 0px;"
+            data-538="position: fixed; top: 80px;"
+          >
+            <ul>
+              <li class="catalog-h2" v-for="(h2, i) in markDownCatalog" :key="i">
+                <p @click="cagatogSkip(h2.title)">{{ h2.title }}</p>
+                <template v-if="h2.list.length > 0">
+                  <div class="catalog-h3" v-for="(h3, k) in h2.list" :key="k">
+                    <p @click="cagatogSkip(h3.title)">{{ h3.title }}</p>
+                    <template v-if="h3.list.length > 0">
+                      <div class="catalog-h4">
+                        <p
+                          v-for="(h4, j) in h3.list"
+                          :key="j"
+                          @click="cagatogSkip(h4.title)"
+                        >{{ h4.title }}</p>
+                      </div>
+                    </template>
+                  </div>
+                </template>
+              </li>
+            </ul>
+          </div>
           <div class="blog-tags">
             <h5>Tags In</h5>
             <div class="blog-tags-list clear">
@@ -94,7 +118,8 @@ export default {
         type: 'blog',
         image: {}
       },
-      articleDetail: {} // 文章详情
+      articleDetail: {}, // 文章详情
+      markDownCatalog: []
     }
   },
   created() {
@@ -115,13 +140,67 @@ export default {
       setTimeout(() => {
         this.loadStatus = true
         param.content = md.render(param.content)
+
+        this.$nextTick(() => {
+          // 生成文章目录
+          let catalog = [],
+            markDown = this.$refs.markDown
+
+          for (let i of markDown.getElementsByTagName('*')) {
+            let tag = i.tagName,
+              text = i.innerHTML
+
+            if (/h2|h3|h4/i.test(i.tagName)) {
+              i.setAttribute('id', text)
+              if (tag === 'H2') {
+                catalog.push({ title: text, list: [] })
+              } else if (tag === 'H3') {
+                catalog[catalog.length - 1].list.push({ title: text, list: [] })
+              } else if (tag === 'H4') {
+                catalog[catalog.length - 1].list[
+                  catalog[catalog.length - 1].list.length - 1
+                ].list.push({ title: text, list: [] })
+              }
+            }
+          }
+
+          this.markDownCatalog = catalog
+          // 设置目录位置
+          this.$refs.catalog.style.marginLeft = `${markDown.clientWidth / 2 +
+            5}px`
+
+          // 如果路由存在标坐标 直接跳到对应位置
+          setTimeout(() => {
+            let path = this.$route.fullPath,
+              index = path.indexOf('#')
+
+            if (index !== -1) {
+              this.cagatogSkip(decodeURI(path.slice(index + 1)))
+            }
+          }, 0)
+        })
       }, 0)
       setTimeout(() => {
         this.showStatus = true
       }, this.$store.state.first_load ? 500 : 0)
     },
+    /**
+     * 目录跳转
+     * @param {title} 标题
+     */
+    cagatogSkip(title) {
+      let head_height = document.getElementsByTagName('header')[0].clientHeight,
+        offsetTop = document.getElementById(title).offsetTop
+
+      document.documentElement.scrollTop = document.body.scrollTop =
+        head_height + offsetTop
+
+      this.$router.push({
+        path: `${this.$route.fullPath.replace(/\#(\S|\s)*/, '')}#${title}`
+      })
+    },
     /** 标签搜索
-     * @param {data}    搜索参数
+     * @param {data}  搜索参数
      */
     search(data) {
       this.$store.commit('searchChange', data)
@@ -197,6 +276,31 @@ export default {
     max-width: 800px;
     margin: 0 auto;
     padding: 0 30px;
+    .articleContent {
+      position: relative;
+      .catalog {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        z-index: 100;
+        padding: 5px 10px;
+        max-width: 150px;
+        border-radius: 4px;
+        border: 1px solid #000;
+        background: #fff;
+        p {
+          line-height: 24px;
+          cursor: pointer;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        .catalog-h3,
+        .catalog-h4 {
+          padding-left: 10px;
+        }
+      }
+    }
   }
   .blog-tags {
     padding: 32px 0;
