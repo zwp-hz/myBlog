@@ -24,7 +24,7 @@
       </div>
       <div class="content">
         <div class="articleContent">
-          <article id="markDown" ref="markDown" v-html="articleDetail.content"/>
+          <div id="markDown" ref="markDown" v-html="articleDetail.content"/>
           <div
             class="catalog"
             ref="catalog"
