@@ -284,7 +284,7 @@ export default {
         left: 50%;
         z-index: 100;
         padding: 5px 10px;
-        max-width: 150px;
+        max-width: 160px;
         border-radius: 4px;
         border: 1px solid #000;
         background: #fff;
