@@ -4,62 +4,64 @@
       <loading :load-status="loadStatus"/>
       <div class="articleList" v-if="articleList.data.length >= 1">
         <article class="u_transition_300" v-for="(item,index) in articleList.data" :key="index">
-          <div class="image" v-if="item.image_src" @click="toArticleDetail(item)">
-            <a
-              class="progressive--not-loaded"
-              :data-url="IMGHOST+item.image_src+QN_POSTFIX+'500'"
-              :style="item.image_status === 2 ? '' : 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+'100)' "
-            >
-              <img
-                v-if="item.image_status == 0"
-                style="opacity: 0;"
-                @load="imgLoad(index,'load');"
-                @error="imgLoad(index,'error');"
-                :src="IMGHOST+item.image_src+QN_POSTFIX+'100'"
-                alt
+          <div class="box">
+            <div class="image" v-if="item.image_src" @click="toArticleDetail(item)">
+              <a
+                class="progressive--not-loaded"
+                :data-url="IMGHOST+item.image_src+QN_POSTFIX+'500'"
+                :style="item.image_status === 2 ? '' : 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+'100)' "
               >
-              <i
-                class="iconfont icon-codestore"
-                :style="'opacity:'+(item.image_status == 2 ? 1 : 0)"
-              />
-            </a>
-          </div>
-          <div class="info">
-            <h2>
-              <nuxt-link
-                :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
-                class="u_transition_300 u_hover_active"
-              >{{ item.title }}</nuxt-link>
-            </h2>
-            <strong>{{ item.describe }}</strong>
-            <p>
-              <b class="article_categories">
-                <span v-for="(value,index) in item.categories" :key="index">
-                  {{ index == 0 ? '':', ' }}
-                  <a
-                    @click="search({type: 'Category', text: value})"
-                    class="u_transition_300 u_hover_active"
-                  >{{ value }}</a>
-                </span>
-              </b>
-              <nuxt-link
-                :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
-                class="review u_transition_300 u_hover_active_bg"
-              >
-                <i class="iconfont icon-huifu"/>
-                <span>{{ item.review.length }}</span>
-              </nuxt-link>
-              <time class="g-c-center">
-                <span class="g-r-center">
-                  <i class="iconfont icon-time"/>
-                  {{ item.creation_at | dateFormat('YYYY/MM/DD') }}
-                </span>
-                <span>
-                  <i class="iconfont icon-chakan"/>
-                  {{ item.browsing }}
-                </span>
-              </time>
-            </p>
+                <img
+                  v-if="item.image_status == 0"
+                  style="opacity: 0;"
+                  @load="imgLoad(index,'load');"
+                  @error="imgLoad(index,'error');"
+                  :src="IMGHOST+item.image_src+QN_POSTFIX+'100'"
+                  alt
+                >
+                <i
+                  class="iconfont icon-codestore"
+                  :style="'opacity:'+(item.image_status == 2 ? 1 : 0)"
+                />
+              </a>
+            </div>
+            <div class="info">
+              <h2>
+                <nuxt-link
+                  :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
+                  class="u_transition_300 u_hover_active"
+                >{{ item.title }}</nuxt-link>
+              </h2>
+              <strong>{{ item.describe }}</strong>
+              <p>
+                <b class="article_categories">
+                  <span v-for="(value,index) in item.categories" :key="index">
+                    {{ index == 0 ? '':', ' }}
+                    <a
+                      @click="search({type: 'Category', text: value})"
+                      class="u_transition_300 u_hover_active"
+                    >{{ value }}</a>
+                  </span>
+                </b>
+                <nuxt-link
+                  :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
+                  class="review u_transition_300 u_hover_active_bg"
+                >
+                  <i class="iconfont icon-huifu"/>
+                  <span>{{ item.review.length }}</span>
+                </nuxt-link>
+                <time class="g-c-center">
+                  <span class="g-r-center">
+                    <i class="iconfont icon-time"/>
+                    {{ item.creation_at | dateFormat('YYYY/MM/DD') }}
+                  </span>
+                  <span>
+                    <i class="iconfont icon-chakan"/>
+                    {{ item.browsing }}
+                  </span>
+                </time>
+              </p>
+            </div>
           </div>
         </article>
       </div>
@@ -144,7 +146,7 @@ export default {
 
       this.getArticlesList(
         Number(query.page) || 1,
-        query._s || query.Tag || queryCategory
+        query._s || query.Tag || query.Category
       )
     }
   },
@@ -192,6 +194,7 @@ export default {
           this.loadStatus = true
           if (res.code == 0) {
             this.listFormat(res.data)
+            document.documentElement.scrollTop = document.body.scrollTop = 400
           }
         })
     },
@@ -200,16 +203,12 @@ export default {
      * @param {num} 分页数值
      */
     pageBtn(num) {
-      let data = {
-        page: num
-      }
-
-      if (this.searchText) data._s = this.searchText
-
       this.$router.push({
-        query: data
+        query: Object.assign({}, this.$route.query, {
+          page: num
+        })
       })
-      this.getArticlesList(num, this.searchText)
+      this.getArticlesList(num)
     },
     /**
      * 标签搜索

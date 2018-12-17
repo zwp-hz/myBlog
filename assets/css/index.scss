@@ -1,4 +1,3 @@
-$imghost: 'http://image.zhuweipeng.top/';
 #index {
   position: relative;
   height: 100vh;
@@ -13,12 +12,12 @@ $imghost: 'http://image.zhuweipeng.top/';
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: url($imghost+'blog_index_bg.jpg');
+    background-image: url('~assets/images/blog_index_bg .jpg');
     background-position: center bottom;
     background-repeat: no-repeat;
     background-size: cover;
   }
-  #intro {
+  .intro {
     position: relative;
     height: 100vh;
     .icon-codestore {
@@ -35,7 +34,95 @@ $imghost: 'http://image.zhuweipeng.top/';
       opacity: 1;
     }
   }
-  #indexMain {
+  .main {
+    height: 6000px;
+    .pc_blog {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      width: 45%;
+      max-width: 585px;
+      border-radius: 10px;
+      box-shadow: inset 0 0 1px rgba(255, 255, 255, .3);
+      background-color: #ccc;
+      transform: translateY(100vh);
+      img {
+        width: 100%;
+      }
+    }
+    .iphonex {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      width: 18%;
+      max-width: 234px;
+      margin-left: -9%;
+      padding: 1% 0;
+      .iphone-frame {
+        width: 100%;
+      }
+      .iphone-viewport {
+        position: absolute;
+        top: 6%;
+        right: 7.5%;
+        width: 85%;
+        background-color: #333;
+        overflow: hidden;
+        border-radius: 1.5vw;
+        .medium-profile-iphone {
+          display: block;
+          position: relative;
+          z-index: 1;
+          width: 100%;
+          border-radius: 4px;
+          img {
+            width: 100%;
+          }
+        }
+        .contact {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background: #333;
+          border: 1px solid rgba(255, 255, 255, .2);
+          border-radius: 6px;
+          transform: scale(0.5);
+          .box {
+            text-align: center;
+            transform: rotate(90deg);
+            p {
+              padding-bottom: 10px;
+              font-size: 20px;
+              color: rgba(255, 255, 255, .8);
+            }
+            i {
+              margin: 0 5px;
+              font-size: 40px;
+              color: #fff;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    .remind-text1 {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      margin-left: -40%;
+      font-size: 24px;
+    }
+    .remind-text2 {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      font-size: 24px;
+      text-align: center;
+      color: #fff;
+    }
+  }
+  .else {
     position: relative;
     z-index: 100;
     .box {
@@ -82,12 +169,19 @@ $imghost: 'http://image.zhuweipeng.top/';
 }
 
 .u_arrow {
-  position: absolute;
-  top: -20px;
+  position: fixed;
+  bottom: 20px;
+  z-index: -1;
+}
+
+@media (min-width: 1300px) {
+  .mobile_box {
+    margin-left: -117px !important;
+  }
 }
 
 @media (max-width: 768px) {
-  #intro {
+  .intro {
     .icon-codestore {
       display: block !important;
     }
@@ -95,11 +189,11 @@ $imghost: 'http://image.zhuweipeng.top/';
       font-size: 25px !important;
     }
   }
-  .wallpaper > p {
-    > strong {
+  .wallpaper>p {
+    >strong {
       font-size: 16px !important;
     }
-    > span {
+    >span {
       font-size: 12px;
     }
   }

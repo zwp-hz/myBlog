@@ -5,14 +5,14 @@
       class="u_transition_300"
       :class="[ headerData.type, scrollStatus ]"
       data-0="background-color: rgba(255,255,255,0);"
-      data-50p="background-color: rgba(255,255,255,0);"
-      data-76p="background-color: rgba(255,255,255,1);"
+      data-300="background-color: rgba(255,255,255,0);"
+      data-1200="background-color: rgba(255,255,255,1);"
     >
       <div
         class="container headerBox g-r-center"
         data-0="color: rgba(206,206,196,1);"
-        data-50p="color: rgba(206,206,196,1);"
-        data-76p="color: rgba(53, 58, 64,1);"
+        data-300="color: rgba(206,206,196,1);"
+        data-1200="color: rgba(53, 58, 64,1);"
       >
         <nav class="g-r-center" style="justify-content: flex-end;">
           <div class="menuList">
@@ -63,8 +63,8 @@
           v-else
           class="iconfont icon-codestore active"
           data-0="top: 30%; font-size: 80px;"
-          data-30p="top: 30%; font-size: 80px;"
-          data-76p="top: 1%; font-size: 50px;"
+          data-300="top: 30%; font-size: 80px;"
+          data-1200="top: 1%; font-size: 50px;"
         />
       </div>
     </div>
@@ -117,26 +117,22 @@ export default {
         {
           route: '/',
           name: 'index',
-          title: '首页',
-          icon: 'icon-ai-home'
+          title: '首页'
         },
         {
           route: '/blog',
           name: 'blog',
-          title: '博客',
-          icon: 'icon-bokeyuan'
+          title: '博客'
         },
         {
           route: '/photos',
           name: 'photos',
-          title: '照片墙',
-          icon: 'icon-zhaopianqiang'
+          title: '照片墙'
         },
         {
           route: '/about',
           name: 'about',
-          title: '关于',
-          icon: 'icon-zuozhe'
+          title: '关于'
         }
       ],
       scrollStatus: '',

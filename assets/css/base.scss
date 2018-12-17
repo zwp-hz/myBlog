@@ -25,6 +25,8 @@ i,
 button,
 input,
 textarea,
+article,
+section,
 div {
   margin: 0;
   padding: 0;
@@ -453,10 +455,6 @@ b {
   content: '\e61f';
 }
 
-.icon-ai-home:before {
-  content: '\e61d';
-}
-
 .icon-quxiao:before {
   content: '\e60a';
 }
@@ -573,10 +571,6 @@ b {
   content: '\e6ef' !important;
 }
 
-.icon-zuozhe:before {
-  content: '\e61e';
-}
-
 .icon-zhenyu:before {
   content: '\e632' !important;
 }
@@ -589,16 +583,8 @@ b {
   content: '\e600';
 }
 
-.icon-zhaopianqiang:before {
-  content: '\e640';
-}
-
 .icon-codestore:before {
   content: '\e7d5';
-}
-
-.icon-bokeyuan:before {
-  content: '\e603';
 }
 
 .icon-n-xiaoxue:before {
