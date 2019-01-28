@@ -323,7 +323,7 @@ export default {
   }
 }
 
-@media (max-width: 1100px;) {
+@media (max-width: 1100px) {
   .catalog {
     display: none !important;
   }
