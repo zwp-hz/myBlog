@@ -10,14 +10,15 @@
         <div class="form-row clear">
           <span
             class="comment_msg u_transition_300"
-            :class="{show: comment_msg,hide: comment_msg_status}">
-            {{ comment_msg }}
-          </span>
+            :class="{show: comment_msg,hide: comment_msg_status}"
+          >{{ comment_msg }}</span>
           <textarea
             class="input"
             v-model="comment_data.content"
             maxlength="200"
-            placeholder="说点什么吧..." required/>
+            placeholder="说点什么吧..."
+            required
+          />
         </div>
         <div class="form-row clear">
           <input
@@ -27,7 +28,7 @@
             placeholder="昵称"
             required
           >
-          <input v-else class="input" disabled placeholder="昵称" >
+          <input v-else class="input" disabled placeholder="昵称">
         </div>
         <div class="form-row text-right">
           <label for="comment-anonymous">
@@ -46,16 +47,18 @@
           style="float: right;"
         >
           <i/>
-          <input type="submit" value="发表评论" >
+          <input type="submit" value="发表评论">
         </div>
       </form>
     </div>
     <div class="comment-list">
       <header>
-        <p><span v-if="comment_list">{{ comment_list.length }}</span>条评论</p>
+        <p>
+          <span v-if="commentList">{{ commentList.length }}</span>条评论
+        </p>
       </header>
       <!-- <h3>最新评论</h3> -->
-      <section class="g-r-center" v-for="(item, index) in comment_list" :key="index">
+      <section class="g-r-center" v-for="(item, index) in commentList" :key="index">
         <div class="portrait">
           <i class="iconfont icon-codestore"/>
         </div>
@@ -65,9 +68,7 @@
             <i>{{ item.city }}</i>
             <span>{{ item.creation_at | dateFormat('YYYY年MM月DD日 hh:mm') }}</span>
           </div>
-          <div class="comment-centent">
-            {{ item.content }}
-          </div>
+          <div class="comment-centent">{{ item.content }}</div>
         </div>
       </section>
     </div>
@@ -80,16 +81,10 @@ export default {
   data() {
     return {
       comment_data: {},
-      comment_list: [], // 评论列表
       comment_msg: '', // 提交评论 提示信息
       comment_msg_status: false, // 提示信息状态
       request_status: false, // 请求状态
       checkbox_status: true
-    }
-  },
-  watch: {
-    commentList(val) {
-      this.comment_list = val
     }
   },
   mounted() {
@@ -114,7 +109,7 @@ export default {
           if (res.code === 0) {
             // 记录用户昵称
             localStorage.nickname = this.comment_data.nickname || ''
-            this.comment_list.push(res.data)
+            this.commentList.push(res.data)
             this.comment_data.content = ''
             this.setCommentMsg(res.message)
           } else {
