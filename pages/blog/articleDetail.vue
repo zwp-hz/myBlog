@@ -323,6 +323,12 @@ export default {
   }
 }
 
+@media (max-width: 1100px;) {
+  .catalog {
+    display: none !important;
+  }
+}
+
 @media (max-width: 767px) {
   #articleDetail .header h1 {
     font-size: 25px;
