@@ -64,7 +64,7 @@
             </div>
           </div>
         </div>
-        <div id="SOHUCS" :sid="articleDetail.id" ></div>
+        <div id="SOHUCS" :sid="$route.query.id" ></div>
       </div>
     </template>
     <footer-box :blog-page="true"/>
@@ -88,11 +88,6 @@ export default {
       })
       .then(res => {
         if (res.code === 0) {
-          for (let item of res.data.review) {
-            item.reply_status = false
-            item.reply_nickname = ''
-            item.reply_content = ''
-          }
           return res.data
         }
       })
