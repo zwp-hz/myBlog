@@ -68,7 +68,57 @@
             <i>{{ item.city }}</i>
             <span>{{ item.creation_at | dateFormat('YYYY年MM月DD日 hh:mm') }}</span>
           </div>
-          <div class="comment-centent">{{ item.content }}</div>
+          <div class="comment-centent">
+            {{ item.content }}
+            <div class="reply u_transition_300" @click="replay(index)">
+              <i class="iconfont icon-huifu1"/>
+              <span>{{ item.reply_status ? '取消回复' : '回复' }}</span>
+            </div>
+          </div>
+          <form
+            class="clear u_transition_300"
+            :class="{ active: item.reply_status }"
+            @submit.prevent="submit('reply')"
+          >
+            <div class="form-row clear">
+              <textarea
+                class="input"
+                v-model="item.reply_content"
+                maxlength="200"
+                :placeholder="item.nickname ? `回复 ${item.nickname}` : '说点什么吧...'"
+                required
+              />
+            </div>
+            <div class="form-row clear">
+              <input
+                v-if="checkbox_status"
+                class="input"
+                v-model="item.reply_nickname"
+                placeholder="昵称"
+                required
+              >
+              <input v-else class="input" disabled placeholder="昵称">
+            </div>
+            <div class="form-row text-right">
+              <label for="comment-anonymous">
+                <input
+                  id="comment-anonymous"
+                  type="checkbox"
+                  @click="checkbox_status = !checkbox_status"
+                  style="float: inherit;"
+                >
+                匿名发表
+              </label>
+            </div>
+            <div
+              class="form-row submit-btn u_transition_300"
+              :class="{u_in_request: request_status}"
+              style="float: right;"
+            >
+              <i/>
+              <input type="submit" value="发表评论">
+            </div>
+          </form>
         </div>
       </section>
     </div>
@@ -80,7 +130,9 @@ export default {
   props: ['commentList'],
   data() {
     return {
-      comment_data: {},
+      comment_data: {
+        nickname: ''
+      },
       comment_msg: '', // 提交评论 提示信息
       comment_msg_status: false, // 提示信息状态
       request_status: false, // 请求状态
@@ -91,12 +143,14 @@ export default {
     this.comment_data.nickname = localStorage.nickname || ''
   },
   methods: {
-    // 发表评论
-    submit() {
+    /**
+     * 发表评论
+     * @param {type} reply：回复
+     */
+    submit(type = '') {
       this.request_status = true
       if (!this.checkbox_status) delete this.comment_data.nickname
 
-      // 添加评论
       this.$axios
         .post(
           'api/setComment',
@@ -118,7 +172,18 @@ export default {
           }
         })
     },
-    // 设置评论提示信息
+    /**
+     * 评论
+     * @param {index} 下标
+     */
+    replay(index) {
+      let reply_status = this.commentList[index].reply_status
+
+      this.commentList[index].reply_status = !reply_status
+    },
+    /**
+     * 设置评论提示信息
+     */
     setCommentMsg(text) {
       this.comment_msg = text
       this.request_status = false
@@ -141,6 +206,83 @@ $defaultColor: #1ed9be;
 #comment {
   position: relative;
   margin-top: 40px;
+  form {
+    .form-row {
+      position: relative;
+      margin-bottom: 5px;
+      .comment_msg {
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        padding: 5px 20px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 6px;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        &.show {
+          top: 50%;
+          opacity: 1;
+        }
+        &.hide {
+          top: 100%;
+          opacity: 0;
+        }
+      }
+      .input {
+        background-color: #fcfcfc;
+        border: none;
+        border-radius: 6px;
+        border: 1px solid $defaultColor;
+        color: #555f77;
+        font-family: inherit;
+        font-size: 14px;
+        padding: 5px 10px;
+        outline: none;
+        width: 100%;
+      }
+      label {
+        color: #555f77;
+        font-family: inherit;
+        font-size: 14px;
+      }
+      textarea.input {
+        height: 100px;
+        padding: 20px 10px 15px;
+        resize: none;
+      }
+      &.submit-btn {
+        float: right;
+        border-radius: 6px;
+        background-color: $defaultColor;
+        i {
+          display: none;
+          position: absolute;
+          top: 9px;
+          left: 10px;
+          width: 15px;
+          height: 15px;
+          color: #fff;
+          border: 1px solid #fff;
+          border-bottom-color: transparent;
+          border-right-color: transparent;
+          border-radius: 100%;
+        }
+        input {
+          padding: 8px 20px;
+          color: #fff;
+          cursor: pointer;
+        }
+        &.u_in_request {
+          padding-left: 10px;
+          i {
+            display: block;
+          }
+        }
+      }
+    }
+  }
   .comment-form {
     .comment-avatar {
       position: absolute;
@@ -160,83 +302,6 @@ $defaultColor: #1ed9be;
         border-radius: 50%;
         i {
           color: $defaultColor;
-        }
-      }
-    }
-    form {
-      .form-row {
-        position: relative;
-        margin-bottom: 5px;
-        .comment_msg {
-          position: absolute;
-          top: 0%;
-          left: 50%;
-          padding: 5px 20px;
-          color: #fff;
-          background-color: rgba(0, 0, 0, 0.5);
-          border-radius: 6px;
-          -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-          opacity: 0;
-          &.show {
-            top: 50%;
-            opacity: 1;
-          }
-          &.hide {
-            top: 100%;
-            opacity: 0;
-          }
-        }
-        .input {
-          background-color: #fcfcfc;
-          border: none;
-          border-radius: 6px;
-          border: 1px solid $defaultColor;
-          color: #555f77;
-          font-family: inherit;
-          font-size: 14px;
-          padding: 5px 10px;
-          outline: none;
-          width: 100%;
-        }
-        label {
-          color: #555f77;
-          font-family: inherit;
-          font-size: 14px;
-        }
-        textarea.input {
-          height: 100px;
-          padding: 20px 10px 15px;
-          resize: none;
-        }
-        &.submit-btn {
-          float: right;
-          border-radius: 6px;
-          background-color: $defaultColor;
-          i {
-            display: none;
-            position: absolute;
-            top: 9px;
-            left: 10px;
-            width: 15px;
-            height: 15px;
-            color: #fff;
-            border: 1px solid #fff;
-            border-bottom-color: transparent;
-            border-right-color: transparent;
-            border-radius: 100%;
-          }
-          input {
-            padding: 8px 20px;
-            color: #fff;
-            cursor: pointer;
-          }
-          &.u_in_request {
-            padding-left: 10px;
-            i {
-              display: block;
-            }
-          }
         }
       }
     }
@@ -279,9 +344,15 @@ $defaultColor: #1ed9be;
       border-radius: 3px;
     }
     section {
-      padding: 15px 0;
+      padding-top: 15px;
       border-bottom: 1px dashed #cecec4;
       align-items: flex-start;
+      &:hover {
+        .reply {
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+      }
       .portrait {
         width: 50px;
         height: 50px;
@@ -314,8 +385,34 @@ $defaultColor: #1ed9be;
           }
         }
         .comment-centent {
-          padding-top: 10px;
+          position: relative;
+          padding: 10px 0 30px;
           word-break: break-all;
+          .reply {
+            visibility: hidden;
+            position: absolute;
+            bottom: 4px;
+            right: 0;
+            color: #1ed9be;
+            opacity: 0;
+            cursor: pointer;
+            i {
+              width: 30px;
+              color: #1ed9be;
+            }
+          }
+        }
+      }
+      form {
+        height: 0;
+        overflow: hidden;
+        &.active {
+          height: 188px;
+          padding-bottom: 4px;
+        }
+        .form-row textarea.input {
+          height: 80px;
+          padding: 10px 10px 10px;
         }
       }
     }

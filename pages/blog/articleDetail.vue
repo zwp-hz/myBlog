@@ -64,7 +64,7 @@
             </div>
           </div>
         </div>
-        <comment :comment-list="articleDetail.review"/>
+        <div id="SOHUCS" :sid="articleDetail.id" ></div>
       </div>
     </template>
     <footer-box :blog-page="true"/>
@@ -75,7 +75,7 @@
 import loading from '~/components/loading'
 import headerBox from '~/components/header'
 import footerBox from '~/components/footer'
-import comment from '~/components/comment'
+// import comment from '~/components/comment'
 
 const Remarkable = require('remarkable')
 const md = new Remarkable()
@@ -88,6 +88,11 @@ export default {
       })
       .then(res => {
         if (res.code === 0) {
+          for (let item of res.data.review) {
+            item.reply_status = false
+            item.reply_nickname = ''
+            item.reply_content = ''
+          }
           return res.data
         }
       })
@@ -97,14 +102,18 @@ export default {
   },
   head() {
     return {
-      title: this.title
+      title: this.title,
+      script: [
+        {
+          src: '/changyan.js'
+        }
+      ]
     }
   },
   components: {
     loading,
     headerBox,
-    footerBox,
-    comment
+    footerBox
   },
   data() {
     return {

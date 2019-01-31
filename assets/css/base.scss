@@ -38,7 +38,7 @@ body {
   height: auto !important;
   color: #333;
   font-size: 14px;
-  font-family: Arial,Microsoft YaHei,黑体,宋体,sans-serif!important;
+  font-family: Arial, Microsoft YaHei, 黑体, 宋体, sans-serif !important;
 }
 
 img {
@@ -525,6 +525,10 @@ b {
 
 .icon-daxue:before {
   content: '\e612' !important;
+}
+
+.icon-huifu1:before {
+  content: '\e717';
 }
 
 .icon-fuchen:before {
