@@ -64,7 +64,7 @@
             </div>
           </div>
         </div>
-        <div id="SOHUCS" :sid="$route.query.id" ></div>
+        <div id="SOHUCS" :sid="$route.query.id"></div>
       </div>
     </template>
     <footer-box :blog-page="true"/>

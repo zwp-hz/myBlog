@@ -1,6 +1,6 @@
 ;(function() {
   var appid = 'cytYjVfKw'
-  var conf = 'cbca0d7c42439e274dbbb13745b1e4e4'
+  var conf = 'prod_b410f9207abb469c925d5a87d0d295dc'
   var width = window.innerWidth || document.documentElement.clientWidth
   if (width < 960) {
     window.document.write(
