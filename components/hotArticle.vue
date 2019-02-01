@@ -64,6 +64,22 @@ export default {
     ...mapState(['IMGHOST', 'articleList_hot', 'M_QN_POSTFIX'])
   },
   mounted() {
+    this.$nextTick(() => {
+      //获取评论数
+      if (document.getElementById('cy_cmt_num')) {
+        let listCount = document.getElementById('cy_cmt_num'),
+          count = listCount.nextSibling
+        listCount.parentNode.removeChild(listCount)
+        count.parentNode.removeChild(count)
+      }
+
+      let head = document.getElementsByTagName('head')[0]
+      let script = document.createElement('script')
+      script.id = 'cy_cmt_num'
+      script.src =
+        'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
+      head.appendChild(script)
+    })
     if (this.articleList_hot.length === 0) {
       //获取热门文章
       this.$axios

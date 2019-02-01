@@ -48,11 +48,6 @@
                   class="review u_transition_300 u_hover_active_bg"
                   href="javaScript: void(0);"
                   @click="toArticleDetail(item)"
-                >{{ item.title }}</a>
-                <a
-                  class="review u_transition_300 u_hover_active_bg"
-                  href="javaScript: void(0);"
-                  @click="toArticleDetail(item)"
                 >
                   <i class="iconfont icon-huifu"/>
                   <span :id="'sourceId::'+item._id" class="cy_cmt_count"></span>
@@ -110,15 +105,6 @@ import loading from '~/components/loading'
 import { lazyload } from '~/assets/js/utils'
 
 export default {
-  head: {
-    script: [
-      {
-        id: 'cy_cmt_num',
-        src:
-          'https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
-      }
-    ]
-  },
   components: {
     loading
   },
