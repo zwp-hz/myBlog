@@ -100,7 +100,7 @@ export default {
       title: this.title,
       script: [
         {
-          src: '/changyan.js'
+          src: 'https://changyan.sohu.com/upload/changyan.js'
         }
       ]
     }
@@ -128,6 +128,14 @@ export default {
   },
   created() {
     this.getArticleDetail()
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.changyan.api.config({
+        appid: 'cytYjVfKw',
+        conf: 'prod_b410f9207abb469c925d5a87d0d295dc'
+      })
+    })
   },
   methods: {
     /**

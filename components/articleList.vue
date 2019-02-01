@@ -27,10 +27,11 @@
             </div>
             <div class="info">
               <h2>
-                <nuxt-link
-                  :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
+                <a
                   class="u_transition_300 u_hover_active"
-                >{{ item.title }}</nuxt-link>
+                  href="javaScript: void(0);"
+                  @click="toArticleDetail(item)"
+                >{{ item.title }}</a>
               </h2>
               <strong>{{ item.describe }}</strong>
               <p>
@@ -43,13 +44,19 @@
                     >{{ value }}</a>
                   </span>
                 </b>
-                <nuxt-link
-                  :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
+                <a
                   class="review u_transition_300 u_hover_active_bg"
+                  href="javaScript: void(0);"
+                  @click="toArticleDetail(item)"
+                >{{ item.title }}</a>
+                <a
+                  class="review u_transition_300 u_hover_active_bg"
+                  href="javaScript: void(0);"
+                  @click="toArticleDetail(item)"
                 >
                   <i class="iconfont icon-huifu"/>
-                  <span>{{ item.review.length }}</span>
-                </nuxt-link>
+                  <span :id="'sourceId::'+item._id" class="cy_cmt_count"></span>
+                </a>
                 <time class="g-c-center">
                   <span class="g-r-center">
                     <i class="iconfont icon-time"/>
@@ -103,6 +110,15 @@ import loading from '~/components/loading'
 import { lazyload } from '~/assets/js/utils'
 
 export default {
+  head: {
+    script: [
+      {
+        id: 'cy_cmt_num',
+        src:
+          'https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
+      }
+    ]
+  },
   components: {
     loading
   },
@@ -236,13 +252,7 @@ export default {
      * @param {data}    文章参数
      */
     toArticleDetail(data) {
-      this.$router.push({
-        path: '/blog/articleDetail',
-        query: {
-          id: data._id,
-          title: data.title
-        }
-      })
+      location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`
     }
   }
 }

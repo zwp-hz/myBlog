@@ -2,12 +2,13 @@
   <div class="recent_posts">
     <h3>最新动态</h3>
     <div class="article g-r-center" v-for="(item,index) in articleList_hot" :key="index">
-      <nuxt-link
+      <a
         v-if="item.image_src"
-        :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
         ondragstart="return false;"
         class="images"
+        href="javaScript: void();"
         :style="item.image_status == 1 ? 'background: url('+IMGHOST+item.image_src+M_QN_POSTFIX+100+') no-repeat center bottom' : ''"
+        @click="toArticleDetail(item)"
       >
         <img
           v-if="item.image_status == 0"
@@ -18,23 +19,24 @@
           alt
         >
         <i v-if="item.image_status == 2 || !item.image_src" class="iconfont icon-codestore"/>
-        <span>{{ item.review.length }}</span>
+        <span :id="'sourceId::'+item._id" class="cy_cmt_count"></span>
         <b class="backImg u_transition_300 u_hover_show">
           <i class="iconfont icon-lianjie"/>
         </b>
-      </nuxt-link>
-      <nuxt-link
+      </a>
+      <a
         v-else
-        :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
         ondragstart="return false;"
         class="images"
+        href="javaScript: void();"
+        @click="toArticleDetail(item)"
       >
         <i class="iconfont icon-codestore"/>
         <span>{{ item.review.length }}</span>
         <b class="backImg u_transition_300 u_hover_show">
           <i class="iconfont icon-lianjie"/>
         </b>
-      </nuxt-link>
+      </a>
       <div style="flex: 1;">
         <div class="categories">
           <span v-for="(value,index) in item.categories" :key="index">
@@ -45,10 +47,11 @@
             >{{ value }}</a>
           </span>
         </div>
-        <nuxt-link
-          :to="{path: '/blog/articleDetail',query: {id: item._id, title: item.title}}"
+        <a
           class="title u_transition_300 u_hover_active"
-        >{{ item.title }}</nuxt-link>
+          href="javaScript: void();"
+          @click="toArticleDetail(item)"
+        >{{ item.title }}</a>
       </div>
     </div>
   </div>
@@ -105,6 +108,13 @@ export default {
           Category: data.text
         }
       })
+    },
+    /**
+     * 跳转详情页
+     * @param {data}    文章参数
+     */
+    toArticleDetail(data) {
+      location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`
     }
   }
 }
