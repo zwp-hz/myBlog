@@ -2,8 +2,8 @@
   <div id="articleList">
     <div class="container">
       <loading :load-status="loadStatus"/>
-      <div class="articleList" v-if="articleList.data.length >= 1">
-        <article class="u_transition_300" v-for="(item,index) in articleList.data" :key="index">
+      <div class="articleList" v-if="articleList.data.list.length >= 1">
+        <article class="u_transition_300" v-for="(item,index) in articleList.data.list" :key="index">
           <div class="box">
             <div class="image" v-if="item.image_src" @click="toArticleDetail(item)">
               <a
@@ -67,7 +67,7 @@
           </div>
         </article>
       </div>
-      <div class="noParam" v-if="articleList.data.length <= 0 && requestStatus">
+      <div class="noParam" v-if="articleList.data.list.length <= 0 && requestStatus">
         <i class="iconfont icon-zanwushuju"/>
         <p>找不到相关 "{{ searchText }}" 数据</p>
       </div>
@@ -159,9 +159,9 @@ export default {
      * @param {isFirst} 是否第一次加载
      */
     listFormat(data, isFirst) {
-      let src = data.data.image_src
+      let list = data.data.list
 
-      for (let item of data.data) {
+      for (let item of list) {
         item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
       }
 
@@ -231,7 +231,7 @@ export default {
      * @param {type}    'load' 加载成功  'error' 加载失败
      */
     imgLoad(index, type) {
-      this.articleList.data[index].image_status = type == 'load' ? 1 : 2
+      this.articleList.data.list[index].image_status = type == 'load' ? 1 : 2
     },
     /**
      * 跳转详情页

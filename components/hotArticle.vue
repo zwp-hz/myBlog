@@ -1,13 +1,13 @@
 <template>
   <div class="recent_posts">
     <h3>最新动态</h3>
-    <div class="article g-r-center" v-for="(item,index) in articleList_hot" :key="index">
+    <div class="article g-r-center" v-for="(item,index) in hots" :key="index">
       <a
         v-if="item.image_src"
         ondragstart="return false;"
         class="images"
         href="javaScript: void();"
-        :style="item.image_status == 1 ? 'background: url('+IMGHOST+item.image_src+M_QN_POSTFIX+100+') no-repeat center bottom' : ''"
+        :style="item.image_status == 1 ? 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+100+') no-repeat center bottom' : ''"
         @click="toArticleDetail(item)"
       >
         <img
@@ -15,7 +15,7 @@
           style="opacity: 0;"
           @load="imgLoad(index,'load');"
           @error="imgLoad(index,'error');"
-          :src="IMGHOST+item.image_src+M_QN_POSTFIX+100"
+          :src="IMGHOST+item.image_src+QN_POSTFIX+100"
           alt
         >
         <i v-if="item.image_status == 2 || !item.image_src" class="iconfont icon-codestore"/>
@@ -60,8 +60,9 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  props: ['hots'],
   computed: {
-    ...mapState(['IMGHOST', 'articleList_hot', 'M_QN_POSTFIX'])
+    ...mapState(['IMGHOST', 'QN_POSTFIX'])
   },
   mounted() {
     this.$nextTick(() => {
@@ -80,28 +81,6 @@ export default {
         'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
       head.appendChild(script)
     })
-    if (this.articleList_hot.length === 0) {
-      //获取热门文章
-      this.$axios
-        .post('api/getArticlesList', {
-          type: 'hot',
-          release: true
-        })
-        .then(res => {
-          if (res.code == 0) {
-            let data = res.data.data
-
-            for (let item of data) {
-              item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-            }
-
-            this.$store.commit('setFooterData', {
-              type: 'articleList_hot',
-              data: data
-            })
-          }
-        })
-    }
   },
   methods: {
     /**
@@ -110,7 +89,7 @@ export default {
      * @param {type}    'load' 加载成功  'error' 加载失败
      */
     imgLoad(index, type) {
-      this.articleList_hot[index].image_status = type == 'load' ? 1 : 2
+      this.hots[index].image_status = type == 'load' ? 1 : 2
     },
     /**
      * 标签搜索

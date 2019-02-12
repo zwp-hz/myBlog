@@ -21,8 +21,8 @@
         </ul>
       </div>
     </div>
-    <article-list :categories-name="categoriesName" :init-list="list"/>
-    <footer-box :blog-page="true"/>
+    <article-list :categories-name="categoriesName" :init-list="article_info"/>
+    <footer-box :blog-page="true" :hots="article_info.data.hots"/>
   </div>
 </template>
 
@@ -42,12 +42,16 @@ export default {
       })
       .then(res => {
         if (res.code === 0) {
+          for (let item of res.data.data.hots) {
+            item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
+          }
+
           return res.data
         }
       })
 
     return {
-      list: data
+      article_info: data
     }
   },
   head: {
@@ -66,7 +70,7 @@ export default {
         isStatic: true,
         type: 'blog'
       },
-      list: [],
+      article_info: {},
       categories: [],
       categoriesName: this.$route.query.categories || '全部'
     }

@@ -67,7 +67,7 @@
         <div id="SOHUCS" :sid="$route.query.id"></div>
       </div>
     </template>
-    <footer-box :blog-page="true"/>
+    <footer-box :blog-page="true" :hots="hots"/>
   </div>
 </template>
 
@@ -84,15 +84,21 @@ export default {
   async asyncData(app) {
     let data = await app.$axios
       .post('api/getArticlesDetail', {
-        _id: app.query.id
+        _id: app.query.id,
+        release: true
       })
       .then(res => {
         if (res.code === 0) {
+          for (let item of res.data.hots) {
+            item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
+          }
+
           return res.data
         }
       })
     return {
-      articleDetail: data
+      articleDetail: data.data,
+      hots: data.hots
     }
   },
   head() {
@@ -123,6 +129,7 @@ export default {
         image: {}
       },
       articleDetail: {}, // 文章详情
+      hots: [], // 热门文章列表
       markDownCatalog: []
     }
   },

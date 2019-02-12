@@ -19,6 +19,7 @@
           class="hotArticle"
           :class="'g-box'"
           style="flex: 1;"
+          :hots="hots"
           @searchCnt="searchList"
           @articleInfo="articleDeatil"
         />
@@ -33,7 +34,8 @@
           target="_blank"
         >浙ICP备17031040号-3</a>
       </p>
-      <p>感谢
+      <p>
+        感谢
         <a href="https://www.qiniu.com/" target="_blank">七牛云存储</a> 提供图片存储空间
       </p>
       <p>
@@ -54,7 +56,7 @@ export default {
     hotArticle,
     tags
   },
-  props: ['blogPage'],
+  props: ['blogPage', 'hots'],
   data() {
     return {}
   },
