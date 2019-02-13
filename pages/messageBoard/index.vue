@@ -46,14 +46,24 @@ export default {
 
 <style lang="scss" scoped>
 #message {
-  min-height: 100vh;
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.3);
-  background-image: linear-gradient(
-      45deg,
-      rgba(194, 233, 221, 0.5) 1%,
-      rgba(104, 119, 132, 0.5)
-    ),
-    linear-gradient(-45deg, #494d71, rgba(217, 230, 185, 0.5) 80%);
+  position: relative;
+  height: 100vh;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  &:before {
+    content: ' ';
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url('~assets/images/blog_index_bg.jpg');
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
   .main {
     margin: 0 auto;
     padding: 200px 30px 0;

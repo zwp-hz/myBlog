@@ -84,7 +84,6 @@ header {
     }
   }
   &.photoWall,
-  &.message,
   &.about {
     background-color: rgba(255, 255, 255, 0) !important;
     .headerBox {
@@ -94,6 +93,11 @@ header {
         background-color: #fff !important;
         border-color: #fff !important;
       }
+    }
+  }
+  &.message {
+    .headerBox {
+      color: #333 !important;
     }
   }
   &.static {
@@ -157,11 +161,11 @@ header {
         }
       }
       .hamburger-menu {
+        display: none;
         position: absolute;
         left: 0;
         top: 13.5px;
         height: 23px;
-        opacity: 0;
         cursor: pointer;
         .bar,
         .bar:after,
@@ -338,7 +342,7 @@ header {
       color: #333;
       .menuList {
         .hamburger-menu {
-          opacity: 1;
+          display: block;
         }
         ul {
           display: none;
