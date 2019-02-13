@@ -22,7 +22,11 @@
                 :key="index"
                 :class="{active: curRoute.indexOf(item.name) != -1 }"
               >
-                <nuxt-link class="u_transition_300" :to="{path: item.route}">{{ item.title }}</nuxt-link>
+                <a
+                  href="javaScript: void(0);"
+                  class="u_transition_300"
+                  @click="navJump(item.route)"
+                >{{ item.title }}</a>
               </li>
             </ul>
             <!-- 菜单 屏幕小于767px显示 -->
@@ -133,6 +137,11 @@ export default {
           route: '/about',
           name: 'about',
           title: '关于'
+        },
+        {
+          route: '/messageBoard',
+          name: 'message',
+          title: '留言板'
         }
       ],
       scrollStatus: '',
@@ -160,6 +169,21 @@ export default {
         : ''
   },
   methods: {
+    /**
+     * 导航跳转
+     * @param {route} 路由地址
+     */
+    navJump(route) {
+      if (route !== this.$route.path) {
+        if (route === '/messageBoard') {
+          location.href = '/messageBoard'
+        } else {
+          this.$router.push({
+            path: route
+          })
+        }
+      }
+    },
     /**
      * 搜索
      */

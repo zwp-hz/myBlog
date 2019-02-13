@@ -84,6 +84,7 @@ header {
     }
   }
   &.photoWall,
+  &.message,
   &.about {
     background-color: rgba(255, 255, 255, 0) !important;
     .headerBox {
@@ -193,7 +194,7 @@ header {
         .m-menu {
           position: absolute;
           top: 50px;
-          left: -18px;
+          left: 0;
           width: 150px;
           padding: 10px;
           opacity: 0;
@@ -206,11 +207,10 @@ header {
           &::after {
             position: absolute;
             top: -15px;
-            left: 18px;
+            left: 0;
             content: '';
             display: block;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
+            border-right: 24px solid transparent;
             border-bottom: 20px solid #333;
           }
           a {
