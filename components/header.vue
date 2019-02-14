@@ -176,7 +176,7 @@ export default {
     navJump(route) {
       if (route !== this.$route.path) {
         if (route === '/messageBoard') {
-          location.href = '/messageBoard'
+          window.location.href = '/messageBoard'
         } else {
           this.$router.push({
             path: route
