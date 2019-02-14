@@ -85,6 +85,7 @@ header {
       position: fixed;
       top: 180px;
       left: 50%;
+      z-index: -1;
       width: 100%;
       min-height: 100vh;
       max-width: 800px;
