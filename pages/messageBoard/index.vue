@@ -3,12 +3,11 @@
     <header-box :header-data="headerData"/>
     <div class="main">
       <div class="head">
-        <h2>欢迎留言~</h2>
+        <h2>欢迎交流~</h2>
         <i class="iconfont icon-navicon-hdbk"/>
       </div>
       <div id="SOHUCS" sid="12345678901234567890"></div>
       <div class="board-bg">
-        <i class="iconfont icon-fsux_tubiao_qipaotu"/>
         <i class="iconfont icon-qipao"/>
       </div>
     </div>
@@ -56,12 +55,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+header {
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: 75px;
+  background-color: #fff;
+}
 #message {
   position: relative;
   .main {
     min-height: 100vh;
     margin: 0 auto;
-    padding: 150px 30px 100px;
+    padding: 150px 30px 120px;
     max-width: 800px;
     .head {
       position: relative;
@@ -71,6 +78,7 @@ export default {
         top: -10px;
         right: 0;
         font-size: 30px;
+        color: #5fbf5e;
       }
     }
     .board-bg {
@@ -81,19 +89,12 @@ export default {
       min-height: 100vh;
       max-width: 800px;
       transform: translate(-50%, 0);
-      .icon-fsux_tubiao_qipaotu {
-        position: absolute;
-        top: 150px;
-        left: -100px;
-        font-size: 100px;
-        color: #1ed9be;
-      }
       .icon-qipao {
         position: absolute;
         top: 400px;
         right: -100px;
         font-size: 100px;
-        color: #1ed9be;
+        color: #5fbf5e;
       }
     }
   }

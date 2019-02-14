@@ -74,6 +74,7 @@ export default {
 <style lang="scss">
 #footer {
   position: relative;
+  z-index: 100;
   width: 100%;
   margin-top: -1px;
   overflow: hidden;
