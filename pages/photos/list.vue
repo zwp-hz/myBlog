@@ -59,6 +59,7 @@
       </div>
       <div class="u_loading" v-if="modal.load_status"/>
     </div>
+    <i class="iconfont icon-jiantou-copy-copy" v-if="scrollTopStatus" @click="scrollTop"></i>
   </div>
 </template>
 
@@ -95,6 +96,7 @@ export default {
         list: [],
         number: 0
       },
+      scrollTopStatus: false, // 滚动条置顶显示状态
       imgList: {}, // 显示的图片列表
       modal: {
         // 弹出层样式、信息
@@ -213,6 +215,12 @@ export default {
       }
     },
     /**
+     * 滚动条置顶
+     */
+    scrollTop() {
+      document.documentElement.scrollTop = document.body.scrollTop = 0
+    },
+    /**
      * 滚动侦听
      */
     seeScroll(e) {
@@ -221,8 +229,7 @@ export default {
         scrollHeight = document.documentElement.scrollHeight, // 内容高度
         seeHeight = document.documentElement.clientHeight // 可见区域高度
 
-      e.preventDefault()
-      e.stopPropagation()
+      this.scrollTopStatus = scrollTop > 0
 
       if (scrollTop >= scrollHeight - seeHeight - 100) {
         clearTimeout(timer)
@@ -340,6 +347,8 @@ export default {
       // DOM渲染完成
       this.$nextTick(() => {
         new lazyload().init()
+        document.documentElement.scrollTop = document.body.scrollTop =
+          (document.documentElement.scrollTop || document.body.scrollTop) - 1
       })
     }
   }
@@ -540,6 +549,20 @@ export default {
       z-index: 1000;
     }
   }
+}
+
+.icon-jiantou-copy-copy {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  color: #000;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #fff;
 }
 
 @media (min-width: 1110px) {
