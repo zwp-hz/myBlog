@@ -110,5 +110,8 @@ header {
   #message .main {
     padding-top: 60px;
   }
+  header {
+    height: 50px;
+  }
 }
 </style>

@@ -48,12 +48,8 @@
         </div>
       </section>
     </div>
-    <div id="modal" v-if="modal.status">
-      <div
-        class="mask u_transition_500"
-        :class="{show: modal.move_status !== 0}"
-        @click="img_modal('','','hide')"
-      />
+    <div id="modal" v-if="modal.status" @click="img_modal('','','hide')">
+      <div class="mask u_transition_500" :class="{show: modal.move_status !== 0}"/>
       <div
         class="centent"
         :class="{active: modal.move_status !== 0,textShow: modal.move_status === 2}"
@@ -219,11 +215,14 @@ export default {
     /**
      * 滚动侦听
      */
-    seeScroll() {
+    seeScroll(e) {
       let scrollTop =
           document.documentElement.scrollTop || document.body.scrollTop, // 滚动条距离顶部高度
         scrollHeight = document.documentElement.scrollHeight, // 内容高度
         seeHeight = document.documentElement.clientHeight // 可见区域高度
+
+      e.preventDefault()
+      e.stopPropagation()
 
       if (scrollTop >= scrollHeight - seeHeight - 100) {
         clearTimeout(timer)
