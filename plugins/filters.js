@@ -50,6 +50,10 @@ export function number_to_chinese(data) {
   let chinese = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'],
     result = ''
 
+  if (data[0] == 0) {
+    data = data.slice(1)
+  }
+
   return (result = data.length > 1 ? '十' + chinese[data[1]] : chinese[data[0]])
 }
 
