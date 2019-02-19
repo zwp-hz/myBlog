@@ -23,34 +23,19 @@
         </section>
       </div>
       <div class="content">
-        <div class="articleContent">
+        <div class="articleContent" ref="articleContent">
           <div id="markDown" ref="markDown" v-html="articleDetail.content"/>
-          <div
-            class="catalog"
-            ref="catalog"
-            data-0="position: absolute; top: 0px;"
-            data-458="position: fixed; top: 0px;"
-            data-538="position: fixed; top: 80px;"
-          >
+          <div class="catalog" :class="{fixed: catalog_fixed}" ref="catalog">
             <ul>
-              <li class="catalog-h2" v-for="(h2, i) in markDownCatalog" :key="i">
-                <p @click="cagatogSkip(h2.title)">{{ h2.title }}</p>
-                <template v-if="h2.list.length > 0">
-                  <div class="catalog-h3" v-for="(h3, k) in h2.list" :key="k">
-                    <p @click="cagatogSkip(h3.title)">{{ h3.title }}</p>
-                    <template v-if="h3.list.length > 0">
-                      <div class="catalog-h4">
-                        <p
-                          v-for="(h4, j) in h3.list"
-                          :key="j"
-                          @click="cagatogSkip(h4.title)"
-                        >{{ h4.title }}</p>
-                      </div>
-                    </template>
-                  </div>
-                </template>
+              <li
+                :class="['catalog-' + item.tag, {active: catalog_index === i}]"
+                v-for="(item, i) in markDownCatalog"
+                :key="i"
+              >
+                <p @click="cagatogSkip(item.text)">{{ item.text }}</p>
               </li>
             </ul>
+            <i class="iconfont icon-jiantou" v-if="scrollTopStatus" @click="runToTop"></i>
           </div>
           <div class="blog-tags">
             <h5>Tags In</h5>
@@ -75,6 +60,7 @@
 import loading from '~/components/loading'
 import headerBox from '~/components/header'
 import footerBox from '~/components/footer'
+import { runToTop } from '~/assets/js/utils'
 // import comment from '~/components/comment'
 
 const Remarkable = require('remarkable')
@@ -128,9 +114,12 @@ export default {
         type: 'blog',
         image: {}
       },
+      scrollTopStatus: false, // 滚动条置顶显示状态
       articleDetail: {}, // 文章详情
       hots: [], // 热门文章列表
-      markDownCatalog: []
+      catalog_fixed: true, // 固定浮动状态
+      markDownCatalog: [], // 文章标题目录
+      catalog_index: 0 // 当前目录下标
     }
   },
   created() {
@@ -144,20 +133,14 @@ export default {
       })
     })
 
-    // 百度链接自动提交
-    ;(function() {
-      var bp = document.createElement('script')
-      var curProtocol = window.location.protocol.split(':')[0]
-      if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'
-      } else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js'
-      }
-      var s = document.getElementsByTagName('script')[0]
-      s.parentNode.insertBefore(bp, s)
-    })()
+    setTimeout(() => {
+      document.addEventListener('scroll', this.seeScroll, false)
+    }, 1000)
   },
   methods: {
+    runToTop() {
+      runToTop()
+    },
     /**
      * 获取文章详情
      */
@@ -184,22 +167,15 @@ export default {
 
             if (/h2|h3|h4/i.test(i.tagName)) {
               i.setAttribute('id', text)
-              if (tag === 'H2') {
-                catalog.push({ title: text, list: [] })
-              } else if (tag === 'H3') {
-                catalog[catalog.length - 1].list.push({ title: text, list: [] })
-              } else if (tag === 'H4') {
-                catalog[catalog.length - 1].list[
-                  catalog[catalog.length - 1].list.length - 1
-                ].list.push({ title: text, list: [] })
-              }
+              catalog.push({ tag: tag, text: text })
             }
           }
 
           this.markDownCatalog = catalog
+
           // 设置目录位置
           this.$refs.catalog.style.marginLeft = `${markDown.clientWidth / 2 +
-            5}px`
+            10}px`
 
           // 如果路由存在标坐标 直接跳到对应位置
           setTimeout(() => {
@@ -207,7 +183,7 @@ export default {
               index = path.indexOf('#')
 
             if (index !== -1) {
-              this.cagatogSkip(decodeURI(path.slice(index + 1)))
+              this.cagatogSkip(decodeURI(path.slice(index + 1)), 'init')
             }
           }, 0)
         })
@@ -219,17 +195,72 @@ export default {
     /**
      * 目录跳转
      * @param {title} 标题
+     * @param {String} type - 跳转类型  init：初始化
      */
-    cagatogSkip(title) {
-      let head_height = document.getElementsByTagName('header')[0].clientHeight,
+    cagatogSkip(title, type) {
+      let parent_top = this.$refs.articleContent.offsetTop,
         offsetTop = document.getElementById(title).offsetTop
 
       document.documentElement.scrollTop = document.body.scrollTop =
-        head_height + offsetTop
+        parent_top + offsetTop
+
+      for (let i = 0, list = this.markDownCatalog; list.length > i; i++) {
+        if (list[i].text === title) {
+          this.catalog_index = i
+          break
+        }
+      }
 
       this.$router.push({
         path: `${this.$route.fullPath.replace(/\#(\S|\s)*/, '')}#${title}`
       })
+
+      // 文章目录列表 初始化
+      if (type === 'init') {
+        setTimeout(() => {
+          let offsetHeight = document.documentElement.offsetHeight,
+            clientHeight = document.documentElement.clientHeight,
+            scrollTop =
+              document.documentElement.scrollTop || document.body.scrollTop
+
+          this.catalog_fixed = !(offsetHeight - clientHeight - 550 < scrollTop)
+          this.scrollTopStatus = true
+        }, 500)
+      }
+    },
+    /**
+     * 滚动侦听
+     */
+    seeScroll() {
+      if (document.documentElement.clientWidth < 1100) {
+        return false
+      }
+
+      let index = this.catalog_index,
+        text = this.markDownCatalog[this.catalog_index].text,
+        ref_top = document.getElementById(text).offsetTop,
+        offsetHeight = document.documentElement.offsetHeight,
+        clientHeight = document.documentElement.clientHeight,
+        parent_top = this.$refs.articleContent.offsetTop,
+        scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop
+
+      this.scrollTopStatus = scrollTop > 0
+
+      this.catalog_fixed = !(offsetHeight - clientHeight - 550 < scrollTop)
+
+      // 滚动条大于当前目录位置 且 大于下一个目录位置
+      if (scrollTop >= parent_top + ref_top) {
+        let after_top = document.getElementById(
+          this.markDownCatalog[index + 1].text
+        ).offsetTop
+
+        if (scrollTop >= parent_top + after_top) {
+          this.catalog_index = ++index
+        }
+      } else if (index >= 1 && scrollTop < parent_top + ref_top) {
+        this.catalog_index = --index
+      }
     },
     /** 标签搜索
      * @param {data}  搜索参数
@@ -312,14 +343,34 @@ export default {
       position: relative;
       .catalog {
         position: absolute;
-        top: 0;
+        bottom: 0px;
         left: 50%;
         z-index: 100;
-        padding: 5px 10px;
+        padding: 0 10px;
         max-width: 160px;
-        border-radius: 4px;
-        border: 1px solid #000;
+        color: #8590a6;
+        border-left: 3px #eee solid;
         background: #fff;
+        &.fixed {
+          position: fixed;
+          bottom: 70px;
+        }
+        li.active {
+          position: relative;
+          p {
+            color: #1ed9be;
+          }
+          &::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: -17.5px;
+            width: 12px;
+            height: 12px;
+            background-color: #9e9e9e;
+            border-radius: 50%;
+          }
+        }
         p {
           line-height: 24px;
           cursor: pointer;
@@ -327,9 +378,25 @@ export default {
           overflow: hidden;
           white-space: nowrap;
         }
-        .catalog-h3,
-        .catalog-h4 {
+        .catalog-H3 {
           padding-left: 10px;
+        }
+        .catalog-H4 {
+          padding-left: 20px;
+        }
+        .icon-jiantou {
+          position: absolute;
+          bottom: -50px;
+          left: 0;
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+          color: #8590a6;
+          font-size: 20px;
+          text-align: center;
+          border-radius: 50%;
+          background-color: #eee;
+          cursor: pointer;
         }
       }
     }

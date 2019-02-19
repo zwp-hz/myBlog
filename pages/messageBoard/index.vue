@@ -11,7 +11,7 @@
         <i class="iconfont icon-qipao"/>
       </div>
     </div>
-    <footer-box/>
+    <footer-box :type="'fixed'"/>
   </div>
 </template>
 
@@ -99,11 +99,6 @@ header {
       }
     }
   }
-}
-
-#footer {
-  position: fixed;
-  bottom: 0;
 }
 
 @media (max-width: 767px) {

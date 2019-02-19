@@ -17,6 +17,24 @@ exports.getDeviceInfo = () => {
 
   return device
 }
+
+/**
+ * 滚动条置顶
+ */
+exports.runToTop = function() {
+  let smoothscroll = () => {
+    let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop
+
+    if (scrollTop > 0) {
+      window.requestAnimationFrame(smoothscroll)
+      window.scrollTo(0, scrollTop - scrollTop / 5)
+    }
+  }
+
+  smoothscroll()
+}
+
 /**
  * 懒加载
  */

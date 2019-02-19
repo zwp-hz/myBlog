@@ -59,7 +59,7 @@
       </div>
       <div class="u_loading" v-if="modal.load_status"/>
     </div>
-    <i class="iconfont icon-jiantou-copy-copy" v-if="scrollTopStatus" @click="scrollTop"></i>
+    <i class="iconfont icon-jiantou" v-if="scrollTopStatus" @click="scrollTop"></i>
   </div>
 </template>
 
@@ -67,7 +67,7 @@
 import { mapState } from 'vuex'
 import loading from '~/components/loading'
 import headerBox from '~/components/header'
-import { lazyload } from '~/assets/js/utils'
+import { lazyload, runToTop } from '~/assets/js/utils'
 
 let timer
 
@@ -218,7 +218,7 @@ export default {
      * 滚动条置顶
      */
     scrollTop() {
-      document.documentElement.scrollTop = document.body.scrollTop = 0
+      runToTop()
     },
     /**
      * 滚动侦听
@@ -551,7 +551,7 @@ export default {
   }
 }
 
-.icon-jiantou-copy-copy {
+.icon-jiantou {
   position: fixed;
   bottom: 10px;
   right: 10px;
@@ -563,6 +563,7 @@ export default {
   text-align: center;
   border-radius: 50%;
   background-color: #fff;
+  cursor: pointer;
 }
 
 @media (min-width: 1110px) {

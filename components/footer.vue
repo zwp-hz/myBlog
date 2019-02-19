@@ -1,5 +1,5 @@
 <template>
-  <footer id="footer">
+  <footer id="footer" :class="[type]">
     <div v-if="blogPage">
       <div class="g-bolang">
         <svg
@@ -56,7 +56,7 @@ export default {
     hotArticle,
     tags
   },
-  props: ['blogPage', 'hots'],
+  props: ['type', 'blogPage', 'hots'],
   data() {
     return {}
   },
@@ -71,7 +71,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #footer {
   position: relative;
   z-index: 100;
@@ -83,6 +83,10 @@ export default {
   &.article {
     position: static;
     height: auto;
+  }
+  &.fixed {
+    position: fixed;
+    bottom: 0;
   }
   .container {
     margin: 0 auto;
