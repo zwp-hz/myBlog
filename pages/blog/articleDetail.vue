@@ -259,12 +259,14 @@ export default {
 
       // 滚动条大于当前目录位置 且 大于下一个目录位置
       if (scrollTop >= parent_top + ref_top) {
-        let after_top = document.getElementById(
-          this.markDownCatalog[index + 1].text
-        ).offsetTop
+        if (index < this.markDownCatalog.length - 1) {
+          let after_top = document.getElementById(
+            this.markDownCatalog[index + 1].text
+          ).offsetTop
 
-        if (scrollTop >= parent_top + after_top) {
-          this.catalog_index = ++index
+          if (scrollTop >= parent_top + after_top) {
+            this.catalog_index = ++index
+          }
         }
       } else if (index >= 1 && scrollTop < parent_top + ref_top) {
         this.catalog_index = --index
@@ -343,15 +345,15 @@ export default {
     }
   }
   .content {
+    position: relative;
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
     padding: 0 30px;
     .articleContent {
-      position: relative;
       .catalog {
         position: absolute;
-        bottom: 30px;
+        bottom: 100px;
         left: 50%;
         z-index: 100;
         padding: 0 10px;
