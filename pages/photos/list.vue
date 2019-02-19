@@ -274,7 +274,7 @@ export default {
           if (time_number > 1 || img_number >= row_size) {
             break
           }
-        } else if (img_number >= 15 || time_number > 3) {
+        } else if (img_number >= 15 || time_number > 4) {
           break
         }
 
