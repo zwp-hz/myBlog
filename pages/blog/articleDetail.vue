@@ -23,7 +23,7 @@
         </section>
       </div>
       <div class="content">
-        <div class="articleContent" ref="articleContent">
+        <div class="articleContent">
           <div id="markDown" ref="markDown" v-html="articleDetail.content"/>
           <div class="catalog" :class="{fixed: catalog_fixed}" ref="catalog">
             <ul>
@@ -198,7 +198,7 @@ export default {
      * @param {String} type - 跳转类型  init：初始化
      */
     cagatogSkip(title, type) {
-      let parent_top = this.$refs.articleContent.offsetTop,
+      let parent_top = 458,
         offsetTop = document.getElementById(title).offsetTop
 
       document.documentElement.scrollTop = document.body.scrollTop =
@@ -246,7 +246,7 @@ export default {
         ref_top = document.getElementById(text).offsetTop,
         offsetHeight = document.documentElement.offsetHeight,
         clientHeight = document.documentElement.clientHeight,
-        parent_top = this.$refs.articleContent.offsetTop,
+        parent_top = 458,
         scrollTop =
           document.documentElement.scrollTop || document.body.scrollTop
 

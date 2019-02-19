@@ -19,12 +19,6 @@ exports.getDeviceInfo = () => {
 }
 
 /**
- * 滚动条缓冲
- * @param {Number} target - 目标值
- */
-exports.scrollBuffer = function(target) {}
-
-/**
  * 滚动条置顶
  */
 exports.runToTop = function() {
