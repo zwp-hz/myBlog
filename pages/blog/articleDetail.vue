@@ -224,7 +224,10 @@ export default {
             scrollTop =
               document.documentElement.scrollTop || document.body.scrollTop
 
-          this.catalog_fixed = !(offsetHeight - clientHeight - footer_height < scrollTop)
+          this.catalog_fixed = !(
+            offsetHeight - clientHeight - footer_height <
+            scrollTop
+          )
           this.scrollTopStatus = true
         }, 500)
       }
