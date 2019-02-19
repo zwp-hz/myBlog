@@ -220,10 +220,11 @@ export default {
         setTimeout(() => {
           let offsetHeight = document.documentElement.offsetHeight,
             clientHeight = document.documentElement.clientHeight,
+            footer_height = document.getElementById('footer').offsetHeight,
             scrollTop =
               document.documentElement.scrollTop || document.body.scrollTop
 
-          this.catalog_fixed = !(offsetHeight - clientHeight - 550 < scrollTop)
+          this.catalog_fixed = !(offsetHeight - clientHeight - footer_height < scrollTop)
           this.scrollTopStatus = true
         }, 500)
       }
@@ -238,6 +239,7 @@ export default {
 
       let index = this.catalog_index,
         text = this.markDownCatalog[this.catalog_index].text,
+        footer_height = document.getElementById('footer').offsetHeight,
         ref_top = document.getElementById(text).offsetTop,
         offsetHeight = document.documentElement.offsetHeight,
         clientHeight = document.documentElement.clientHeight,
@@ -247,7 +249,10 @@ export default {
 
       this.scrollTopStatus = scrollTop > 0
 
-      this.catalog_fixed = !(offsetHeight - clientHeight - 550 < scrollTop)
+      this.catalog_fixed = !(
+        offsetHeight - clientHeight - footer_height <
+        scrollTop
+      )
 
       // 滚动条大于当前目录位置 且 大于下一个目录位置
       if (scrollTop >= parent_top + ref_top) {
@@ -343,7 +348,7 @@ export default {
       position: relative;
       .catalog {
         position: absolute;
-        bottom: 0px;
+        bottom: 30px;
         left: 50%;
         z-index: 100;
         padding: 0 10px;
@@ -353,7 +358,7 @@ export default {
         background: #fff;
         &.fixed {
           position: fixed;
-          bottom: 70px;
+          bottom: 100px;
         }
         li.active {
           position: relative;
