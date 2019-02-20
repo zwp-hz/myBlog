@@ -115,8 +115,6 @@ export default {
      */
     imgLoad(index, type) {
       this.a_hots[index].image_status = type == 'load' ? 1 : 2
-
-      console.log(this.a_hots)
     },
     /**
      * 标签搜索
