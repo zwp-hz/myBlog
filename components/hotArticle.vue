@@ -1,7 +1,7 @@
 <template>
   <div class="recent_posts">
     <h3>最新动态</h3>
-    <div class="article g-r-center" v-for="(item,index) in hots" :key="index">
+    <div class="article g-r-center" v-for="(item,index) in a_hots" :key="index">
       <a
         v-if="item.image_src"
         ondragstart="return false;"
@@ -61,8 +61,33 @@
 import { mapState } from 'vuex'
 export default {
   props: ['hots'],
+  data() {
+    return {
+      a_hots: []
+    }
+  },
   computed: {
-    ...mapState(['IMGHOST', 'QN_POSTFIX'])
+    ...mapState(['IMGHOST', 'QN_POSTFIX', 'article_hots'])
+  },
+  watch: {
+    article_hots(val) {
+      for (let item of val) {
+        item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
+      }
+
+      this.a_hots = val
+    }
+  },
+  created() {
+    let hots = this.hots || this.article_hots
+
+    if (hots) {
+      for (let item of hots) {
+        item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
+      }
+
+      this.a_hots = hots
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -89,7 +114,9 @@ export default {
      * @param {type}    'load' 加载成功  'error' 加载失败
      */
     imgLoad(index, type) {
-      this.hots[index].image_status = type == 'load' ? 1 : 2
+      this.a_hots[index].image_status = type == 'load' ? 1 : 2
+
+      console.log(this.a_hots)
     },
     /**
      * 标签搜索

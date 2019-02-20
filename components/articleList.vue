@@ -73,7 +73,7 @@
       </div>
       <div class="noParam" v-if="articleList.data.list.length <= 0 && requestStatus">
         <i class="iconfont icon-zanwushuju"/>
-        <p>找不到相关 "{{ searchText }}" 数据</p>
+        <p>找不到相关 "{{ searchText.text }}" 数据</p>
       </div>
       <!-- 分页 -->
       <div v-if="articleList.last_page > 1" class="pagination g-c-center">
@@ -126,7 +126,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['IMGHOST', 'QN_POSTFIX', 'M_QN_POSTFIX'])
+    ...mapState(['IMGHOST', 'QN_POSTFIX', 'M_QN_POSTFIX', 'article_hots'])
   },
   watch: {
     // 标签切换
@@ -177,6 +177,14 @@ export default {
     listFormat(data, isFirst) {
       let list = data.data.list
 
+      // 保存热门文章到store
+      if (this.article_hots.length === 0) {
+        this.$store.commit('setFooterData', {
+          type: 'article_hots',
+          data: data.data.hots
+        })
+      }
+
       for (let item of list) {
         item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
       }
@@ -225,6 +233,14 @@ export default {
           this.loadStatus = true
           if (res.code == 0) {
             this.listFormat(res.data)
+
+            // 保存热门文章到store
+            if (this.article_hots.length === 0) {
+              this.$store.commit('setFooterData', {
+                type: 'article_hots',
+                data: res.data.data.hots
+              })
+            }
 
             if (type !== 'first') {
               document.documentElement.scrollTop = document.body.scrollTop = 400

@@ -13,7 +13,7 @@ import mutations from './mutations'
  * @property {String} IMGHOST - 七牛云host
  * @property {Object} search - 搜索内容
  * @property {String} first_load - 是否第一次加载
- * @property {Array} articleList_hot - 热门文章列表
+ * @property {Array} article_hots - 热门文章列表
  * @property {Array} tags - 文章标签
  */
 let state = {
@@ -28,7 +28,7 @@ let state = {
   IMGHOST: 'http://image.zhuweipeng.top/',
   search: {},
   first_load: true,
-  articleList_hot: [],
+  article_hots: [],
   tags: []
 }
 

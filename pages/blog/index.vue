@@ -41,10 +41,6 @@ export default {
       })
       .then(res => {
         if (res.code === 0) {
-          for (let item of res.data.data.hots) {
-            item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-          }
-
           return res.data
         }
       })

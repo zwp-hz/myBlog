@@ -21,7 +21,6 @@
           style="flex: 1;"
           :hots="hots"
           @searchCnt="searchList"
-          @articleInfo="articleDeatil"
         />
         <tags :class="'g-box'" style="flex: 1;" class="tags" @searchCnt="searchList"/>
       </div>
@@ -63,9 +62,6 @@ export default {
   methods: {
     searchList(text) {
       this.$emit('searchCnt', text)
-    },
-    articleDeatil(text) {
-      this.$emit('articleInfo', text)
     }
   }
 }
