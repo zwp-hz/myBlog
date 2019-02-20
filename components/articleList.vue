@@ -134,7 +134,7 @@ export default {
       this.getArticlesList(1)
     },
     searchCnt(data) {
-      this.getArticlesList(1, data.text)
+      this.getArticlesList(1, data)
     }
   },
   created() {
@@ -150,11 +150,21 @@ export default {
         new lazyload().init()
       })
     } else {
-      let query = this.$route.query
+      let query = this.$route.query,
+        _s = query._s,
+        Tag = query.Tag,
+        Category = query.Category
 
       this.getArticlesList(
         Number(query.page) || 1,
-        query._s || query.Tag || query.Category
+        _s
+          ? { type: '_s', text: _s }
+          : Tag
+            ? { type: 'Tag', text: Tag }
+            : Category
+              ? { type: 'Category', text: Category }
+              : {},
+        'first'
       )
     }
   },
@@ -183,43 +193,58 @@ export default {
     },
     /**
      * 获取文章列表
-     * @param {page}        分页数值
-     * @param {searchCnt}   搜索内容
+     * @param {Number}  pagr - 分页
+     * @param {String}  searchCnt - 搜索内容
+     * @param {String}  type - 请求类型  first：第一次
      */
-    getArticlesList(page, searchCnt) {
+    getArticlesList(page, searchCnt = '', type) {
+      let data = {}
+
+      if (searchCnt) {
+        data[searchCnt.type] = searchCnt.text
+      } else {
+        data['Category'] = this.categoriesName
+      }
+
       this.requestStatus = false
       this.searchText = searchCnt || this.categoriesName
 
       // 获取对应文章列表
       this.$axios
-        .post('api/getArticlesList', {
-          page: page,
-          release: true,
-          categories: this.categoriesName || '',
-          searchCnt: searchCnt || ''
-        })
+        .post(
+          'api/getArticlesList',
+          Object.assign(
+            {
+              page: page,
+              release: true
+            },
+            data
+          )
+        )
         .then(res => {
           this.loadStatus = true
           if (res.code == 0) {
             this.listFormat(res.data)
-            document.documentElement.scrollTop = document.body.scrollTop = 400
 
-            this.$nextTick(() => {
-              //获取评论数
-              if (document.getElementById('cy_cmt_num')) {
-                let listCount = document.getElementById('cy_cmt_num'),
-                  count = listCount.nextSibling
-                listCount.parentNode.removeChild(listCount)
-                count.parentNode.removeChild(count)
-              }
+            if (type !== 'first') {
+              document.documentElement.scrollTop = document.body.scrollTop = 400
+              this.$nextTick(() => {
+                //获取评论数
+                if (document.getElementById('cy_cmt_num')) {
+                  let listCount = document.getElementById('cy_cmt_num'),
+                    count = listCount.nextSibling
+                  listCount.parentNode.removeChild(listCount)
+                  count.parentNode.removeChild(count)
+                }
 
-              let head = document.getElementsByTagName('head')[0]
-              let script = document.createElement('script')
-              script.id = 'cy_cmt_num'
-              script.src =
-                'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
-              head.appendChild(script)
-            })
+                let head = document.getElementsByTagName('head')[0]
+                let script = document.createElement('script')
+                script.id = 'cy_cmt_num'
+                script.src =
+                  'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
+                head.appendChild(script)
+              })
+            }
           }
         })
     },
@@ -242,7 +267,7 @@ export default {
     search(data) {
       this.$store.commit('searchChange', data)
       this.$router.push({
-        path: '/searchResult',
+        path: '/blog/searchResult',
         query: {
           Category: data.text
         }

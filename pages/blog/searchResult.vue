@@ -3,9 +3,9 @@
     <header-box :header-data="headerData"/>
     <div class="titlebar">
       <div class="container clear">
-        <h1 v-if="(search.type || routeQuery.type) == '_s'">
-          "{{ search.text || routeQuery.text }}"的搜索结果
-        </h1>
+        <h1
+          v-if="(search.type || routeQuery.type) == '_s'"
+        >"{{ search.text || routeQuery.text }}"的搜索结果</h1>
         <h1 v-else>
           {{ (search.type || routeQuery.type) == 'Category' ? '分类' :
           (search.type || routeQuery.type) }}：{{ search.text || routeQuery.text }}
@@ -13,9 +13,9 @@
         <p class="breadcrumbs">
           <nuxt-link class="u_transition_300 u_hover_active" :to="{path: '/blog'}">博客</nuxt-link>
           <span>&gt;</span>
-          <strong v-if="(search.type || routeQuery.type) == '_s'">
-            "{{ search.text || routeQuery.text }}"
-          </strong>
+          <strong
+            v-if="(search.type || routeQuery.type) == '_s'"
+          >"{{ search.text || routeQuery.text }}"</strong>
           <strong v-else>{{ search.text || routeQuery.text }}</strong>
         </p>
       </div>
@@ -64,11 +64,12 @@ export default {
         }
       }
 
-      if (!this.routeQuery.type)
+      if (!this.routeQuery.type) {
         this.routeQuery = {
           type: 'Category',
           text: '全部'
         }
+      }
     }
   }
 }

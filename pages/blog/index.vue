@@ -37,8 +37,7 @@ export default {
       .post('api/getArticlesList', {
         page: Number(app.query.page) || 1,
         release: true,
-        searchCnt: app.query._s || app.query.Tag || app.queryCategory,
-        categories: app.query.categories || '全部'
+        Category: app.query.categories || '全部'
       })
       .then(res => {
         if (res.code === 0) {
