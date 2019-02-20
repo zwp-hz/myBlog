@@ -3,7 +3,11 @@
     <div class="container">
       <loading :load-status="loadStatus"/>
       <div class="articleList" v-if="articleList.data.list.length >= 1">
-        <article class="u_transition_300" v-for="(item,index) in articleList.data.list" :key="index">
+        <article
+          class="u_transition_300"
+          v-for="(item,index) in articleList.data.list"
+          :key="index"
+        >
           <div class="box">
             <div class="image" v-if="item.image_src" @click="toArticleDetail(item)">
               <a
@@ -115,7 +119,9 @@ export default {
       searchText: '',
       requestStatus: false,
       articleList: {
-        data: []
+        data: {
+          list: []
+        }
       }
     }
   },
@@ -197,6 +203,23 @@ export default {
           if (res.code == 0) {
             this.listFormat(res.data)
             document.documentElement.scrollTop = document.body.scrollTop = 400
+
+            this.$nextTick(() => {
+              //获取评论数
+              if (document.getElementById('cy_cmt_num')) {
+                let listCount = document.getElementById('cy_cmt_num'),
+                  count = listCount.nextSibling
+                listCount.parentNode.removeChild(listCount)
+                count.parentNode.removeChild(count)
+              }
+
+              let head = document.getElementsByTagName('head')[0]
+              let script = document.createElement('script')
+              script.id = 'cy_cmt_num'
+              script.src =
+                'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
+              head.appendChild(script)
+            })
           }
         })
     },
