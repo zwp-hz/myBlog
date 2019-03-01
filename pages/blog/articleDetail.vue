@@ -169,10 +169,6 @@ export default {
 
           this.markDownCatalog = catalog
 
-          // 设置目录位置
-          this.$refs.catalog.style.marginLeft = `${markDown.clientWidth / 2 +
-            10}px`
-
           // 如果路由存在标坐标 直接跳到对应位置
           setTimeout(() => {
             let path = this.$route.fullPath,
@@ -294,7 +290,7 @@ export default {
     top: 25vh;
     left: 50%;
     width: 100%;
-    max-width: 800px;
+    max-width: 1024px;
     padding: 50px 30px;
     color: #fff;
     -webkit-transform: translate(-50%, -50%);
@@ -343,7 +339,7 @@ export default {
   .content {
     position: relative;
     width: 100%;
-    max-width: 800px;
+    max-width: 1024px;
     margin: 0 auto;
     padding: 0 30px;
     .articleContent {
@@ -354,6 +350,7 @@ export default {
         z-index: 100;
         padding: 0 10px;
         max-width: 160px;
+        margin-left: 492px;
         color: #8590a6;
         border-left: 3px #eee solid;
         background: #fff;
@@ -425,6 +422,17 @@ export default {
       color: #8d8d8d;
       background-color: #f0f0f0;
     }
+  }
+}
+
+@media (max-width: 1300px) {
+  .header,
+  .content {
+    max-width: 800px !important;
+  }
+
+  .catalog {
+    margin-left: 380px !important;
   }
 }
 
