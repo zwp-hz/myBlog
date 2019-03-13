@@ -378,7 +378,6 @@ export default {
           line-height: 24px;
           cursor: pointer;
           text-overflow: ellipsis;
-          overflow: hidden;
           white-space: nowrap;
         }
         .catalog-H3 {
