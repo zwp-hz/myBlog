@@ -24,7 +24,7 @@ module.exports = {
       {
         innerHTML:
           'window.isWebp = document.createElement("canvas").toDataURL("image/webp").indexOf("data:image/webp") == 0;\
-          var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?e06aa8a5b02de6f6dfb39cf0a922781d";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();',
+          var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?8ea4f05c72817d37c77f44d5afd79024";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();',
         type: 'text/javascript'
       }
     ],
