@@ -10,7 +10,7 @@
         >
           <div class="box">
             <div class="image" v-if="item.image_src" @click="toArticleDetail(item)">
-              <a
+              <div
                 class="progressive--not-loaded"
                 :data-url="IMGHOST+item.image_src+QN_POSTFIX+'500'"
                 :style="item.image_status === 2 ? '' : 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+'100)' "
@@ -27,7 +27,7 @@
                   class="iconfont icon-codestore"
                   :style="'opacity:'+(item.image_status == 2 ? 1 : 0)"
                 />
-              </a>
+              </div>
             </div>
             <div class="info">
               <h2>
@@ -291,8 +291,8 @@ export default {
     },
     /**
      * 图片加载
-     * @param {index}   下标
-     * @param {type}    'load' 加载成功  'error' 加载失败
+     * @param {Number} index - 图片下标
+     * @param {String} type - 加载类型  load: 成功  error: 加载失败
      */
     imgLoad(index, type) {
       this.articleList.data.list[index].image_status = type == 'load' ? 1 : 2

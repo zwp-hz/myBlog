@@ -11,7 +11,7 @@
         @click="toArticleDetail(item)"
       >
         <img
-          v-if="item.image_status == 0"
+          v-if="!item.image_status"
           style="opacity: 0;"
           @load="imgLoad(index,'load');"
           @error="imgLoad(index,'error');"
@@ -71,23 +71,11 @@ export default {
   },
   watch: {
     article_hots(val) {
-      for (let item of val) {
-        item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-      }
-
       this.a_hots = val
     }
   },
   created() {
-    let hots = this.hots || this.article_hots
-
-    if (hots) {
-      for (let item of hots) {
-        item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-      }
-
-      this.a_hots = hots
-    }
+    this.a_hots = this.hots || this.article_hots || []
   },
   mounted() {
     this.$nextTick(() => {
@@ -114,7 +102,7 @@ export default {
      * @param {type}    'load' 加载成功  'error' 加载失败
      */
     imgLoad(index, type) {
-      this.a_hots[index].image_status = type == 'load' ? 1 : 2
+      this.$set(this.a_hots[index], 'image_status', type == 'load' ? 1 : 2)
     },
     /**
      * 标签搜索
