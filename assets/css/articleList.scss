@@ -3,17 +3,21 @@
   width: 100%;
   overflow: hidden;
   background-color: #fff;
+
   .container {
     min-height: 400px;
     margin: 0 auto;
+
     .articleList,
     .list {
       display: flex;
       flex-wrap: wrap;
       margin: 15px -15px 0 0;
+
       article {
         width: 33.33%;
         padding-right: 15px;
+
         .box {
           margin-bottom: 15px;
           -webkit-column-break-inside: avoid;
@@ -23,12 +27,20 @@
           box-shadow: 5px 5px 20px -10px rgba(0, 0, 0, 0.5);
           background-color: #cecec4;
           border-radius: 8px;
+
           .image {
             display: block;
             width: 100%;
             cursor: pointer;
             overflow: hidden;
-            .progressive--is-loaded {
+
+            .progressive {
+              display: flex;
+              display: -webkit-flex;
+              flex-direction: column;
+              flex: 1;
+              align-items: center;
+              justify-content: center;
               width: 100%;
               height: 220px;
               text-align: center;
@@ -38,14 +50,13 @@
               background-color: #cecec4;
               background-size: cover !important;
               -webkit-background-size: cover !important;
-              transform: translateZ(0);
-              display: flex;
-              display: -webkit-flex;
-              flex-direction: column;
-              flex: 1;
-              align-items: center;
-              justify-content: center;
               border-radius: 8px;
+            }
+
+            .is-loaded {
+              transform: translateZ(0);
+
+
               &:hover {
                 position: relative;
                 z-index: 10;
@@ -53,12 +64,14 @@
                 -webkit-transform: scale(1.2);
               }
             }
+
             .icon-codestore {
               font-size: 80px;
               color: #fff;
               z-index: 100;
             }
           }
+
           .info {
             position: relative;
             z-index: 100;
@@ -68,6 +81,7 @@
             display: inline-block;
             background-color: #fff;
             border-radius: 8px;
+
             h2,
             strong {
               width: 100%;
@@ -79,15 +93,18 @@
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 2;
             }
+
             h2 {
               line-height: 24px;
               height: 48px;
               font-size: 20px;
               margin: 12px 0;
+
               a {
                 color: #000;
               }
             }
+
             strong {
               height: 36px;
               margin-bottom: 28px;
@@ -96,6 +113,7 @@
               text-indent: 1em;
               font-size: 14px;
             }
+
             p {
               display: flex;
               display: -webkit-flex;
@@ -104,14 +122,17 @@
               padding: 28px 0 48px 10%;
               margin-right: 40%;
               border-top: 1px solid #e9e9e9;
+
               .article_categories {
                 margin-right: 15px;
+
                 a {
                   line-height: 20px;
                   color: #8d8d8d;
                   font-size: 13px;
                 }
               }
+
               time {
                 position: absolute;
                 right: -66%;
@@ -119,13 +140,16 @@
                 padding-right: 20px;
                 color: #8d8d8d !important;
                 align-items: flex-end;
+
                 span:first-child {
                   padding-bottom: 4px;
                 }
+
                 i {
                   padding-right: 5px;
                 }
               }
+
               .review {
                 position: absolute;
                 top: -20px;
@@ -137,6 +161,7 @@
                 color: #8d8d8d;
                 background-color: #f6f6f6;
                 border-radius: 100px;
+
                 &.u_hover_active_bg:hover {
                   color: #fff;
                 }
@@ -146,12 +171,15 @@
         }
       }
     }
+
     .noParam {
       padding-top: 100px;
       text-align: center;
+
       i {
         font-size: 80px;
       }
+
       p {
         padding: 30px 0;
         line-height: 30px;
@@ -159,9 +187,11 @@
         color: #8d8d8d;
       }
     }
+
     .pagination {
       margin: 20px 0 0 0;
       width: 100%;
+
       ul {
         display: -webkit-box;
         margin: 0 auto;
@@ -170,8 +200,10 @@
         padding: 5px 4px;
         border-radius: 30px;
         border-width: 0px;
+
         li {
           margin: 0 2px;
+
           span,
           a {
             display: block;
@@ -182,9 +214,11 @@
             color: #8d8d8d;
             cursor: pointer;
           }
+
           a.next {
             width: 60px;
           }
+
           span {
             background-color: #1ed9be;
             border-radius: 30px;

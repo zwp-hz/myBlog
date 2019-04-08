@@ -15,6 +15,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
     "cross-env": "^5.2.0",
+    "highlight.js": "^9.15.6",
     "nuxt": "^2.2.0",
     "remarkable": "^1.7.1"
   },

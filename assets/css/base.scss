@@ -1,5 +1,6 @@
 $defaultColor: #cecec4;
 $activeColor: #1ed9be;
+
 // 初始化
 body,
 h1,
@@ -25,6 +26,8 @@ i,
 button,
 input,
 textarea,
+pre,
+code,
 article,
 section,
 div {
@@ -39,6 +42,9 @@ body {
   color: #333;
   font-size: 14px;
   font-family: Arial, Microsoft YaHei, 黑体, 宋体, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 img {
@@ -46,7 +52,8 @@ img {
   vertical-align: top;
 }
 
-a {
+a,
+button {
   text-decoration: none !important;
   cursor: pointer;
   outline: none;
@@ -59,13 +66,21 @@ li {
 }
 
 input {
-  float: left;
   border: 0;
   background: none;
   outline: none;
+
   &:disabled {
     background-color: rgba(192, 192, 192, 0.4) !important;
   }
+}
+
+a,
+button,
+input,
+html {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 strong,
@@ -151,6 +166,7 @@ b {
   transition: background 0.2s;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+
   &:after,
   &:before {
     content: '';
@@ -165,6 +181,7 @@ b {
     animation: fade1 1s infinite;
     transition: background 0.2s;
   }
+
   &:before {
     left: 14px;
     animation: fade3 1s infinite;
@@ -209,10 +226,12 @@ b {
     opacity: 0;
     -webkit-transform: translate(0, 0px) rotate(45deg);
   }
+
   50% {
     opacity: 1;
     -webkit-transform: translate(0, -5px) rotate(45deg);
   }
+
   100% {
     opacity: 0;
     -webkit-transform: translate(0, -10px) rotate(45deg);
@@ -230,6 +249,7 @@ b {
   color: #fff;
   background-color: $defaultColor;
   border: 1px solid $defaultColor;
+
   &:hover {
     color: $activeColor !important;
     background-color: #fff !important;
@@ -239,10 +259,12 @@ b {
 
 .u_in_request {
   position: relative;
+
   i {
     animation: ball-clip-rotate 0.75s linear infinite;
     -webkit-animation: ball-clip-rotate 0.75s linear infinite;
   }
+
   &:before {
     content: '';
     position: absolute;
@@ -302,8 +324,10 @@ b {
   position: absolute;
   z-index: 1;
   width: 100%;
+
   svg {
     width: 100%;
+
     .g-bolang-svg {
       fill: #fff;
       -webkit-animation: bolang 20s linear infinite alternate;
@@ -313,16 +337,102 @@ b {
   }
 }
 
+// 代码块样式
+.code-editor {
+  max-width: 100%;
+
+  .embed-nav {
+    width: 100%;
+    padding: 0 15px;
+    background-color: #384a56;
+
+    ul {
+      height: 44px;
+      justify-content: flex-start;
+
+      li {
+        width: 50px;
+        height: 30px;
+        margin-right: 10px;
+        line-height: 30px;
+        text-align: center;
+        color: #bac1c9;
+        cursor: pointer;
+
+        &.active {
+          border-radius: 15px;
+          background-color: #233038;
+        }
+      }
+    }
+  }
+
+  pre.line-numbers {
+    position: absolute;
+    z-index: -100;
+    width: 100%;
+    height: 400px;
+    padding: 0 20px 0 55px;
+    margin: 0;
+    line-height: 20px;
+    color: #fff;
+    overflow: auto;
+    background: #4e606c;
+    white-space: inherit;
+    opacity: 0;
+    &.active {
+      position: relative;
+      z-index: 1;
+      opacity: 1;
+    }
+    code {
+      display: block;
+      padding: 0;
+      white-space: pre;
+      word-spacing: normal;
+      word-break: normal;
+      background: #4e606c;
+    }
+
+    .line-numbers-rows {
+      position: absolute;
+      pointer-events: none;
+      top: 20px;
+      font-size: 100%;
+      left: 15px;
+      width: 40px;
+      letter-spacing: -1px;
+      color: #879ba6;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+
+      span {
+        counter-increment: linenumber;
+
+        &::before {
+          content: counter(linenumber);
+          color: #999;
+          display: block;
+          padding-right: 0.8em;
+          text-align: right;
+        }
+      }
+    }
+  }
+}
+
 #index .g-bolang-svg {
   fill-opacity: 0;
 }
 
 // 图片模糊
-.progressive--not-loaded {
+.progressive.not-loaded {
   filter: blur(20px);
 }
 
-.progressive--is-loaded {
+.progressive.is-loaded {
   filter: blur(20px);
   animation: sharpen 1.2s ease-out both;
 }
@@ -331,9 +441,11 @@ b {
   0% {
     filter: blur(15px);
   }
+
   80% {
     filter: blur(0px);
   }
+
   100% {
     filter: blur(0px);
   }
@@ -344,9 +456,11 @@ b {
   0% {
     d: path('M 27 10C 21 8 14 3 0 3L 0 0L 54 0L 54 14C 40 14 33 12 27 10Z');
   }
+
   50% {
     d: path('M 27 14C 12 14 5 7 0 7L 0 0L 54 0L 54 7C 49 7 42 14 27 14Z');
   }
+
   100% {
     d: path('M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z');
   }
@@ -356,6 +470,7 @@ b {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -383,6 +498,10 @@ b {
 @media (max-width: 768px) {
   .container {
     max-width: 468px !important;
+
+    .code-editor {
+      padding-top: 0;
+    }
   }
 }
 
@@ -397,10 +516,13 @@ b {
   font-family: 'iconfont';
   src: url('../font/iconfont.eot?t=1502357518313');
   /* IE9*/
-  src: url('../font/iconfont.eot?t=1502357518313#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../font/iconfont.woff?t=1502357518313') format('woff'), /* chrome, firefox */
-  url('../font/iconfont.ttf?t=1502357518313') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('../font/iconfont.svg?t=1502357518313#iconfont') format('svg');
+  src: url('../font/iconfont.eot?t=1502357518313#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('../font/iconfont.woff?t=1502357518313') format('woff'),
+    /* chrome, firefox */ url('../font/iconfont.ttf?t=1502357518313')
+      format('truetype'),
+    /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+      url('../font/iconfont.svg?t=1502357518313#iconfont') format('svg');
   /* iOS 4.1- */
 }
 
@@ -413,15 +535,15 @@ b {
 }
 
 .icon-jiantou:before {
-  content: "\e633";
+  content: '\e633';
 }
 
 .icon-navicon-hdbk:before {
-  content: "\e66a";
+  content: '\e66a';
 }
 
 .icon-qipao:before {
-  content: "\e603";
+  content: '\e603';
 }
 
 .icon-404:before {
@@ -594,6 +716,10 @@ b {
 
 .icon-zanwushuju:before {
   content: '\e600';
+}
+
+.icon-load-error:before {
+  content: '\e87d';
 }
 
 .icon-codestore:before {

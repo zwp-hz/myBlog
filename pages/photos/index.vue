@@ -87,13 +87,15 @@
       <div class="u_arrow"/>
     </div>
     <div class="m-view" v-else>
-      <section v-for="(item, index) in imgs" :key="index" v-if="item.list[1]">
-        <nuxt-link
-          class="g-c-center"
-          :to="{path: '/photos/list',query: {prefix: item.prefix}}"
-          :style="'background: url('+item.list[1].key+'750)'"
-        >{{ item.prefix.replace(/:/g,'') }}</nuxt-link>
-      </section>
+      <template v-for="(item, index) in imgs">
+        <section :key="index" v-if="item.list[1]">
+          <nuxt-link
+            class="g-c-center"
+            :to="{path: '/photos/list',query: {prefix: item.prefix}}"
+            :style="'background: url('+item.list[1].key+'750)'"
+          >{{ item.prefix.replace(/:/g,'') }}</nuxt-link>
+        </section>
+      </template>
     </div>
   </div>
 </template>

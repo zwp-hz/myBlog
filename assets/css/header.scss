@@ -1,5 +1,6 @@
 $defaultColor: #cecec4;
 $activeColor: #1ed9be;
+
 header {
   .detail_bg {
     position: absolute;
@@ -8,6 +9,7 @@ header {
     width: 100%;
     height: 50vh;
     overflow: hidden;
+
     img {
       width: 100%;
       height: 100%;
@@ -18,12 +20,14 @@ header {
       object-fit: cover;
     }
   }
+
   .img-progressive--not-loaded {
     img {
       -webkit-filter: blur(20px) grayscale(100%) brightness(0.3);
       filter: blur(20px) grayscale(100%) brightness(0.3);
     }
   }
+
   .img-progressive--is-loaded {
     img {
       -webkit-filter: blur(15px) grayscale(100%) brightness(0.3);
@@ -31,11 +35,13 @@ header {
       animation: img_sharpen 0.8s both;
     }
   }
+
   @keyframes img_sharpen {
     from {
       -webkit-filter: blur(15px) grayscale(100%) brightness(0.3);
       filter: blur(15px) grayscale(100%) brightness(0.3);
     }
+
     to {
       -webkit-filter: blur(0px) grayscale(100%) brightness(0.3);
       filter: blur(0px) grayscale(100%) brightness(0.3);
@@ -50,44 +56,56 @@ header {
   z-index: 150;
   width: 100%;
   height: 70px;
+  padding: 0 10px;
   font-size: 16px;
   &.blog {
     .headerBox {
       color: #fff !important;
     }
+
     .login_btn {
       background-color: $defaultColor !important;
       border: 1px solid $defaultColor !important;
     }
+
     &.down {
       top: -70px;
     }
+
     &.up {
       border-bottom: 1px solid #cecec4;
       background-color: #fff !important;
+
       .headerBox {
         color: #000 !important;
       }
+
       .searchBox {
         color: #fff !important;
         background-color: rgba(0, 0, 0, 0.8) !important;
       }
     }
+
     .m-menu {
       background: #fff !important;
+
       &::after {
         border-bottom-color: #fff !important;
       }
+
       a {
         color: #333 !important;
       }
     }
   }
+
   &.photoWall,
   &.about {
     background-color: rgba(255, 255, 255, 0) !important;
+
     .headerBox {
       color: #fff !important;
+
       button {
         color: #1ed9be !important;
         background-color: #fff !important;
@@ -95,37 +113,47 @@ header {
       }
     }
   }
-  &.message {
+
+  &.message,
+  &.laboratory {
     .headerBox {
       color: #333 !important;
     }
   }
+
   &.static {
     position: static;
     background-color: rgba(255, 255, 255, 0) !important;
+
     .headerBox {
       color: #fff !important;
     }
   }
+
   .headerBox {
     position: relative;
     height: 100%;
     margin: 0 auto;
     color: $defaultColor;
+
     .menuList {
       flex: 1;
+
       ul {
         justify-content: flex-start;
+
         li {
           &.active {
             color: $activeColor;
           }
+
           a {
             position: relative;
             display: block;
             margin: 0 10px;
             padding: 3px 0;
             color: inherit;
+
             &:before {
               content: '';
               display: block;
@@ -135,6 +163,7 @@ header {
               height: 2px;
               width: 0;
             }
+
             &:after {
               content: '';
               display: block;
@@ -146,12 +175,14 @@ header {
               background: $activeColor;
               transition: width 0.5s ease;
             }
+
             &:hover {
               &:before {
                 width: 100%;
                 background: $activeColor;
                 transition: width 0.5s ease;
               }
+
               &:after {
                 width: 100%;
                 background: transparent;
@@ -160,6 +191,7 @@ header {
           }
         }
       }
+
       .hamburger-menu {
         display: none;
         position: absolute;
@@ -167,34 +199,41 @@ header {
         top: 13.5px;
         height: 23px;
         cursor: pointer;
+
         .bar,
         .bar:after,
         .bar:before {
           width: 30px;
           height: 3px;
         }
+
         .bar {
           position: relative;
           z-index: 100;
           transform: translateY(10px);
           background-color: #333;
         }
+
         .bar:before {
           content: '';
           position: absolute;
           left: 0;
           bottom: 10px;
           background-color: #333;
-          transition: bottom 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1), transform 300ms cubic-bezier(0.23, 1, 0.32, 1);
+          transition: bottom 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1),
+            transform 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
+
         .bar:after {
           content: '';
           position: absolute;
           left: 0;
           top: 10px;
           background-color: #333;
-          transition: top 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1), transform 300ms cubic-bezier(0.23, 1, 0.32, 1);
+          transition: top 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1),
+            transform 300ms cubic-bezier(0.23, 1, 0.32, 1);
         }
+
         .m-menu {
           position: absolute;
           top: 50px;
@@ -209,6 +248,7 @@ header {
           background-color: #333;
           transition: all 0.4s;
           box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+
           &::after {
             position: absolute;
             top: -15px;
@@ -218,29 +258,37 @@ header {
             border-right: 24px solid transparent;
             border-bottom: 20px solid #333;
           }
+
           a {
             display: block;
             color: #fff;
             line-height: 30px;
+
             &.active {
               color: #1ed9be !important;
             }
           }
         }
+
         &.active {
           .bar {
             background-color: rgba(255, 255, 255, 0) !important;
+
             &:before {
               bottom: 0;
               transform: rotate(-45deg);
-              transition: bottom 300ms cubic-bezier(0.23, 1, 0.32, 1), transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1);
+              transition: bottom 300ms cubic-bezier(0.23, 1, 0.32, 1),
+                transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1);
             }
+
             &:after {
               top: 0;
               transform: rotate(45deg);
-              transition: top 300ms cubic-bezier(0.23, 1, 0.32, 1), transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1);
+              transition: top 300ms cubic-bezier(0.23, 1, 0.32, 1),
+                transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1);
             }
           }
+
           .m-menu {
             visibility: visible;
             opacity: 1;
@@ -248,17 +296,20 @@ header {
         }
       }
     }
+
     .searchBox {
       height: 30px;
       border-radius: 30px;
       color: rgba(141, 141, 141, 1);
       background-color: #fff;
+
       &:hover {
         input {
           width: 120px;
           padding-left: 15px;
         }
       }
+
       input {
         height: 30px;
         width: 0;
@@ -266,6 +317,7 @@ header {
         font-size: 16px;
         color: inherit;
       }
+
       span {
         width: 30px;
         height: 30px;
@@ -275,9 +327,11 @@ header {
         cursor: pointer;
       }
     }
+
     .icon-codestore {
       position: absolute;
       font-size: 50px;
+
       &.active {
         position: fixed;
         top: 30%;
@@ -292,11 +346,13 @@ header {
   height: 50vh;
   background: -webkit-linear-gradient(45deg, #1e212b, #373b4d);
   background: linear-gradient(45deg, #1e212b, #373b4d);
+
   .g-bolang {
     bottom: 0;
     -webkit-transform: matrix(1, 0, 0, -1, 0, 0);
     transform: matrix(1, 0, 0, -1, 0, 0);
   }
+
   h1 {
     position: absolute;
     top: 50%;
@@ -312,21 +368,31 @@ header {
   }
 }
 
+@media (max-width: 900px) {
+  #header .icon-codestore {
+    display: none;
+  }
+}
+
 @media (max-width: 767px) {
   #header {
     height: 50px;
     background-color: #fff;
+
     nav {
       height: 50px;
     }
+
     &.blog {
       background-color: inherit !important;
+
       .bar,
       .bar:after,
       .bar:before {
         background-color: #fff !important;
       }
     }
+
     &.photoWall,
     &.about {
       .bar,
@@ -335,6 +401,7 @@ header {
         background-color: #fff !important;
       }
     }
+
     &.blog.up {
       .bar,
       .bar:after,
@@ -342,17 +409,21 @@ header {
         background-color: #333 !important;
       }
     }
+
     .headerBox {
       color: #333;
+
       .menuList {
         .hamburger-menu {
           display: block;
         }
+
         ul {
           display: none;
         }
       }
     }
+
     .icon-codestore {
       display: none;
     }

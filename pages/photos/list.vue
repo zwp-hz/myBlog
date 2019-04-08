@@ -18,7 +18,7 @@
                   href="javaScript:void(0);"
                   data-type="img"
                   :data-url="item.src"
-                  class="progressive--not-loaded"
+                  class="progressive not-loaded"
                 >
                   <img
                     :style="'opacity:'+(item.status === 2 ? 0 : 1)"

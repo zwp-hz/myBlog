@@ -129,6 +129,11 @@ export default {
           title: '博客'
         },
         {
+          route: '/laboratory',
+          name: 'laboratory',
+          title: '实验室'
+        },
+        {
           route: '/photos',
           name: 'photos',
           title: '照片墙'

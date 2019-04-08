@@ -9,9 +9,9 @@
           :key="index"
         >
           <div class="box">
-            <div class="image" v-if="item.image_src" @click="toArticleDetail(item)">
+            <div class="image" @click="toArticleDetail(item)">
               <div
-                class="progressive--not-loaded"
+                class="progressive not-loaded"
                 :data-url="IMGHOST+item.image_src+QN_POSTFIX+'500'"
                 :style="item.image_status === 2 ? '' : 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+'100)' "
               >

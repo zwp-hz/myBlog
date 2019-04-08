@@ -40,6 +40,8 @@ exports.runToTop = function() {
  */
 exports.lazyload = function() {
   this.init = () => {
+    window.removeEventListener('scroll', forEach_envent, false)
+
     let forEach_envent = () => {
       let object = document.querySelectorAll('[data-url]'),
         scrollTop =
@@ -73,7 +75,8 @@ exports.lazyload = function() {
                 item.style.background = "url('" + image_url + "')"
               }
             }
-            item.className = 'u_transition_300 progressive--is-loaded'
+
+            item.className = 'u_transition_300 progressive is-loaded'
           })
         }
       }
