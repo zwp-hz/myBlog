@@ -44,7 +44,6 @@ export default {
         )[1]
 
         this.weather_ifno = weather_ifno
-        console.log(this.weather_ifno)
       }
     )
   }
