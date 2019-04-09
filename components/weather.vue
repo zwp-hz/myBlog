@@ -1,17 +1,14 @@
 <template>
   <div id="weather" :class="{isMobile: device.isMobile}">
-    <section class="g-c-center" v-if="sunlightStatus">
-      <i
-        :class="`iconfont icon-${sunlightStatus === 1 ? '' : 'n-' }${weatherInfo.forecast[0].weather[0][sunlightStatus === 1 ? 'day' : 'night'][0].type_py.pinyin}`"
-      ></i>
-      <p class="cityName">{{ weatherInfo.city[0] }}</p>
+    <section class="g-c-center" v-if="weather_ifno.currentCity">
+      <i :class="`iconfont icon-${weather_ifno.picture_icon}`"></i>
+      <p class="cityName">{{ weather_ifno.currentCity }}</p>
       <div class="info g-r-center">
         <p>
-          <span>{{ weatherInfo.city[0] }}</span>
-          <b v-if="sunlightStatus == 1">{{ weatherInfo.forecast[0].weather[0].day[0].type[0] }}</b>
-          <b v-else>{{ weatherInfo.forecast[0].weather[0].night[0].type[0] }}</b>
+          <span>{{ weather_ifno.currentCity }}</span>
+          <b>{{ weather_ifno.weather_data[0].weather }}</b>
         </p>
-        <strong>{{ weatherInfo.wendu[0] }}ﾟ</strong>
+        <strong>{{ 24 || weather_ifno.weather_data[0].date }}ﾟ</strong>
       </div>
     </section>
   </div>
@@ -19,9 +16,12 @@
 
 <script>
 import { mapState } from 'vuex'
+import jsonp from 'jsonp'
+
 export default {
   data() {
     return {
+      weather_ifno: {},
       sunlightStatus: null
     }
   },
@@ -29,39 +29,24 @@ export default {
     ...mapState(['device'])
   },
   mounted() {
-    //获取天气信息
-    this.$axios.get('api/getWeather').then(res => {
-      if (res.code === 0) {
-        this.weatherInfo = res.data
-        this.sunlightStatus = this.getSunlightStatus(res.data)
-      }
-    })
-  },
-  methods: {
-    /**
-     * 区分白天的晚上
-     * @param {info}    天气信息。
-     * @return   1: 白天   2: 晚上
-     */
-    getSunlightStatus(info) {
-      let date = new Date(info.time), //系统时间
-        cur_hh = date.getHours(), //当前时
-        cur_mm = date.getMinutes(), //当前分
-        sunrise_hh = Number(info.sunrise_1[0].substring(0, 2)), //日出时
-        sunrise_mm = Number(info.sunrise_1[0].substring(3, 5)), //日出分
-        sunset_hh = Number(info.sunset_1[0].substring(0, 2)), //日落时
-        sunset_mm = Number(info.sunset_1[0].substring(3, 5)) //日落分
+    jsonp(
+      `http://api.map.baidu.com/telematics/v3/weather?location=${
+        returnCitySN.cname
+      }&output=json&ak=cgLTnAd8d2q50s2vAM32yyXsfqchIAix`,
+      {},
+      (err, data) => {
+        let weather_ifno = data.results[0]
 
-      if (
-        (cur_hh > sunrise_hh && cur_hh < sunset_hh) ||
-        (cur_hh == sunrise_hh && cur_mm >= sunrise_mm) ||
-        (cur_hh == sunset_hh && cur_mm < sunset_mm)
-      ) {
-        return 1
-      } else {
-        return 2
+        weather_ifno.weather_data[0].date.match(/：(\d*)/)[1]
+        weather_ifno.currentCity = weather_ifno.currentCity.replace(/\S*省/, '')
+        weather_ifno.picture_icon = weather_ifno.weather_data[0].dayPictureUrl.match(
+          /\/([a-z]*)\.png/
+        )[1]
+
+        this.weather_ifno = weather_ifno
+        console.log(this.weather_ifno)
       }
-    }
+    )
   }
 }
 </script>

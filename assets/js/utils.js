@@ -21,7 +21,7 @@ exports.getDeviceInfo = () => {
 /**
  * 滚动条置顶
  */
-exports.runToTop = function() {
+exports.runToTop = () => {
   let smoothscroll = () => {
     let scrollTop =
       document.documentElement.scrollTop || document.body.scrollTop

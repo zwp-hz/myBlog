@@ -201,4 +201,10 @@
       font-size: 12px;
     }
   }
+  .weather_box {
+    border-right: 30vw solid transparent !important;
+    #weather {
+      width: 22.5vw !important;
+    }
+  }
 }

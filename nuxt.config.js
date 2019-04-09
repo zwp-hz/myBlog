@@ -21,6 +21,7 @@ module.exports = {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     script: [
+      { src: 'http://pv.sohu.com/cityjson?ie=utf-8' },
       {
         innerHTML:
           'window.isWebp = document.createElement("canvas").toDataURL("image/webp").indexOf("data:image/webp") == 0;\
@@ -31,7 +32,11 @@ module.exports = {
     __dangerouslyDisableSanitizers: ['script']
   },
   loading: { color: '#1ed9be' },
-  css: ['@/assets/css/base.scss', '@/assets/css/header.scss'],
+  css: [
+    '@/assets/css/base.scss',
+    '@/assets/css/font.scss',
+    '@/assets/css/header.scss'
+  ],
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:8989/'
   },
