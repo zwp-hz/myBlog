@@ -36,7 +36,6 @@ img_styles = [], // 图片样式参数
 img_width = 0, // 图片的宽度
 row_number = 0, // 图片行数
 row_tops = [], // 记录最好一行图片的位置
-cur_index = 0, // 记录当前图片位置的下标
 load_type = "init", // 加载类型 默认：init - 初始化  scroll - 滚动加载  resize - 视图变化
 beforeScrollTop = 0, // 记录滚动条变化前的数值 用于区分上下滚动
 timer;
@@ -61,7 +60,6 @@ let windowResize = () => {
     let offsetWidth = content.offsetWidth;
 
     load_type = "resize";
-    cur_index = 0;
     row_tops = [];
     row_number = offsetWidth >= 1200 ? 4 : offsetWidth > 750 ? 3 : 2; // 基于不同宽度设置不同行数
     img_width = offsetWidth / row_number;
@@ -105,7 +103,6 @@ let imgRrgodic = img_list => {
   let offsetWidth = content.offsetWidth, // 容器的宽度
     img_dom_length = img_styles.length;
 
-  cur_index = img_dom_length;
   row_number = offsetWidth >= 1200 ? 4 : offsetWidth > 750 ? 3 : 2; // 基于不同宽度设置不同行数
   img_width = offsetWidth / row_number;
 
@@ -140,11 +137,13 @@ let imgRrgodic = img_list => {
   * @param {Number} index - 图片下标
   */
 let setImgPosition = index => {
-  // 加载图片大于当前处理图片的下标 不执行
-  if (index > cur_index) {
+  let number = load_type === 'resize' ? 0 : content.getElementsByClassName('box').length
+
+  // 加载图片下标大于当前设置图片的下标时不执行
+  if (index > number) {
     return;
   } else {
-    for (let i = cur_index; img_styles.length > i; i++) {
+    for (let i = number; img_styles.length > i; i++) {
       let item = img_styles[i];
 
       if (item) {
@@ -153,7 +152,7 @@ let setImgPosition = index => {
           top = 0;
 
         // 第一行图片不需要计算最小值
-        if (load_type !== "scroll" && row_number > i) {
+        if (row_number > row_tops.length) {
           left = i * img_width;
           top = 0;
           row_tops[i] = item.height;
@@ -181,6 +180,8 @@ let setImgPosition = index => {
             div.getElementsByTagName("img")[0].style.height =
               item.height + "px";
           }
+
+          number = i
         } else {
           // 创建dom节点、设置属性
           let div = document.createElement("div");
@@ -196,11 +197,8 @@ let setImgPosition = index => {
 
           content.appendChild(div);
         }
-
-        cur_index = i + 1;
         forEach_envent();
       } else {
-        cur_index = i;
         break;
       }
     }
@@ -275,6 +273,12 @@ let imgLoad = (src, callback) => {
         </pre>
         <pre class="line-numbers" :class="{active: embed_nav.index === 2}">
           <code ref="code2">
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .u_transition_300 {
   transition: 0.3s all ease-in-out;
   -webkit-transition: 0.3s all ease-in-out;
@@ -368,7 +372,6 @@ let imgs = [
   img_width = 0, // 图片的宽度
   row_number = 0, // 图片行数
   row_tops = [], // 记录最好一行图片的位置
-  cur_index = 0, // 记录当前图片位置的下标
   load_type = 'init', // 加载类型 默认：init - 初始化  scroll - 滚动加载  resize - 视图变化
   beforeScrollTop = 0, // 记录滚动条变化前的数值 用于区分上下滚动
   timer
@@ -410,6 +413,12 @@ export default {
       hljs.highlightBlock(block)
     })
   },
+  beforeDestroy() {
+    row_tops = []
+    img_styles = []
+    window.removeEventListener('scroll', this.scrollChange, false)
+    window.removeEventListener('scroll', this.windowResize, false)
+  },
   methods: {
     /**
      * 浏览器窗口变化
@@ -421,14 +430,11 @@ export default {
         let offsetWidth = this.$refs.content.offsetWidth
 
         load_type = 'resize'
-        cur_index = 0
         row_tops = []
         row_number = offsetWidth >= 1200 ? 4 : offsetWidth > 750 ? 3 : 2 // 基于不同宽度设置不同行数
         img_width = offsetWidth / row_number
 
-        img_styles.forEach((item, index) => {
-          this.setImgPosition(index)
-        })
+        this.setImgPosition()
       }, 50)
     },
     /**
@@ -452,7 +458,6 @@ export default {
       let offsetWidth = this.$refs.content.offsetWidth, // 容器的宽度
         img_dom_length = img_styles.length
 
-      cur_index = img_dom_length
       row_number = offsetWidth >= 1200 ? 4 : offsetWidth < 750 ? 2 : 3 // 基于不同宽度设置不同行数
       img_width = offsetWidth / row_number
 
@@ -487,12 +492,17 @@ export default {
      * 设置图片位置
      * @param {Number} index - 图片下标
      */
-    setImgPosition(index) {
-      // 加载图片大于当前处理图片的下标 不执行
-      if (index > cur_index) {
+    setImgPosition(index = 0) {
+      let number =
+        load_type === 'resize'
+          ? 0
+          : this.$refs.content.getElementsByClassName('box').length
+
+      // 加载图片下标大于当前设置图片的下标时不执行
+      if (index > number) {
         return
       } else {
-        for (let i = cur_index; img_styles.length > i; i++) {
+        for (let i = number; img_styles.length > i; i++) {
           let item = img_styles[i]
 
           if (item) {
@@ -501,7 +511,7 @@ export default {
               top = 0
 
             // 第一行图片不需要计算最小值
-            if (load_type !== 'scroll' && i < row_number) {
+            if (row_tops.length < row_number) {
               left = i * img_width
               top = 0
               row_tops[i] = item.height
@@ -529,6 +539,8 @@ export default {
                 div.getElementsByTagName('img')[0].style.height =
                   item.height + 'px'
               }
+
+              number = i
             } else {
               // 创建dom节点、设置属性
               let div = document.createElement('div')
@@ -544,10 +556,8 @@ export default {
               this.$refs.content.appendChild(div)
             }
 
-            cur_index = i + 1
             this.forEach_envent()
           } else {
-            cur_index = i
             break
           }
         }

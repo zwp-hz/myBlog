@@ -380,11 +380,14 @@ b {
     background: #4e606c;
     white-space: inherit;
     opacity: 0;
+    -webkit-overflow-scrolling: touch;
+
     &.active {
       position: relative;
       z-index: 1;
       opacity: 1;
     }
+
     code {
       display: block;
       padding: 0;
