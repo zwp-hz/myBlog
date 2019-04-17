@@ -27,9 +27,7 @@ module.exports = {
       { src: 'http://pv.sohu.com/cityjson?ie=utf-8' },
       {
         innerHTML:
-          'window.isWebp = document.createElement("canvas").toDataURL("image/webp").indexOf("data:image/webp") == 0;\
-          (function(){ var bp = document.createElement("script"); var curProtocol = window.location.protocol.split(":")[0]; if (curProtocol === "https") { bp.src = "https://zz.bdstatic.com/linksubmit/push.js";}else {bp.src = "http://push.zhanzhang.baidu.com/push.js";}var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(bp, s);})()\
-          var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?8ea4f05c72817d37c77f44d5afd79024";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();',
+          'window.isWebp = document.createElement("canvas").toDataURL("image/webp").indexOf("data:image/webp") == 0;',
         type: 'text/javascript'
       }
     ],
@@ -54,9 +52,10 @@ module.exports = {
     }
   },
   plugins: [
-    '~/plugins/axios',
-    '~/plugins/filters',
-    { src: '~/assets/js/skrollr.min.js', ssr: false }
+    '@/plugins/axios',
+    '@/plugins/filters',
+    { src: '@/assets/js/statistics.js', ssr: false },
+    { src: '@/assets/js/skrollr.min.js', ssr: false }
   ],
   modules: ['@nuxtjs/axios'],
   build: {
