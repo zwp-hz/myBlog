@@ -22,7 +22,7 @@ import footerBox from '~/components/footer.vue'
 
 export default {
   head: {
-    title: '留言板-朱为鹏的网站',
+    title: '留言板-朱为鹏的个人网站',
     script: [
       {
         src: 'https://changyan.sohu.com/upload/changyan.js'

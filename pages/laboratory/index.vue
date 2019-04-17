@@ -99,7 +99,7 @@ let list = [
 
 export default {
   head: {
-    title: '实验室-朱为鹏的网站'
+    title: '实验室-朱为鹏的个人网站'
   },
   components: {
     headerBox,

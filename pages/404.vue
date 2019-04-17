@@ -14,7 +14,7 @@
 <script>
 export default {
   head: {
-    title: '404-朱为鹏的网站'
+    title: '404-朱为鹏的个人网站'
   }
 }
 </script>

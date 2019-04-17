@@ -378,7 +378,7 @@ let imgs = [
 
 export default {
   head: {
-    title: '瀑布流-实验室'
+    title: '瀑布流-朱为鹏的个人网站'
   },
   components: {
     headerBox,

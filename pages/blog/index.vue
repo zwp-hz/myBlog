@@ -50,7 +50,7 @@ export default {
     }
   },
   head: {
-    title: '博客-朱为鹏的网站'
+    title: '博客-朱为鹏的个人网站'
   },
   components: {
     headerBox,

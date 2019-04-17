@@ -11,7 +11,10 @@ module.exports = {
         content:
           'width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'
       },
-      { name: 'keywords', content: '朱为鹏, 个人博客' },
+      {
+        name: 'keywords',
+        content: '朱为鹏, 个人博客, 个人网站, 朱为鹏的个人网站'
+      },
       {
         hid: 'description',
         name: 'description',
@@ -25,6 +28,7 @@ module.exports = {
       {
         innerHTML:
           'window.isWebp = document.createElement("canvas").toDataURL("image/webp").indexOf("data:image/webp") == 0;\
+          (function(){ var bp = document.createElement("script"); var curProtocol = window.location.protocol.split(":")[0]; if (curProtocol === "https") { bp.src = "https://zz.bdstatic.com/linksubmit/push.js";}else {bp.src = "http://push.zhanzhang.baidu.com/push.js";}var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(bp, s);})()\
           var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?8ea4f05c72817d37c77f44d5afd79024";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();',
         type: 'text/javascript'
       }

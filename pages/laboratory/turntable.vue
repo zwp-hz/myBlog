@@ -132,7 +132,7 @@ hljs.registerLanguage('javascript', javascript)
 
 export default {
   head: {
-    title: '大转盘-实验室',
+    title: '大转盘-朱为鹏的个人网站',
     script: [
       {
         src: '/turntable.js'

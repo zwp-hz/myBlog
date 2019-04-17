@@ -74,7 +74,7 @@ let timer
 export default {
   head() {
     return {
-      title: this.title + '-朱为鹏的网站'
+      title: this.title + '-朱为鹏的个人网站'
     }
   },
   components: {
