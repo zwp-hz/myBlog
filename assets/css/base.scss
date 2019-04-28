@@ -56,8 +56,16 @@ a,
 button {
   text-decoration: none !important;
   cursor: pointer;
-  outline: none;
   hide-focus: expression(this.hideFocus=true);
+}
+
+a,
+button,
+input,
+html {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  border: none;
 }
 
 li {
@@ -73,14 +81,6 @@ input {
   &:disabled {
     background-color: rgba(192, 192, 192, 0.4) !important;
   }
-}
-
-a,
-button,
-input,
-html {
-  outline: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 strong,
@@ -318,6 +318,19 @@ b {
   padding-right: 15px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.g-button {
+  padding: 0 20px;
+  height: 36px;
+  color: #fff;
+  border-radius: 4px;
+  opacity: 0.5;
+  cursor: auto;
+  &.active {
+    opacity: 1;
+    cursor: pointer;
+  }
 }
 
 .g-bolang {

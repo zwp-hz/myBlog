@@ -59,7 +59,7 @@
       </div>
       <div class="u_loading" v-if="modal.load_status"/>
     </div>
-    <i class="iconfont icon-jiantou" v-if="scrollTopStatus" @click="scrollTop"></i>
+    <i class="iconfont icon-jiantou" v-if="scrollToPositionpStatus" @click="scrollToPositionp"></i>
   </div>
 </template>
 
@@ -67,7 +67,7 @@
 import { mapState } from 'vuex'
 import loading from '~/components/loading'
 import headerBox from '~/components/header'
-import { lazyload, runToTop } from '~/assets/js/utils'
+import { lazyload, scrollToPosition } from '~/assets/js/utils'
 
 let timer
 
@@ -96,7 +96,7 @@ export default {
         list: [],
         number: 0
       },
-      scrollTopStatus: false, // 滚动条置顶显示状态
+      scrollToPositionpStatus: false, // 滚动条置顶显示状态
       imgList: {}, // 显示的图片列表
       modal: {
         // 弹出层样式、信息
@@ -141,8 +141,9 @@ export default {
      * @param {type}    显示隐藏状态。 默认：show。 可选 hide
      */
     img_modal(event, src, type) {
-      let scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop
+      let scrollToPositionp =
+        document.documentElement.scrollToPositionp ||
+        document.body.scrollToPositionp
 
       if (type === 'hide') {
         if (this.modal.move_status !== 2) return false
@@ -169,13 +170,13 @@ export default {
         // 设置modal 样式
         this.modal.status = true
         this.befoer_modal = {
-          top: obj.offsetTop - scrollTop + 'px',
+          top: obj.offsetTop - scrollToPositionp + 'px',
           height: obj.clientHeight + 'px'
         }
         this.modal.style = {
           width: obj.clientWidth + 'px',
           height: obj.clientHeight + 'px',
-          top: obj.offsetTop - scrollTop + 'px',
+          top: obj.offsetTop - scrollToPositionp + 'px',
           left: obj.offsetLeft + 'px'
         }
 
@@ -217,21 +218,22 @@ export default {
     /**
      * 滚动条置顶
      */
-    scrollTop() {
-      runToTop()
+    scrollToPositionp() {
+      scrollToPosition(0)
     },
     /**
      * 滚动侦听
      */
     seeScroll(e) {
-      let scrollTop =
-          document.documentElement.scrollTop || document.body.scrollTop, // 滚动条距离顶部高度
+      let scrollToPositionp =
+          document.documentElement.scrollToPositionp ||
+          document.body.scrollToPositionp, // 滚动条距离顶部高度
         scrollHeight = document.documentElement.scrollHeight, // 内容高度
         seeHeight = document.documentElement.clientHeight // 可见区域高度
 
-      this.scrollTopStatus = scrollTop > 0
+      this.scrollToPositionpStatus = scrollToPositionp > 0
 
-      if (scrollTop >= scrollHeight - seeHeight - 100) {
+      if (scrollToPositionp >= scrollHeight - seeHeight - 100) {
         clearTimeout(timer)
         timer = setTimeout(() => {
           this.laodImgs()
@@ -347,8 +349,9 @@ export default {
       // DOM渲染完成
       this.$nextTick(() => {
         new lazyload().init()
-        document.documentElement.scrollTop = document.body.scrollTop =
-          (document.documentElement.scrollTop || document.body.scrollTop) - 1
+        document.documentElement.scrollToPositionp = document.body.scrollToPositionp =
+          (document.documentElement.scrollToPositionp ||
+            document.body.scrollToPositionp) - 1
       })
     }
   }

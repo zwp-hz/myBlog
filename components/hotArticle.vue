@@ -19,7 +19,7 @@
           alt
         >
         <i v-if="item.image_status == 2 || !item.image_src" class="iconfont icon-codestore"/>
-        <span :id="'sourceId::'+item._id" class="cy_cmt_count"></span>
+        <span class="cy_cmt_count">{{ item.comments.length }}</span>
         <b class="backImg u_transition_300 u_hover_show">
           <i class="iconfont icon-lianjie"/>
         </b>
@@ -77,36 +77,18 @@ export default {
   created() {
     this.a_hots = this.hots || this.article_hots || []
   },
-  mounted() {
-    this.$nextTick(() => {
-      //获取评论数
-      if (document.getElementById('cy_cmt_num')) {
-        let listCount = document.getElementById('cy_cmt_num'),
-          count = listCount.nextSibling
-        listCount.parentNode.removeChild(listCount)
-        count.parentNode.removeChild(count)
-      }
-
-      let head = document.getElementsByTagName('head')[0]
-      let script = document.createElement('script')
-      script.id = 'cy_cmt_num'
-      script.src =
-        'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
-      head.appendChild(script)
-    })
-  },
   methods: {
     /**
      * 图片加载
-     * @param {index}   下标
-     * @param {type}    'load' 加载成功  'error' 加载失败
+     * @param {Number} indext - 下标
+     * @param {String}  type - 'load' 加载成功  'error' 加载失败
      */
     imgLoad(index, type) {
       this.$set(this.a_hots[index], 'image_status', type == 'load' ? 1 : 2)
     },
     /**
      * 标签搜索
-     * @param {data}    搜索参数
+     * @param {Object} data - 搜索参数
      */
     search(data) {
       this.$store.commit('searchChange', data)
@@ -119,7 +101,7 @@ export default {
     },
     /**
      * 跳转详情页
-     * @param {data}    文章参数
+     * @param {Object} data - 文章参数
      */
     toArticleDetail(data) {
       location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`

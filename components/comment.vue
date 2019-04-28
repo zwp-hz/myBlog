@@ -1,125 +1,82 @@
 <template>
   <div id="comment">
+    <!-- 评论模块 -->
     <div class="comment-form">
       <div class="comment-avatar">
         <div class="box">
           <i class="iconfont icon-huifu" style="font-size: 30px;"/>
         </div>
       </div>
-      <form class="clear" @submit.prevent="submit">
-        <div class="form-row clear">
-          <span
-            class="comment_msg u_transition_300"
-            :class="{show: comment_msg,hide: comment_msg_status}"
-          >{{ comment_msg }}</span>
-          <textarea
-            class="input"
-            v-model="comment_data.content"
-            maxlength="200"
-            placeholder="说点什么吧..."
-            required
-          />
+      <section class="clear">
+        <span
+          class="comment_msg u_transition_300"
+          :class="{show: comment_msg,hide: comment_msg_status}"
+        >{{ comment_msg }}</span>
+        <textarea
+          class="input"
+          v-model="comment.content"
+          maxlength="200"
+          placeholder="说点什么吧..."
+          ref="content"
+          required
+        />
+        <input class="input user-name" type="text" v-model="comment.user_name" placeholder="昵称（选填）">
+        <div class="g-r-center">
+          <input class="input" type="email" v-model="comment.email" placeholder="填写邮箱订阅动态（选填）">
+          <button
+            class="g-button u_transition_300"
+            :class="{active: comment.content}"
+            @click="submit()"
+          >发表评论</button>
         </div>
-        <div class="form-row clear">
-          <input
-            v-if="checkbox_status"
-            class="input"
-            v-model="comment_data.nickname"
-            placeholder="昵称"
-            required
-          >
-          <input v-else class="input" disabled placeholder="昵称">
-        </div>
-        <div class="form-row text-right">
-          <label for="comment-anonymous">
-            <input
-              id="comment-anonymous"
-              type="checkbox"
-              @click="checkbox_status = !checkbox_status"
-              style="float: inherit;"
-            >
-            匿名发表
-          </label>
-        </div>
-        <div
-          class="form-row submit-btn u_transition_300"
-          :class="{u_in_request: request_status}"
-          style="float: right;"
-        >
-          <i/>
-          <input type="submit" value="发表评论">
-        </div>
-      </form>
+      </section>
     </div>
+    <!-- 评论列表 -->
     <div class="comment-list">
       <header>
         <p>
           <span v-if="commentList">{{ commentList.length }}</span>条评论
         </p>
       </header>
-      <!-- <h3>最新评论</h3> -->
-      <section class="g-r-center" v-for="(item, index) in commentList" :key="index">
-        <div class="portrait">
-          <i class="iconfont icon-codestore"/>
-        </div>
-        <div class="box">
-          <div class="comment-info">
-            <strong>{{ item.nickname || '匿名' }}</strong>
-            <i>{{ item.city }}</i>
-            <span>{{ item.creation_at | dateFormat('YYYY年MM月DD日 hh:mm') }}</span>
+      <section v-for="(item, index) in commentList" :key="index">
+        <div class="comment g-r-center">
+          <div class="portrait">
+            <i class="iconfont icon-codestore"/>
           </div>
-          <div class="comment-centent">
-            {{ item.content }}
-            <div class="reply u_transition_300" @click="replay(index)">
-              <i class="iconfont icon-huifu1"/>
-              <span>{{ item.reply_status ? '取消回复' : '回复' }}</span>
+          <div class="box">
+            <div class="comment-info">
+              <strong>{{ item.user_name || '匿名' }}</strong>
+              <i>{{ item.city }}</i>
+              <span>{{ item.creation_at | dateFormat('YYYY年MM月DD日 hh:mm') }}</span>
+            </div>
+            <div class="comment-centent">
+              {{ item.content }}
+              <div class="btn u_transition_300" @click="reply(index, item._id, item.user_name)">
+                <i class="iconfont icon-huifu1"/>
+                <span>回复</span>
+              </div>
             </div>
           </div>
-          <form
-            class="clear u_transition_300"
-            :class="{ active: item.reply_status }"
-            @submit.prevent="submit('reply')"
-          >
-            <div class="form-row clear">
-              <textarea
-                class="input"
-                v-model="item.reply_content"
-                maxlength="200"
-                :placeholder="item.nickname ? `回复 ${item.nickname}` : '说点什么吧...'"
-                required
-              />
-            </div>
-            <div class="form-row clear">
-              <input
-                v-if="checkbox_status"
-                class="input"
-                v-model="item.reply_nickname"
-                placeholder="昵称"
-                required
-              >
-              <input v-else class="input" disabled placeholder="昵称">
-            </div>
-            <div class="form-row text-right">
-              <label for="comment-anonymous">
-                <input
-                  id="comment-anonymous"
-                  type="checkbox"
-                  @click="checkbox_status = !checkbox_status"
-                  style="float: inherit;"
-                >
-                匿名发表
-              </label>
-            </div>
-            <div
-              class="form-row submit-btn u_transition_300"
-              :class="{u_in_request: request_status}"
-              style="float: right;"
-            >
-              <i/>
-              <input type="submit" value="发表评论">
-            </div>
-          </form>
         </div>
+        <section class="reply g-r-center" v-for="(data, i) in item.replys" :key="i">
+          <div class="portrait">
+            <i class="iconfont icon-codestore"/>
+          </div>
+          <div class="box">
+            <div class="comment-info">
+              <strong>{{ data.reply_user ? data.user_name + ' @ ' + data.reply_user : '匿名' }}</strong>
+              <i>{{ data.city }}</i>
+              <span>{{ data.creation_at | dateFormat('YYYY年MM月DD日 hh:mm') }}</span>
+            </div>
+            <div class="comment-centent">
+              {{ data.content }}
+              <div class="btn u_transition_300" @click="reply(index, item._id, data.user_name)">
+                <i class="iconfont icon-huifu1"/>
+                <span>回复</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
     </div>
   </div>
@@ -130,67 +87,88 @@ export default {
   props: ['commentList'],
   data() {
     return {
-      comment_data: {
-        nickname: ''
+      comment: {
+        content: '',
+        user_name: '',
+        email: ''
       },
       comment_msg: '', // 提交评论 提示信息
       comment_msg_status: false, // 提示信息状态
-      request_status: false, // 请求状态
-      checkbox_status: true
+      request_status: false // 请求状态
     }
   },
   mounted() {
-    this.comment_data.nickname = localStorage.nickname || ''
+    console.log(this.commentList)
+    this.comment.user_name = localStorage.user_name || ''
+    this.comment.email = localStorage.email || ''
   },
   methods: {
     /**
      * 发表评论
-     * @param {type} reply：回复
      */
-    submit(type = '') {
-      this.request_status = true
-      if (!this.checkbox_status) delete this.comment_data.nickname
+    submit() {
+      let { ...c } = this.comment
 
-      this.$axios
-        .post(
-          'api/setComment',
-          Object.assign(this.comment_data, {
-            id: this.$route.query.id,
-            city: this.$store.state.city
-          })
-        )
-        .then(res => {
+      if (c.content) {
+        let params = {
+          id: this.$route.query.id,
+          content: c.content,
+          user_name: c.user_name,
+          email: c.email,
+          city: returnCitySN.cname
+        }
+
+        if (c.reply_id && c.content.indexOf(`@${c.reply_user}：`) !== -1) {
+          params.id = c.reply_id
+          params.content = c.content.replace(`@${c.reply_user}：`, '')
+          params.reply_user = c.reply_user
+        }
+
+        this.request_status = true
+        this.$axios.post('api/addComment', params).then(res => {
           if (res.code === 0) {
             // 记录用户昵称
-            localStorage.nickname = this.comment_data.nickname || ''
-            this.commentList.push(res.data)
-            this.comment_data.content = ''
-            this.setCommentMsg(res.message)
-          } else {
-            this.comment_msg = res.message
-            this.setCommentMsg(res.message)
+            localStorage.user_name = c.user_name || ''
+            localStorage.email = c.email || ''
+            this.comment.content = ''
+            if (params.reply_user) {
+              this.commentList[c.reply_index].replys.unshift(res.data)
+            } else {
+              this.commentList.unshift(res.data)
+            }
           }
+          this.addCommentMsg(res.message)
         })
+      }
     },
     /**
      * 评论
-     * @param {index} 下标
+     * @param {Number} index - 评论下标
+     * @param {String} reply_id - 回复评论id
+     * @param {String} reply_user - 回复评论用户
      */
-    replay(index) {
-      let reply_status = this.commentList[index].reply_status
+    reply(index, reply_id, reply_user) {
+      this.comment.reply_id = reply_id
+      this.comment.reply_user = reply_user
+      this.comment.reply_index = index
+      this.comment.content = `@${reply_user}：`
 
-      this.commentList[index].reply_status = !reply_status
+      let scrollTop =
+        document.body.scrollTop || document.documentElement.scrollTop
+
+      window.scrollTo(
+        0,
+        this.$refs.content.getBoundingClientRect().top + scrollTop
+      )
     },
     /**
      * 设置评论提示信息
      */
-    setCommentMsg(text) {
+    addCommentMsg(text) {
       this.comment_msg = text
       this.request_status = false
-
       setTimeout(() => {
         this.comment_msg_status = true
-
         setTimeout(() => {
           this.comment_msg = ''
           this.comment_msg_status = false
@@ -202,86 +180,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$defaultColor: #1ed9be;
+$defaultColor: #1e212b;
 #comment {
   position: relative;
   margin-top: 40px;
-  form {
-    .form-row {
-      position: relative;
-      margin-bottom: 5px;
-      .comment_msg {
-        position: absolute;
-        top: 0%;
-        left: 50%;
-        padding: 5px 20px;
-        color: #fff;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 6px;
-        -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-        opacity: 0;
-        &.show {
-          top: 50%;
-          opacity: 1;
-        }
-        &.hide {
-          top: 100%;
-          opacity: 0;
-        }
-      }
-      .input {
-        background-color: #fcfcfc;
-        border: none;
-        border-radius: 6px;
-        border: 1px solid $defaultColor;
-        color: #555f77;
-        font-family: inherit;
-        font-size: 14px;
-        padding: 5px 10px;
-        outline: none;
-        width: 100%;
-      }
-      label {
-        color: #555f77;
-        font-family: inherit;
-        font-size: 14px;
-      }
-      textarea.input {
-        height: 100px;
-        padding: 20px 10px 15px;
-        resize: none;
-      }
-      &.submit-btn {
-        float: right;
-        border-radius: 6px;
-        background-color: $defaultColor;
-        i {
-          display: none;
-          position: absolute;
-          top: 9px;
-          left: 10px;
-          width: 15px;
-          height: 15px;
-          color: #fff;
-          border: 1px solid #fff;
-          border-bottom-color: transparent;
-          border-right-color: transparent;
-          border-radius: 100%;
-        }
-        input {
-          padding: 8px 20px;
-          color: #fff;
-          cursor: pointer;
-        }
-        &.u_in_request {
-          padding-left: 10px;
-          i {
-            display: block;
-          }
-        }
-      }
+  .input {
+    width: 100%;
+    height: 36px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background-color: #fcfcfc;
+    border: none;
+    border-radius: 4px;
+    border: 1px solid $defaultColor;
+    color: #333;
+    outline: none;
+    &.user-name {
+      margin-bottom: 10px;
     }
+  }
+  textarea.input {
+    float: left;
+    height: 90px;
+    padding: 15px 10px 10px;
+    margin-bottom: 10px;
+    resize: none;
   }
   .comment-form {
     .comment-avatar {
@@ -294,6 +218,7 @@ $defaultColor: #1ed9be;
       line-height: 50px;
       text-align: center;
       background-color: #fff;
+      cursor: pointer;
       .box {
         width: 50px;
         height: 50px;
@@ -305,9 +230,41 @@ $defaultColor: #1ed9be;
         }
       }
     }
+    section {
+      position: relative;
+      .comment_msg {
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        padding: 5px 20px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 4px;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        &.show {
+          top: 50%;
+          opacity: 1;
+        }
+        &.hide {
+          top: 100%;
+          opacity: 0;
+        }
+      }
+      .g-r-center {
+        input {
+          flex: 1;
+        }
+        .g-button {
+          margin-left: 20px;
+          background: $defaultColor;
+        }
+      }
+    }
   }
   .comment-list {
-    padding: 15px 0;
+    padding: 40px 0 15px;
     header {
       position: relative;
       height: 30px;
@@ -345,77 +302,101 @@ $defaultColor: #1ed9be;
     }
     section {
       padding-top: 15px;
-      border-bottom: 1px dashed #cecec4;
       align-items: flex-start;
-      &:hover {
-        .reply {
-          visibility: visible !important;
-          opacity: 1 !important;
+      .comment {
+        border-bottom: 1px solid #f1f1f1;
+        align-items: flex-start;
+        &:hover .box .comment-centent .btn {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+      &.reply {
+        margin-left: 30px;
+        border-bottom: 1px solid #f1f1f1;
+        &:hover .box .comment-centent .btn {
+          visibility: visible;
+          opacity: 1;
         }
       }
       .portrait {
-        width: 50px;
-        height: 50px;
-        margin-right: 15px;
-        line-height: 50px;
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        line-height: 40px;
         text-align: center;
         border-radius: 50%;
         background-color: #cecec4;
         i {
           color: #fff;
-          font-size: 30px;
+          font-size: 25px;
         }
       }
       .box {
         flex: 1;
         .comment-info {
+          display: flex;
           strong {
             color: $defaultColor;
           }
           i {
-            padding-left: 15px;
+            padding: 0 10px;
             font-style: normal;
             font-size: 12px;
-            color: #cecec4;
+            color: #8590a6;
           }
           span {
-            float: right;
+            flex: 1;
             font-size: 12px;
-            color: #cecec4;
+            color: #8590a6;
+            text-align: right;
           }
         }
         .comment-centent {
           position: relative;
           padding: 10px 0 30px;
           word-break: break-all;
-          .reply {
+          .btn {
             visibility: hidden;
             position: absolute;
             bottom: 4px;
             right: 0;
-            color: #1ed9be;
+            color: $defaultColor;
             opacity: 0;
             cursor: pointer;
             i {
               width: 30px;
-              color: #1ed9be;
+              color: $defaultColor;
             }
           }
         }
       }
-      form {
-        height: 0;
-        overflow: hidden;
-        &.active {
-          height: 188px;
-          padding-bottom: 4px;
-        }
-        .form-row textarea.input {
-          height: 80px;
-          padding: 10px 10px 10px;
-        }
+    }
+  }
+}
+
+@media (max-width: 750px) {
+  #comment {
+    .comment-form {
+      section {
+        padding-bottom: 55px;
       }
     }
+    .comment-list {
+      padding-top: 20px;
+    }
+    .comment-centent {
+      .btn {
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+    }
+  }
+
+  .g-button {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
   }
 }
 </style>

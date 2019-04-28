@@ -6,9 +6,7 @@
       v-for="(item, index) in tags"
       :key="index"
       @click="search({type: 'Tag', text: item.name})"
-    >
-      {{ item.name }}
-    </a>
+    >{{ item.name }}</a>
   </div>
 </template>
 

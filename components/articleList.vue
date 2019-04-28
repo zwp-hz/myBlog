@@ -9,7 +9,10 @@
           :key="index"
         >
           <div class="box">
-            <div class="image" @click="toArticleDetail(item)">
+            <nuxt-link
+              class="image"
+              :to="{ path: '/blog/articleDetail', query: {id: item._id, title: item.title} }"
+            >
               <div
                 class="progressive not-loaded"
                 :data-url="IMGHOST+item.image_src+QN_POSTFIX+'500'"
@@ -28,14 +31,14 @@
                   :style="'opacity:'+(item.image_status == 2 ? 1 : 0)"
                 />
               </div>
-            </div>
+            </nuxt-link>
             <div class="info">
               <h2>
-                <a
+                <nuxt-link
                   class="u_transition_300 u_hover_active"
                   href="javaScript: void(0);"
-                  @click="toArticleDetail(item)"
-                >{{ item.title }}</a>
+                  :to="{ path: '/blog/articleDetail', query: {id: item._id, title: item.title} }"
+                >{{ item.title }}</nuxt-link>
               </h2>
               <strong>{{ item.describe }}</strong>
               <p>
@@ -48,14 +51,14 @@
                     >{{ value }}</a>
                   </span>
                 </b>
-                <a
+                <nuxt-link
                   class="review u_transition_300 u_hover_active_bg"
                   href="javaScript: void(0);"
-                  @click="toArticleDetail(item)"
+                  :to="{ path: '/blog/articleDetail', query: {id: item._id, title: item.title} }"
                 >
                   <i class="iconfont icon-huifu"/>
-                  <span :id="'sourceId::'+item._id" class="cy_cmt_count"></span>
-                </a>
+                  <span class="cy_cmt_count">{{ item.comments.length }}</span>
+                </nuxt-link>
                 <time class="g-c-center">
                   <span class="g-r-center">
                     <i class="iconfont icon-time"/>
@@ -163,8 +166,7 @@ export default {
             ? { type: 'Tag', text: Tag }
             : Category
               ? { type: 'Category', text: Category }
-              : {},
-        'first'
+              : {}
       )
     }
   },
@@ -203,9 +205,8 @@ export default {
      * 获取文章列表
      * @param {Number}  pagr - 分页
      * @param {String}  searchCnt - 搜索内容
-     * @param {String}  type - 请求类型  first：第一次
      */
-    getArticlesList(page, searchCnt = '', type) {
+    getArticlesList(page, searchCnt = '') {
       let data = {}
 
       if (searchCnt) {
@@ -241,32 +242,12 @@ export default {
                 data: res.data.data.hots
               })
             }
-
-            if (type !== 'first') {
-              document.documentElement.scrollTop = document.body.scrollTop = 400
-              this.$nextTick(() => {
-                //获取评论数
-                if (document.getElementById('cy_cmt_num')) {
-                  let listCount = document.getElementById('cy_cmt_num'),
-                    count = listCount.nextSibling
-                  listCount.parentNode.removeChild(listCount)
-                  count.parentNode.removeChild(count)
-                }
-
-                let head = document.getElementsByTagName('head')[0]
-                let script = document.createElement('script')
-                script.id = 'cy_cmt_num'
-                script.src =
-                  'http://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytYjVfKw'
-                head.appendChild(script)
-              })
-            }
           }
         })
     },
     /**
      * 分页
-     * @param {num} 分页数值
+     * @param {Number} num - 分页数值
      */
     pageBtn(num) {
       this.$router.push({
@@ -278,7 +259,7 @@ export default {
     },
     /**
      * 标签搜索
-     * @param {data}    搜索参数
+     * @param {Object} data - 搜索参数
      */
     search(data) {
       this.$store.commit('searchChange', data)
@@ -299,7 +280,7 @@ export default {
     },
     /**
      * 跳转详情页
-     * @param {data}    文章参数
+     * @param {Object}  data - 文章参数
      */
     toArticleDetail(data) {
       location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`

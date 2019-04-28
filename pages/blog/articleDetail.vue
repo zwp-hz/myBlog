@@ -35,7 +35,7 @@
                 <p @click="cagatogSkip(item.text)">{{ item.text }}</p>
               </li>
             </ul>
-            <i class="iconfont icon-jiantou" v-if="scrollTopStatus" @click="runToTop"></i>
+            <i class="iconfont icon-jiantou" v-if="scrollTopStatus" @click="scrollToPosition(0)"></i>
           </div>
           <div class="blog-tags">
             <h5>Tags In</h5>
@@ -49,7 +49,7 @@
             </div>
           </div>
         </div>
-        <div id="SOHUCS" :sid="$route.query.id"></div>
+        <comment :comment-list="articleDetail.comments"></comment>
       </div>
     </template>
     <footer-box :blog-page="true" :hots="hots"/>
@@ -60,8 +60,8 @@
 import loading from '~/components/loading'
 import headerBox from '~/components/header'
 import footerBox from '~/components/footer'
-import { runToTop } from '~/assets/js/utils'
-// import comment from '~/components/comment'
+import { scrollToPosition } from '~/assets/js/utils'
+import comment from '~/components/comment'
 
 const Remarkable = require('remarkable')
 const md = new Remarkable()
@@ -85,18 +85,14 @@ export default {
   },
   head() {
     return {
-      title: this.title,
-      script: [
-        {
-          src: 'https://changyan.sohu.com/upload/changyan.js'
-        }
-      ]
+      title: this.title
     }
   },
   components: {
     loading,
     headerBox,
-    footerBox
+    footerBox,
+    comment
   },
   data() {
     return {
@@ -122,20 +118,20 @@ export default {
     this.getArticleDetail()
   },
   mounted() {
-    this.$nextTick(() => {
-      window.changyan.api.config({
-        appid: 'cytYjVfKw',
-        conf: 'prod_b410f9207abb469c925d5a87d0d295dc'
-      })
-    })
-
     setTimeout(() => {
       document.addEventListener('scroll', this.seeScroll, false)
     }, 1000)
   },
+  beforeDestroy() {
+    document.removeEventListener('scroll', this.seeScroll, false)
+  },
   methods: {
-    runToTop() {
-      runToTop()
+    /**
+     * 滚动到指定位置
+     * @param {Number} number - 位置
+     */
+    scrollToPosition(number) {
+      scrollToPosition(number)
     },
     /**
      * 获取文章详情
@@ -193,8 +189,7 @@ export default {
       let parent_top = 458,
         offsetTop = document.getElementById(title).offsetTop
 
-      document.documentElement.scrollTop = document.body.scrollTop =
-        parent_top + offsetTop
+      this.scrollToPosition((document.body.scrollTop = parent_top + offsetTop))
 
       for (let i = 0, list = this.markDownCatalog; list.length > i; i++) {
         if (list[i].text === title) {
