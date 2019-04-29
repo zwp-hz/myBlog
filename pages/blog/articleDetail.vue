@@ -60,7 +60,6 @@
 import loading from '~/components/loading'
 import headerBox from '~/components/header'
 import footerBox from '~/components/footer'
-import { scrollToPosition } from '~/assets/js/utils'
 import comment from '~/components/comment'
 
 const Remarkable = require('remarkable')
@@ -118,9 +117,7 @@ export default {
     this.getArticleDetail()
   },
   mounted() {
-    setTimeout(() => {
-      document.addEventListener('scroll', this.seeScroll, false)
-    }, 1000)
+    document.addEventListener('scroll', this.seeScroll, false)
   },
   beforeDestroy() {
     document.removeEventListener('scroll', this.seeScroll, false)
@@ -131,7 +128,11 @@ export default {
      * @param {Number} number - 位置
      */
     scrollToPosition(number) {
-      scrollToPosition(number)
+      window.scrollSkip = true // 用于记录滚动方式  true：不触发up滚动浮动
+      window.scrollTo(0, number)
+      setTimeout(() => {
+        window.scrollSkip = false
+      }, 50)
     },
     /**
      * 获取文章详情
@@ -189,7 +190,7 @@ export default {
       let parent_top = 458,
         offsetTop = document.getElementById(title).offsetTop
 
-      this.scrollToPosition((document.body.scrollTop = parent_top + offsetTop))
+      this.scrollToPosition(parent_top + offsetTop)
 
       for (let i = 0, list = this.markDownCatalog; list.length > i; i++) {
         if (list[i].text === title) {

@@ -64,7 +64,7 @@
           </div>
           <div class="box">
             <div class="comment-info">
-              <strong>{{ data.reply_user ? data.user_name + ' @ ' + data.reply_user : '匿名' }}</strong>
+              <strong>{{ data.reply_user ? (data.user_name || '匿名') + ' @ ' + data.reply_user : '匿名' }}</strong>
               <i>{{ data.city }}</i>
               <span>{{ data.creation_at | dateFormat('YYYY年MM月DD日 hh:mm') }}</span>
             </div>
@@ -154,12 +154,16 @@ export default {
       this.comment.content = `@${reply_user}：`
 
       let scrollTop =
-        document.body.scrollTop || document.documentElement.scrollTop
+          document.body.scrollTop || document.documentElement.scrollTop,
+        content = this.$refs.content
 
-      window.scrollTo(
-        0,
-        this.$refs.content.getBoundingClientRect().top + scrollTop
-      )
+      window.scrollSkip = true
+      setTimeout(() => {
+        window.scrollSkip = false
+      }, 50)
+      window.scrollTo(0, content.getBoundingClientRect().top + scrollTop - 50)
+
+      content.focus()
     },
     /**
      * 设置评论提示信息

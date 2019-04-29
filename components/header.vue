@@ -218,7 +218,7 @@ export default {
       window.addEventListener(
         'scroll',
         () => {
-          // 滚动的时候隐藏菜单
+          // h5滚动的时候隐藏菜单
           if (this.menuSwitch) this.menuSwitch = false
 
           if (this.headerData.type === 'blog') {
@@ -230,18 +230,17 @@ export default {
 
             if (afterScrollTop <= 50) {
               this.scrollStatus = ''
-              return false
-            }
-
-            if (delta <= 0 && delta > -3) {
-              return false
             } else {
-              let type = delta > 0 ? 'down' : 'up'
+              if (delta > 0 || delta <= -3) {
+                if (!window.scrollSkip) {
+                  let type = delta > 0 ? 'down' : 'up'
 
-              if (this.scrollStatus === type) {
-                return false
-              } else {
-                this.scrollStatus = type
+                  if (this.scrollStatus !== type) {
+                    this.scrollStatus = type
+                  }
+                } else {
+                  this.scrollStatus = 'down'
+                }
               }
             }
           }

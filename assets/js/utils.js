@@ -19,23 +19,6 @@ exports.getDeviceInfo = () => {
 }
 
 /**
- * 滚动条置顶
- */
-exports.scrollToPosition = number => {
-  let smoothscroll = () => {
-    let scrollTop =
-      document.documentElement.scrollTop || document.body.scrollTop
-
-    if (scrollTop > number) {
-      window.requestAnimationFrame(smoothscroll)
-      window.scrollTo(0, scrollTop - scrollTop / 5)
-    }
-  }
-
-  smoothscroll()
-}
-
-/**
  * 懒加载
  */
 exports.lazyload = function() {

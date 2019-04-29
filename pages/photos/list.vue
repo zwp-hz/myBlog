@@ -59,7 +59,7 @@
       </div>
       <div class="u_loading" v-if="modal.load_status"/>
     </div>
-    <i class="iconfont icon-jiantou" v-if="scrollToPositionpStatus" @click="scrollToPositionp"></i>
+    <i class="iconfont icon-jiantou" v-if="scrollToPositionpStatus" onclick="window.scrollTo(0, 0)"></i>
   </div>
 </template>
 
@@ -67,7 +67,7 @@
 import { mapState } from 'vuex'
 import loading from '~/components/loading'
 import headerBox from '~/components/header'
-import { lazyload, scrollToPosition } from '~/assets/js/utils'
+import { lazyload } from '~/assets/js/utils'
 
 let timer
 
@@ -214,12 +214,6 @@ export default {
           }
         }, 600)
       }
-    },
-    /**
-     * 滚动条置顶
-     */
-    scrollToPositionp() {
-      scrollToPosition(0)
     },
     /**
      * 滚动侦听
