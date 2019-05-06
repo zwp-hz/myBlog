@@ -8,7 +8,7 @@ export default function({ $axios, redirect }) {
 
     config.timeout = '10000'
 
-    if (config.method === 'post') {
+    if (config.method === 'post' && config.type !== 'upload') {
       config.data = qs.stringify(config.data)
     }
   })

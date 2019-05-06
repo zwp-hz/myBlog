@@ -53,6 +53,7 @@ module.exports = {
   },
   plugins: [
     '@/plugins/axios',
+    '@/plugins/base',
     '@/plugins/filters',
     { src: '@/assets/js/statistics.js', ssr: false },
     { src: '@/assets/js/skrollr.min.js', ssr: false }

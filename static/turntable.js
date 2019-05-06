@@ -23,7 +23,7 @@ $turntable.prototype = {
         this.$isRandom == 2
           ? area_size * result -
             area_size / 2 +
-            parseInt(Math.random() * (area_size + 1), 10)
+            parseInt(Math.random() * area_size, 10)
           : area_size * result
 
     this.rotate($angle, callback)

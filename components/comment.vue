@@ -3,8 +3,10 @@
     <!-- 评论模块 -->
     <div class="comment-form">
       <div class="comment-avatar">
+        <input class="upload" type="file" ref="upload" @change="avatarUpload">
         <div class="box">
-          <i class="iconfont icon-huifu" style="font-size: 30px;"/>
+          <img v-if="avatar" :src="AVATAR_IMGHOST + avatar + QN_POSTFIX + 100" alt>
+          <i v-else class="iconfont icon-upload" style="font-size: 30px;"/>
         </div>
       </div>
       <section class="clear">
@@ -41,7 +43,8 @@
       <section v-for="(item, index) in commentList" :key="index">
         <div class="comment g-r-center">
           <div class="portrait">
-            <i class="iconfont icon-codestore"/>
+            <img v-if="item.avatar" :src="AVATAR_IMGHOST + item.avatar + QN_POSTFIX + 100" alt="">
+            <i v-else class="iconfont icon-codestore"/>
           </div>
           <div class="box">
             <div class="comment-info">
@@ -60,7 +63,8 @@
         </div>
         <section class="reply g-r-center" v-for="(data, i) in item.replys" :key="i">
           <div class="portrait">
-            <i class="iconfont icon-codestore"/>
+            <img v-if="item.avatar" :src="AVATAR_IMGHOST + data.avatar + QN_POSTFIX + 100" alt="">
+            <i v-else class="iconfont icon-codestore"/>
           </div>
           <div class="box">
             <div class="comment-info">
@@ -83,10 +87,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: ['commentList'],
   data() {
     return {
+      avatar: '',
       comment: {
         content: '',
         user_name: '',
@@ -97,12 +104,36 @@ export default {
       request_status: false // 请求状态
     }
   },
+  computed: {
+    ...mapState(['AVATAR_IMGHOST', 'QN_POSTFIX'])
+  },
   mounted() {
-    console.log(this.commentList)
+    this.avatar = localStorage.avatar || ''
     this.comment.user_name = localStorage.user_name || ''
     this.comment.email = localStorage.email || ''
+
+    console.log()
   },
   methods: {
+    /**
+     * 头像上传
+     */
+    avatarUpload() {
+      let formData = new FormData(),
+        file = this.$refs.upload.files[0]
+
+      formData.append('file', file)
+
+      this.$axios
+        .post('/api/avatarUpload', formData, { type: 'upload' })
+        .then(res => {
+          if (res.code === 0) {
+            this.avatar = res.data.avatar
+            localStorage.avatar = res.data.avatar
+          } else {
+          }
+        })
+    },
     /**
      * 发表评论
      */
@@ -115,7 +146,8 @@ export default {
           content: c.content,
           user_name: c.user_name,
           email: c.email,
-          city: returnCitySN.cname
+          city: returnCitySN.cname,
+          avatar: this.avatar
         }
 
         if (c.reply_id && c.content.indexOf(`@${c.reply_user}：`) !== -1) {
@@ -222,13 +254,25 @@ $defaultColor: #1e212b;
       line-height: 50px;
       text-align: center;
       background-color: #fff;
-      cursor: pointer;
+      .upload {
+        position: absolute;
+        left: 5px;
+        width: 50px;
+        height: 50px;
+        opacity: 0;
+        cursor: pointer;
+      }
       .box {
         width: 50px;
         height: 50px;
         margin-left: 5px;
         border: 1px solid $defaultColor;
         border-radius: 50%;
+        img {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+        }
         i {
           color: $defaultColor;
         }
@@ -331,6 +375,11 @@ $defaultColor: #1e212b;
         text-align: center;
         border-radius: 50%;
         background-color: #cecec4;
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
         i {
           color: #fff;
           font-size: 25px;
