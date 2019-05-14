@@ -62,8 +62,7 @@ export default {
       headerData: {
         title: 'Blog',
         searchStatus: true,
-        isStatic: true,
-        type: 'blog'
+        isStatic: true
       },
       article_info: {},
       categories: [],

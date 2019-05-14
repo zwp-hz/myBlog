@@ -110,8 +110,7 @@ export default {
       headerData: {
         title: '实验室',
         searchStatus: false,
-        isStatic: true,
-        type: 'blog'
+        isStatic: true
       },
       list: [],
       categories: ['全部', '动画', '页面效果'],

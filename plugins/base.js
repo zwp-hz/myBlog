@@ -1,3 +1,4 @@
 import Vue from 'vue'
+import Message from '../utils/message/main.js'
 
-Vue.prototype.$message = data => {}
+Vue.prototype.$message = Message

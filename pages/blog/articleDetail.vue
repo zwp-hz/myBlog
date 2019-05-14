@@ -49,7 +49,7 @@
             </div>
           </div>
         </div>
-        <comment :comment-list="articleDetail.comments"></comment>
+        <comment :list="articleDetail.comments"></comment>
       </div>
     </template>
     <footer-box :blog-page="true" :hots="hots"/>
@@ -102,7 +102,7 @@ export default {
         title: '',
         searchStatus: true,
         isStatic: true,
-        type: 'blog',
+        type: 'article',
         image: {}
       },
       scrollTopStatus: false, // 滚动条置顶显示状态

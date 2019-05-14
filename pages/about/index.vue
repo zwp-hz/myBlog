@@ -1,52 +1,74 @@
 <template>
   <div id="about">
     <header-box :header-data="headerData"/>
+    <section class="content">
+      <div class="main"></div>
+      <div class="guestbook">
+        <h3>一直留言，一直爽</h3>
+        <comment :list="guestbook_list" :type="'guestbook'"></comment>
+      </div>
+    </section>
+    <footer-box/>
   </div>
 </template>
 
 <script>
 'use strict'
 import headerBox from '~/components/header.vue'
+import comment from '~/components/comment.vue'
+import footerBox from '~/components/footer.vue'
 
 export default {
+  async asyncData(app) {
+    let data = await app.$axios.post('api/getGuestbookList').then(res => {
+      if (res.code === 0) {
+        return res.data
+      }
+    })
+    return {
+      guestbook_list: data
+    }
+  },
   head: {
-    title: '关于-朱为鹏的网站'
+    title: '关于我-朱为鹏的网站'
   },
   components: {
-    headerBox
+    headerBox,
+    comment,
+    footerBox
   },
   data() {
     return {
       headerData: {
+        title: '关于我',
         searchStatus: false,
-        isStatic: true,
-        type: 'about'
-      }
+        isStatic: true
+      },
+      guestbook_list: []
     }
   },
-  methods: {
-    searchList(text) {
-      let data = {}
-
-      data[text.type] = text.text
-      this.$router.push({
-        path: '/searchResult',
-        query: data
-      })
-    }
-  }
+  methods: {}
 }
 </script>
 
 <style lang="scss" scoped>
 #about {
-  position: relative;
-  height: 3000px;
-  overflow: hidden;
-  background-color: #3498db;
-  svg {
-    position: fixed;
-    top: 100px;
+  .content {
+    width: 100%;
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 30px;
+    h3 {
+      font-size: 18px;
+      line-height: 40px;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 1300px) {
+  .content {
+    max-width: 800px !important;
   }
 }
 </style>

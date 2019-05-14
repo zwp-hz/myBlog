@@ -10,10 +10,6 @@
         </div>
       </div>
       <section class="clear">
-        <span
-          class="comment_msg u_transition_300"
-          :class="{show: comment_msg,hide: comment_msg_status}"
-        >{{ comment_msg }}</span>
         <textarea
           class="input"
           v-model="comment.content"
@@ -22,14 +18,14 @@
           ref="content"
           required
         />
-        <input class="input user-name" type="text" v-model="comment.user_name" placeholder="昵称（选填）">
+        <input class="input user-name" type="text" v-model="comment.user_name" placeholder="昵称（必填）">
         <div class="g-r-center">
           <input class="input" type="email" v-model="comment.email" placeholder="填写邮箱订阅动态（选填）">
           <button
             class="g-button u_transition_300"
-            :class="{active: comment.content}"
+            :class="{active: comment.content && comment.user_name}"
             @click="submit()"
-          >发表评论</button>
+          >{{ type === 'guestbook' ? '发表留言' : '发表评论' }}</button>
         </div>
       </section>
     </div>
@@ -37,20 +33,21 @@
     <div class="comment-list">
       <header>
         <p>
-          <span v-if="commentList">{{ commentList.length }}</span>条评论
+          <span v-if="list">{{ list.length || 0 }}</span>
+          条{{ type === 'guestbook' ? '留言' : '评论' }}
         </p>
       </header>
-      <section v-for="(item, index) in commentList" :key="index">
+      <section v-for="(item, index) in list" :key="index">
         <div class="comment g-r-center">
           <div class="portrait">
-            <img v-if="item.avatar" :src="AVATAR_IMGHOST + item.avatar + QN_POSTFIX + 100" alt="">
+            <img v-if="item.avatar" :src="AVATAR_IMGHOST + item.avatar + QN_POSTFIX + 100" alt>
             <i v-else class="iconfont icon-codestore"/>
           </div>
           <div class="box">
             <div class="comment-info">
               <strong>{{ item.user_name || '匿名' }}</strong>
               <i>{{ item.city }}</i>
-              <span>{{ item.creation_at | dateFormat('YYYY年MM月DD日 hh:mm') }}</span>
+              <span>{{ item.creation_at | dateFormat('YYYY-MM-DD hh:mm') }}</span>
             </div>
             <div class="comment-centent">
               {{ item.content }}
@@ -63,14 +60,14 @@
         </div>
         <section class="reply g-r-center" v-for="(data, i) in item.replys" :key="i">
           <div class="portrait">
-            <img v-if="item.avatar" :src="AVATAR_IMGHOST + data.avatar + QN_POSTFIX + 100" alt="">
+            <img v-if="item.avatar" :src="AVATAR_IMGHOST + data.avatar + QN_POSTFIX + 100" alt>
             <i v-else class="iconfont icon-codestore"/>
           </div>
           <div class="box">
             <div class="comment-info">
               <strong>{{ data.reply_user ? (data.user_name || '匿名') + ' @ ' + data.reply_user : '匿名' }}</strong>
               <i>{{ data.city }}</i>
-              <span>{{ data.creation_at | dateFormat('YYYY年MM月DD日 hh:mm') }}</span>
+              <span>{{ data.creation_at | dateFormat('YYYY-MM-DD hh:mm') }}</span>
             </div>
             <div class="comment-centent">
               {{ data.content }}
@@ -90,7 +87,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  props: ['commentList'],
+  props: ['list', 'type'],
   data() {
     return {
       avatar: '',
@@ -99,7 +96,6 @@ export default {
         user_name: '',
         email: ''
       },
-      comment_msg: '', // 提交评论 提示信息
       comment_msg_status: false, // 提示信息状态
       request_status: false // 请求状态
     }
@@ -111,8 +107,6 @@ export default {
     this.avatar = localStorage.avatar || ''
     this.comment.user_name = localStorage.user_name || ''
     this.comment.email = localStorage.email || ''
-
-    console.log()
   },
   methods: {
     /**
@@ -140,7 +134,11 @@ export default {
     submit() {
       let { ...c } = this.comment
 
-      if (c.content) {
+      if (!c.content) {
+        this.$message({ type: 'info', title: '评论内容不能为空' })
+      } else if (!c.user_name) {
+        this.$message({ type: 'info', title: '昵称不能为空' })
+      } else {
         let params = {
           id: this.$route.query.id,
           content: c.content,
@@ -157,20 +155,28 @@ export default {
         }
 
         this.request_status = true
-        this.$axios.post('api/addComment', params).then(res => {
-          if (res.code === 0) {
-            // 记录用户昵称
-            localStorage.user_name = c.user_name || ''
-            localStorage.email = c.email || ''
-            this.comment.content = ''
-            if (params.reply_user) {
-              this.commentList[c.reply_index].replys.unshift(res.data)
+        this.$axios
+          .post(
+            this.type === 'guestbook' ? 'api/addGuestbook' : 'api/addComment',
+            params
+          )
+          .then(res => {
+            if (res.code === 0) {
+              // 记录用户昵称
+              localStorage.user_name = c.user_name || ''
+              localStorage.email = c.email || ''
+              this.comment.content = ''
+              if (params.reply_user) {
+                this.list[c.reply_index].replys.unshift(res.data)
+              } else {
+                this.list.unshift(res.data)
+              }
+
+              this.$message({ type: 'success', title: res.message })
             } else {
-              this.commentList.unshift(res.data)
+              this.$message({ type: 'error', title: res.message })
             }
-          }
-          this.addCommentMsg(res.message)
-        })
+          })
       }
     },
     /**
@@ -196,20 +202,6 @@ export default {
       window.scrollTo(0, content.getBoundingClientRect().top + scrollTop - 50)
 
       content.focus()
-    },
-    /**
-     * 设置评论提示信息
-     */
-    addCommentMsg(text) {
-      this.comment_msg = text
-      this.request_status = false
-      setTimeout(() => {
-        this.comment_msg_status = true
-        setTimeout(() => {
-          this.comment_msg = ''
-          this.comment_msg_status = false
-        }, 300)
-      }, 1000)
     }
   }
 }
@@ -280,26 +272,6 @@ $defaultColor: #1e212b;
     }
     section {
       position: relative;
-      .comment_msg {
-        position: absolute;
-        top: 0%;
-        left: 50%;
-        padding: 5px 20px;
-        color: #fff;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 4px;
-        -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-        opacity: 0;
-        &.show {
-          top: 50%;
-          opacity: 1;
-        }
-        &.hide {
-          top: 100%;
-          opacity: 0;
-        }
-      }
       .g-r-center {
         input {
           flex: 1;

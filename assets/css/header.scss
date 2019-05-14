@@ -58,7 +58,17 @@ header {
   height: 70px;
   padding: 0 10px;
   font-size: 16px;
-  &.blog {
+
+  &.title {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0) !important;
+
+    .headerBox {
+      color: #fff !important;
+    }
+  }
+
+  &.article {
     .headerBox {
       color: #fff !important;
     }
@@ -100,7 +110,7 @@ header {
   }
 
   &.photoWall,
-  &.about {
+  &.title {
     background-color: rgba(255, 255, 255, 0) !important;
 
     .headerBox {
@@ -383,18 +393,13 @@ header {
       height: 50px;
     }
 
-    &.blog {
+    &.article {
       background-color: inherit !important;
-
-      .bar,
-      .bar:after,
-      .bar:before {
-        background-color: #fff !important;
-      }
     }
 
     &.photoWall,
-    &.about {
+    &.title,
+    &.article {
       .bar,
       .bar:after,
       .bar:before {
@@ -402,7 +407,7 @@ header {
       }
     }
 
-    &.blog.up {
+    &.article.up {
       .bar,
       .bar:after,
       .bar:before {

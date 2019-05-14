@@ -3,7 +3,7 @@
     <div
       id="header"
       class="u_transition_300"
-      :class="[ headerData.type, scrollStatus ]"
+      :class="[ headerData.type, scrollStatus, {title: headerData.title} ]"
       data-0="background-color: rgba(255,255,255,0);"
       data-300="background-color: rgba(255,255,255,0);"
       data-1200="background-color: rgba(255,255,255,1);"
@@ -73,7 +73,7 @@
       </div>
     </div>
     <!-- 博客头部菜单 -->
-    <div id="blogHeader" v-if="headerData.type === 'blog'">
+    <div id="blogHeader" v-if="headerData.title || headerData.type === 'article'">
       <div class="g-bolang">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -141,12 +141,7 @@ export default {
         {
           route: '/about',
           name: 'about',
-          title: '关于'
-        },
-        {
-          route: '/messageBoard',
-          name: 'message',
-          title: '留言板'
+          title: '关于我'
         }
       ],
       scrollStatus: '',
@@ -166,7 +161,9 @@ export default {
       }
     })
 
-    this.handleScroll()
+    if (this.headerData.type === 'article') {
+      this.handleScroll()
+    }
 
     this.scrollStatus =
       document.documentElement.scrollTop || document.body.scrollTop > 50
@@ -180,13 +177,9 @@ export default {
      */
     navJump(route) {
       if (route !== this.$route.path) {
-        if (route === '/messageBoard') {
-          window.location.href = '/messageBoard'
-        } else {
-          this.$router.push({
-            path: route
-          })
-        }
+        this.$router.push({
+          path: route
+        })
       }
     },
     /**
@@ -221,26 +214,24 @@ export default {
           // h5滚动的时候隐藏菜单
           if (this.menuSwitch) this.menuSwitch = false
 
-          if (this.headerData.type === 'blog') {
-            let afterScrollTop =
-                document.documentElement.scrollTop || document.body.scrollTop,
-              delta = afterScrollTop - beforeScrollTop
+          let afterScrollTop =
+              document.documentElement.scrollTop || document.body.scrollTop,
+            delta = afterScrollTop - beforeScrollTop
 
-            beforeScrollTop = afterScrollTop
+          beforeScrollTop = afterScrollTop
 
-            if (afterScrollTop <= 50) {
-              this.scrollStatus = ''
-            } else {
-              if (delta > 0 || delta <= -3) {
-                if (!window.scrollSkip) {
-                  let type = delta > 0 ? 'down' : 'up'
+          if (afterScrollTop <= 50) {
+            this.scrollStatus = ''
+          } else {
+            if (delta > 0 || delta <= -3) {
+              if (!window.scrollSkip) {
+                let type = delta > 0 ? 'down' : 'up'
 
-                  if (this.scrollStatus !== type) {
-                    this.scrollStatus = type
-                  }
-                } else {
-                  this.scrollStatus = 'down'
+                if (this.scrollStatus !== type) {
+                  this.scrollStatus = type
                 }
+              } else {
+                this.scrollStatus = 'down'
               }
             }
           }
