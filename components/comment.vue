@@ -123,7 +123,7 @@ export default {
         .then(res => {
           if (res.code === 0) {
             this.avatar = res.data.avatar
-            this.$message({ type: 'error', title: '上传头像成功' })
+            this.$message({ type: 'success', title: '上传头像成功' })
             localStorage.avatar = res.data.avatar
           } else {
             this.$message({ type: 'error', title: '上传头像失败' })
