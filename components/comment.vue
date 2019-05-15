@@ -31,7 +31,7 @@
     </div>
     <!-- 评论列表 -->
     <div class="comment-list">
-      <header>
+      <header :class="{guestbook: type === 'guestbook'}">
         <p>
           <span v-if="list">{{ list.length || 0 }}</span>
           条{{ type === 'guestbook' ? '留言' : '评论' }}
@@ -123,8 +123,10 @@ export default {
         .then(res => {
           if (res.code === 0) {
             this.avatar = res.data.avatar
+            this.$message({ type: 'error', title: '上传头像成功' })
             localStorage.avatar = res.data.avatar
           } else {
+            this.$message({ type: 'error', title: '上传头像失败' })
           }
         })
     },
@@ -305,6 +307,9 @@ $defaultColor: #1e212b;
         border-bottom: none;
         border-radius: 6px 6px 0 0;
         background-color: #fff;
+      }
+      &.guestbook::after {
+        content: '留言';
       }
       span {
         padding-right: 5px;
