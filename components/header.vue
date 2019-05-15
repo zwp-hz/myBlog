@@ -139,9 +139,9 @@ export default {
           title: '照片墙'
         },
         {
-          route: '/about',
-          name: 'about',
-          title: '关于我'
+          route: '/messageBoard',
+          name: 'messageBoard',
+          title: '留言板'
         }
       ],
       scrollStatus: '',

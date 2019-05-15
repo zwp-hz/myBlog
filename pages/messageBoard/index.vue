@@ -1,5 +1,5 @@
 <template>
-  <div id="about">
+  <div id="messageBoard">
     <header-box :header-data="headerData"/>
     <section class="content">
       <div class="main"></div>
@@ -30,7 +30,7 @@ export default {
     }
   },
   head: {
-    title: '关于我-朱为鹏的网站'
+    title: '留言板-朱为鹏的网站'
   },
   components: {
     headerBox,
@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       headerData: {
-        title: '关于我',
+        title: '留言板',
         searchStatus: false,
         isStatic: true
       },
@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#about {
+#messageBoard {
   .content {
     width: 100%;
     max-width: 1024px;

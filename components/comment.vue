@@ -167,7 +167,7 @@ export default {
               localStorage.email = c.email || ''
               this.comment.content = ''
               if (params.reply_user) {
-                this.list[c.reply_index].replys.unshift(res.data)
+                this.list[c.reply_index].replys.push(res.data)
               } else {
                 this.list.unshift(res.data)
               }
