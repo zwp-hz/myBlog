@@ -428,6 +428,7 @@ export default {
                 img {
                   width: 100%;
                   border-radius: 6px;
+                  background-image: inherit;
                 }
                 .icon-codestore {
                   position: absolute;

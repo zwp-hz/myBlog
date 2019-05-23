@@ -33,6 +33,7 @@
             width: 100%;
             cursor: pointer;
             overflow: hidden;
+            border-radius: 8px;
 
             .progressive {
               display: flex;
@@ -51,11 +52,6 @@
               background-size: cover !important;
               -webkit-background-size: cover !important;
               border-radius: 8px;
-            }
-
-            .is-loaded {
-              transform: translateZ(0);
-
 
               &:hover {
                 position: relative;

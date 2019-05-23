@@ -58,8 +58,11 @@ exports.lazyload = function() {
                 item.style.background = "url('" + image_url + "')"
               }
             }
-
             item.className = 'u_transition_300 progressive is-loaded'
+            setTimeout(() => {
+              // item.style.filter = ' blur(0px)'
+              item.className = 'u_transition_300 progressive'
+            }, 1300)
           })
         }
       }

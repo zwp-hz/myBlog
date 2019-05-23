@@ -458,12 +458,8 @@ b {
     filter: blur(15px);
   }
 
-  80% {
-    filter: blur(0px);
-  }
-
   100% {
-    filter: blur(0px);
+    filter: blur(0.5px);
   }
 }
 
