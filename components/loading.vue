@@ -45,7 +45,7 @@ $activeColor: #1ed9be;
     z-index: 1000;
     width: 51%;
     height: 100%;
-    background: linear-gradient(#1ed9be, #cecec4);
+    background: linear-gradient(#90fdeb, #cecec4);
     transform: translateX(0);
     transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     &.section-left {

@@ -195,7 +195,7 @@ export default {
       bottom: 0;
       left: 0;
       z-index: -10;
-      background-image: linear-gradient(to bottom right, #002f4b, #dc4225);
+      background-image: linear-gradient(to bottom right, #002f4b, #e3c4a8);
       opacity: 0.6;
     }
   }
