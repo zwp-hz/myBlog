@@ -59,7 +59,7 @@
       </div>
       <div class="u_loading" v-if="modal.load_status"/>
     </div>
-    <i class="iconfont icon-jiantou" v-if="scrollToPositionpStatus" onclick="window.scrollTo(0, 0)"></i>
+    <i class="iconfont icon-jiantou" v-if="scrollTopStatus" onclick="window.scrollTo(0, 0)"></i>
   </div>
 </template>
 
@@ -96,7 +96,7 @@ export default {
         list: [],
         number: 0
       },
-      scrollToPositionpStatus: false, // 滚动条置顶显示状态
+      scrollTopStatus: false, // 滚动条置顶显示状态
       imgList: {}, // 显示的图片列表
       modal: {
         // 弹出层样式、信息
@@ -141,9 +141,8 @@ export default {
      * @param {type}    显示隐藏状态。 默认：show。 可选 hide
      */
     img_modal(event, src, type) {
-      let scrollToPositionp =
-        document.documentElement.scrollToPositionp ||
-        document.body.scrollToPositionp
+      let scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop
 
       if (type === 'hide') {
         if (this.modal.move_status !== 2) return false
@@ -170,13 +169,13 @@ export default {
         // 设置modal 样式
         this.modal.status = true
         this.befoer_modal = {
-          top: obj.offsetTop - scrollToPositionp + 'px',
+          top: obj.offsetTop - scrollTop + 'px',
           height: obj.clientHeight + 'px'
         }
         this.modal.style = {
           width: obj.clientWidth + 'px',
           height: obj.clientHeight + 'px',
-          top: obj.offsetTop - scrollToPositionp + 'px',
+          top: obj.offsetTop - scrollTop + 'px',
           left: obj.offsetLeft + 'px'
         }
 
@@ -219,15 +218,14 @@ export default {
      * 滚动侦听
      */
     seeScroll(e) {
-      let scrollToPositionp =
-          document.documentElement.scrollToPositionp ||
-          document.body.scrollToPositionp, // 滚动条距离顶部高度
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop, // 滚动条距离顶部高度
         scrollHeight = document.documentElement.scrollHeight, // 内容高度
         seeHeight = document.documentElement.clientHeight // 可见区域高度
 
-      this.scrollToPositionpStatus = scrollToPositionp > 0
+      this.scrollTopStatus = scrollTop > 0
 
-      if (scrollToPositionp >= scrollHeight - seeHeight - 100) {
+      if (scrollTop >= scrollHeight - seeHeight - 100) {
         clearTimeout(timer)
         timer = setTimeout(() => {
           this.laodImgs()
