@@ -242,8 +242,8 @@ export default class PhotoList extends Vue {
       let img_array: any = item.img_name.match(/.*?(:|-|\.|，)/g),
         time_string: any = img_array[0] + img_array[1] + img_array[2],
         clientWidth: number = document.documentElement.clientWidth,
-        img_width: number =
-          (clientWidth > 767 ? clientWidth / 3 : clientWidth / 2) * 0.8
+        img_width: number = parseInt((clientWidth > 767 ? clientWidth / 3 : clientWidth / 2) * 0.8 as any, 10)
+
 
       // 记录数量
       time_number = time_string !== img_time ? ++time_number : time_number
