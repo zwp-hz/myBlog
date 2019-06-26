@@ -34,14 +34,10 @@
         >
           <div class="row">
             <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[0].prefix}}">
-              <span
-                v-for="(item,index) in imgs[0].list"
-                :key="index"
-                :class="{layer: index!=2,one: index==0,two: index==1}"
-              >
+              <span class="layer" v-for="(item,index) in imgs[0].list" :key="index">
                 <img :src="item.key+'200'">
               </span>
-              <span class="layer three">{{ imgs[0].prefix }}</span>
+              <b class="prefix">{{ imgs[0].prefix }}</b>
             </nuxt-link>
           </div>
         </div>
@@ -53,14 +49,10 @@
         >
           <div class="row">
             <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[1].prefix}}">
-              <span
-                v-for="(item,index) in imgs[1].list"
-                :key="index"
-                :class="{layer: index!=2,one: index==0,two: index==1}"
-              >
+              <span class="layer" v-for="(item,index) in imgs[1].list" :key="index">
                 <img :src="item.key+'200'">
               </span>
-              <span class="layer three">{{ imgs[1].prefix }}</span>
+              <b class="prefix">{{ imgs[1].prefix }}</b>
             </nuxt-link>
           </div>
         </div>
@@ -72,14 +64,10 @@
         >
           <div class="row">
             <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[2].prefix}}">
-              <span
-                v-for="(item,index) in imgs[2].list"
-                :key="index"
-                :class="{layer: index!=2,one: index==0,two: index==1}"
-              >
+              <span class="layer" v-for="(item,index) in imgs[2].list" :key="index">
                 <img :src="item.key+'200'">
               </span>
-              <span class="layer three">{{ imgs[2].prefix }}</span>
+              <b class="prefix">{{ imgs[2].prefix }}</b>
             </nuxt-link>
           </div>
         </div>
@@ -244,11 +232,10 @@ export default class Photos extends Vue {
         text-align: center;
         perspective: 1000px;
         .set {
-          background: #000;
+          display: block;
           width: 220px;
           height: 220px;
           margin: -60px 17px 0;
-          display: inline-block;
           outline: 1px solid transparent;
           box-shadow: 0 0 1px 0 rgba(0, 0, 0, 1);
           position: relative;
@@ -257,6 +244,7 @@ export default class Photos extends Vue {
           font-weight: 700;
           color: #fff;
           text-decoration: none;
+          background: #000;
           img {
             width: 100%;
             height: 100%;
@@ -268,46 +256,47 @@ export default class Photos extends Vue {
             img {
               opacity: 1;
             }
-            .layer:not(.three) {
-              box-shadow: 0 0 8px 0 #000;
-            }
-            .layer.one {
-              transform: translateZ(12px);
-            }
-            .layer.two {
-              transform: translateZ(24px);
-            }
-            .layer.three {
-              transform: translateZ(32px);
-              text-shadow: 0 0 4px #000;
+            .layer {
+              &:nth-child(1) {
+                transform: translateZ(24px);
+              }
+              &:nth-child(2) {
+                transform: translateZ(12px);
+              }
+              &:nth-child(3) {
+                transform: translateZ(6px);
+              }
             }
           }
           .layer {
-            background: #000;
-            display: block;
-            outline: 1px solid transparent;
-            box-shadow: 0 0 4px 0 #000;
+            position: absolute;
             top: 0;
             right: 0;
             bottom: 0;
             left: 0;
-            position: absolute;
-            transition: box-shadow 0.5s, transform 0.5s, text-shadow 0.5s;
+            background: #000;
+            outline: 1px solid transparent;
+            box-shadow: 0 0 4px 0 #000;
+            transition: all 0.5s;
             text-align: left;
-            &.one {
+            &:nth-child(1) {
+              transform: translateZ(6px);
+            }
+            &:nth-child(2) {
               transform: translateZ(4px);
             }
-            &.two {
-              transform: translateZ(8px);
+            &:nth-child(3) {
+              transform: translateZ(2px);
             }
-            &.three {
-              background: none;
-              padding: 16px;
-              box-shadow: none;
-              top: auto;
-              right: auto;
-              transform: translateZ(8px);
-            }
+          }
+          .prefix {
+            position: absolute;
+            background: none;
+            padding: 16px;
+            box-shadow: none;
+            left: 0;
+            bottom: 0;
+            transform: translateZ(8px);
           }
         }
       }
