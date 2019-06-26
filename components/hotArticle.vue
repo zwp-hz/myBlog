@@ -7,18 +7,9 @@
         ondragstart="return false;"
         class="images"
         href="javaScript: void();"
-        :style="item.image_status == 1 ? 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+100+') no-repeat center bottom' : ''"
+        :style="`background-image: url('${IMGHOST+item.image_src+QN_POSTFIX+100}')`"
         @click="toArticleDetail(item)"
       >
-        <img
-          v-if="!item.image_status"
-          style="opacity: 0;"
-          @load="imgLoad(index,'load');"
-          @error="imgLoad(index,'error');"
-          :src="IMGHOST+item.image_src+QN_POSTFIX+100"
-          alt
-        >
-        <i v-if="item.image_status == 2 || !item.image_src" class="iconfont icon-codestore"/>
         <span class="cy_cmt_count">{{ item.comments.length }}</span>
         <b class="backImg u_transition_300 u_hover_show">
           <i class="iconfont icon-lianjie"/>
@@ -127,9 +118,11 @@ export default class HotArticle extends Vue {
       height: 76px;
       margin-right: 19px;
       border-radius: 50% 50%;
+      background-repeat: no-repeat;
+      background-position: center bottom;
       background-color: #cecec4;
-      background-size: cover !important;
-      -webkit-background-size: cover !important;
+      background-size: cover;
+      -webkit-background-size: cover;
       .icon-codestore {
         position: absolute;
         top: 19.5px;
