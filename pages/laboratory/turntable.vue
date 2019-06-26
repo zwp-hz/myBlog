@@ -122,90 +122,91 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+'use strict'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import headerBox from '~/components/header.vue'
 import footerBox from '~/components/footer.vue'
+import { $turntable }  from '~/assets/js/utils'
 import hljs from 'highlight.js/lib/highlight'
 import javascript from 'highlight.js/lib/languages/javascript'
 import 'highlight.js/styles/a11y-dark.css'
 hljs.registerLanguage('javascript', javascript)
 
-export default {
+@Component({
   head: {
-    title: '大转盘-朱为鹏的个人网站',
-    script: [
-      {
-        src: '/turntable.js'
-      }
-    ]
+    title: '大转盘-朱为鹏的个人网站'
   },
   components: {
     headerBox,
     footerBox
-  },
-  data() {
-    return {
-      embed_nav: { list: ['js'], index: 0 },
-      line_number: 0,
-      result_text: '',
-      turntable_status: false, // 转盘状态 false：未开始 true 运行中 默认false
-      param: {
-        result: 1,
-        rotary_direction: 1,
-        duration: 2000,
-        isRandom: 1
-      },
-      headerData: {
-        searchStatus: false,
-        isStatic: true,
-        type: 'laboratory'
-      }
-    }
-  },
-  watch: {
-    'embed_nav.index': function() {
-      this.setLineNumber()
-    }
-  },
+  }
+})
+export default class Turntable extends Vue {
+  // data
+  embed_nav: any = { list: ['js'], index: 0 }
+  line_number: number = 0
+  result_text: string = ''
+  turntable_status: boolean = false // 转盘状态 false：未开始 true 运行中 默认false
+  param: any = {
+    result: 1,
+    rotary_direction: 1,
+    duration: 2000,
+    isRandom: 1
+  }
+  headerData: any = {
+    searchStatus: false,
+    isStatic: true,
+    type: 'laboratory'
+  }
+
+  @Watch('embed_nav.index')
+  onChanged() {
+    this.setLineNumber()
+  }
+
   mounted() {
     this.setLineNumber()
-    document.querySelectorAll('pre code').forEach(block => {
+    let code_obj: any = document.querySelectorAll('pre code')
+
+    code_obj.forEach(block => {
       hljs.highlightBlock(block)
     })
-  },
-  methods: {
-    /**
-     * 设置代码行数
-     */
-    setLineNumber() {
-      let index = this.embed_nav.index
+  }
 
-      this.$nextTick(() => {
-        this.line_number = Math.ceil(
-          (this.$refs[`code${index}`].offsetHeight - 40) / 20
-        )
-      })
-    },
-    /**
-     * 开始转盘
-     */
-    turntableStart() {
-      if (!this.turntable_status) {
-        this.turntable_status = true
-        let result = this.param.result,
-          turntable = new $turntable({
-            rotaryImg: this.$refs.turntable,
-            rotary_direction: this.param.rotary_direction,
-            awardsNum: 10,
-            duration: this.param.duration,
-            isRandom: this.param.isRandom
-          })
+  /**
+   * 设置代码行数
+   */
+  setLineNumber(): void {
+    let index = this.embed_nav.index
 
-        turntable.run(result, () => {
-          this.turntable_status = false
-          this.result_text = `恭喜获得奖品${result}`
+    this.$nextTick(() => {
+      let code_obj: any = this.$refs[`code${index}`]
+
+      this.line_number = Math.ceil((code_obj.offsetHeight - 40) / 20)
+    })
+  }
+
+  /**
+   * 开始转盘
+   */
+  turntableStart(): void {
+    if (!this.turntable_status) {
+      this.turntable_status = true
+
+      let result = this.param.result,
+        turntable = new $turntable({
+          rotaryImg: this.$refs.turntable,
+          rotary_direction: this.param.rotary_direction,
+          awardsNum: 10,
+          duration: this.param.duration,
+          isRandom: this.param.isRandom
         })
-      }
+
+      turntable.run(result, () => {
+        this.turntable_status = false
+        this.result_text = `恭喜获得奖品${result}`
+      })
     }
   }
 }

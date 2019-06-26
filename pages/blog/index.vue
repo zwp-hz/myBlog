@@ -22,17 +22,20 @@
       </div>
     </div>
     <article-list :categories-name="categoriesName" :init-list="article_info"/>
-    <footer-box :blog-page="true" :hots="article_info.data.hots"/>
+    <footer-box :hots="article_info.data.hots"/>
   </div>
 </template>
 
-<script>
-import headerBox from '~/components/header'
-import footerBox from '~/components/footer'
-import articleList from '~/components/articleList'
+<script lang='ts'>
+'use strict'
+import { Vue, Component } from 'vue-property-decorator'
+import { HeaderData } from '~/types/common'
+import headerBox from '~/components/header.vue'
+import footerBox from '~/components/footer.vue'
+import articleList from '~/components/articleList.vue'
 
-export default {
-  async asyncData(app) {
+@Component({
+  async asyncData(app: any) {
     let data = await app.$axios
       .post('api/getArticlesList', {
         page: Number(app.query.page) || 1,
@@ -56,22 +59,25 @@ export default {
     headerBox,
     footerBox,
     articleList
-  },
-  data() {
-    return {
-      headerData: {
-        title: 'Blog',
-        searchStatus: true,
-        isStatic: true
-      },
-      article_info: {},
-      categories: [],
-      categoriesName: this.$route.query.categories || '全部'
-    }
-  },
+  }
+})
+export default class Blog extends Vue {
+  // data
+  headerData: HeaderData = {
+    title: 'Blog',
+    searchStatus: true,
+    isStatic: true
+  }
+  article_info: any = {}
+  categories: string[] = []
+  categoriesName: string | string[] = ''
+
+  created() {
+    this.categoriesName = this.$route.query.categories || '全部'
+  }
+
   mounted() {
-    // 获取分类列表
-    this.$axios.post('api/getCategoryList').then(res => {
+    ;(<any>this).$axios.post('api/getCategoryList').then(res => {
       if (res.code === 0) {
         this.categories = res.data
       }

@@ -105,49 +105,54 @@
     </div>
   </div>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-import loading from '~/components/loading'
+<script lang='ts'>
+'use strict'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { State } from 'vuex-class'
+import loading from '~/components/loading.vue'
 import { lazyload } from '~/assets/js/utils'
 
-export default {
+@Component({
   components: {
     loading
-  },
-  props: ['categoriesName', 'searchCnt', 'initList'],
-  data() {
-    return {
-      loadStatus: false, // 加载状态。false：加载中。true：加载完成。
-      searchText: '',
-      requestStatus: false,
-      articleList: {
-        data: {
-          list: []
-        }
-      }
+  }
+})
+export default class ArticleList extends Vue {
+  @Prop(String)
+  readonly categoriesName: string
+  @Prop({})
+  readonly initList: any
+
+  // data
+  loadStatus: boolean = false // 加载状态。false：加载中。true：加载完成。
+  searchText: string = ''
+  requestStatus: boolean = false
+  articleList: any = {
+    data: {
+      list: []
     }
-  },
-  computed: {
-    ...mapState(['IMGHOST', 'QN_POSTFIX', 'M_QN_POSTFIX', 'article_hots'])
-  },
-  watch: {
-    // 标签切换
-    categoriesName() {
-      this.getArticlesList(1)
-    },
-    searchCnt(data) {
-      this.getArticlesList(1, data)
-    }
-  },
-  created() {
-    if (this.initList) {
-      this.listFormat(this.initList, true)
-    }
-  },
+  }
+
+  @State('IMGHOST')
+  IMGHOST
+  @State('QN_POSTFIX')
+  QN_POSTFIX
+  @State('article_hots')
+  article_hots: any
+
+  @Watch('categoriesName')
+  categoriesChange() {
+    this.getArticlesList(1)
+  }
+  @Watch('searchCnt')
+  searchChange(data: any) {
+    this.getArticlesList(1, data)
+  }
+
   mounted() {
     // 如果有初始数据就初始化状态否则请求文章列表
     if (this.initList) {
+      this.listFormat(this.initList, true)
       this.loadStatus = true
       this.$nextTick(() => {
         new lazyload().init()
@@ -169,122 +174,119 @@ export default {
               : {}
       )
     }
-  },
-  methods: {
-    /**
-     * 列表格式化
-     * @param {data} 数据
-     * @param {isFirst} 是否第一次加载
-     */
-    listFormat(data, isFirst) {
-      let list = data.data.list
+  }
 
-      // 保存热门文章到store
-      if (this.article_hots.length === 0) {
-        this.$store.commit('setFooterData', {
-          type: 'article_hots',
-          data: data.data.hots
-        })
-      }
+  /**
+   * 列表格式化
+   * @param {data} 数据
+   * @param {isFirst} 是否第一次加载
+   */
+  listFormat(data: any, isFirst: boolean = false) {
+    let list = data.data.list
 
-      for (let item of list) {
-        item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-      }
-
-      this.articleList = data
-
-      // DOM渲染完成
-      this.$nextTick(() => {
-        this.requestStatus = true
-        if (!isFirst) {
-          new lazyload().init()
-        }
+    // 保存热门文章到store
+    if (this.article_hots.length === 0) {
+      this.$store.commit('setFooterData', {
+        type: 'article_hots',
+        data: data.data.hots
       })
-    },
-    /**
-     * 获取文章列表
-     * @param {Number}  pagr - 分页
-     * @param {String}  searchCnt - 搜索内容
-     */
-    getArticlesList(page, searchCnt = '') {
-      let data = {}
-
-      if (searchCnt) {
-        data[searchCnt.type] = searchCnt.text
-      } else {
-        data['Category'] = this.categoriesName
-      }
-
-      this.requestStatus = false
-      this.searchText = searchCnt || this.categoriesName
-
-      // 获取对应文章列表
-      this.$axios
-        .post(
-          'api/getArticlesList',
-          Object.assign(
-            {
-              page: page,
-              release: true
-            },
-            data
-          )
-        )
-        .then(res => {
-          this.loadStatus = true
-          if (res.code == 0) {
-            this.listFormat(res.data)
-
-            // 保存热门文章到store
-            if (this.article_hots.length === 0) {
-              this.$store.commit('setFooterData', {
-                type: 'article_hots',
-                data: res.data.data.hots
-              })
-            }
-          }
-        })
-    },
-    /**
-     * 分页
-     * @param {Number} num - 分页数值
-     */
-    pageBtn(num) {
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, {
-          page: num
-        })
-      })
-      this.getArticlesList(num)
-    },
-    /**
-     * 标签搜索
-     * @param {Object} data - 搜索参数
-     */
-    search(data) {
-      this.$store.commit('searchChange', data)
-      this.$router.push({
-        path: '/blog/searchResult',
-        query: {
-          Category: data.text
-        }
-      })
-    },
-    /**
-     * 图片加载
-     * @param {Number} index - 图片下标
-     * @param {String} type - 加载类型  load: 成功  error: 加载失败
-     */
-    imgLoad(index, type) {
-      this.articleList.data.list[index].image_status = type == 'load' ? 1 : 2
-    },
-    /**
-     * 跳转详情页
-     * @param {Object}  data - 文章参数
-     */
-    toArticleDetail(data) {
-      location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`
     }
+
+    for (let item of list) {
+      item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
+    }
+
+
+    this.articleList = data
+
+    // DOM渲染完成
+    this.$nextTick(() => {
+      this.requestStatus = true
+      if (!isFirst) {
+        new lazyload().init()
+      }
+    })
+  }
+
+  /**
+   * 获取文章列表
+   * @param {Number}  pagr - 分页
+   * @param {String}  searchCnt - 搜索内容
+   */
+  getArticlesList(page: number, searchCnt: any = '') {
+    let data: any = {}
+
+    if (searchCnt) {
+      data[searchCnt.type] = searchCnt.text
+    } else {
+      data['Category'] = this.categoriesName
+    }
+
+    this.requestStatus = false
+    this.searchText = searchCnt || this.categoriesName
+
+    // 获取对应文章列表
+    ;(<any>this).$axios
+      .post(
+        'api/getArticlesList',
+        Object.assign(
+          {
+            page: page,
+            release: true
+          },
+          data
+        )
+      )
+      .then(res => {
+        this.loadStatus = true
+        if (res.code == 0) {
+          this.listFormat(res.data)
+        }
+      })
+  }
+
+  /**
+   * 分页
+   * @param {Number} num - 分页数值
+   */
+  pageBtn(num: number): void {
+    this.$router.push({
+      query: Object.assign({}, this.$route.query, {
+        page: num
+      })
+    })
+    this.getArticlesList(num)
+  }
+
+  /**
+   * 标签搜索
+   * @param {Object} data - 搜索参数
+   */
+  search(data: any): void {
+    this.$store.commit('searchChange', data)
+    this.$router.push({
+      path: '/blog/searchResult',
+      query: {
+        Category: data.text
+      }
+    })
+  }
+
+  /**
+   * 图片加载
+   * @param {Number} index - 图片下标
+   * @param {String} type - 加载类型  load: 成功  error: 加载失败
+   */
+  imgLoad(index: number, type: string): void {
+    this.articleList.data.list[index].image_status = type == 'load' ? 1 : 2
+  }
+
+  /**
+   * 跳转详情页
+   * @param {Object}  data - 文章参数
+   */
+  toArticleDetail(data: any): void {
+    location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`
   }
 }
 </script>

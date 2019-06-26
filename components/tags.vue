@@ -1,5 +1,5 @@
 <template>
-  <div class="tags clear">
+  <div class="tags clear g-box">
     <h3>tags</h3>
     <a
       class="fl u_transition_300 u_button"
@@ -10,45 +10,45 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-export default {
-  computed: {
-    ...mapState(['tags'])
-  },
+<script lang='ts'>
+'use strict'
+import { Vue, Component } from 'vue-property-decorator'
+import { State } from 'vuex-class'
+
+@Component
+export default class tags extends Vue {
+  @State('tags')
+  tags
+
   mounted() {
     if (this.tags.length === 0) {
       //获取标签列表
-      this.$axios.post('api/getTagsList').then(res => {
+      ;(<any>this).$axios.post('api/getTagsList').then(res => {
         if (res.code == 0) {
           this.$store.commit('setFooterData', {
             type: 'tags',
-            data: res.data
+            data: []
           })
         }
       })
     }
-  },
-  methods: {
-    /**
-     * 标签搜索
-     * @param {data}    搜索参数
-     */
-    search(data) {
-      this.$store.commit('searchChange', data)
-      this.$router.push({
-        path: '/blog/searchResult',
-        query: {
-          Tag: data.text
-        }
-      })
-    }
+  }
+
+  search(data) {
+    this.$store.commit('searchChange', data)
+    this.$router.push({
+      path: '/blog/searchResult',
+      query: {
+        Tag: data.text
+      }
+    })
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .tags {
+  flex: 1;
   h3 {
     margin-bottom: 15px;
     font-size: 20px;

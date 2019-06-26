@@ -12,14 +12,16 @@
   </div>
 </template>
 
-<script>
+<script lang='ts'>
 'use strict'
+import { Vue, Component } from "vue-property-decorator";
+import { HeaderData } from "~/types/common";
 import headerBox from '~/components/header.vue'
 import comment from '~/components/comment.vue'
 import footerBox from '~/components/footer.vue'
 
-export default {
-  async asyncData(app) {
+@Component({
+  async asyncData(app: any) {
     let data = await app.$axios.post('api/getGuestbookList').then(res => {
       if (res.code === 0) {
         return res.data
@@ -36,18 +38,16 @@ export default {
     headerBox,
     comment,
     footerBox
-  },
-  data() {
-    return {
-      headerData: {
-        title: '留言板',
-        searchStatus: false,
-        isStatic: true
-      },
-      guestbook_list: []
-    }
-  },
-  methods: {}
+  }
+})
+export default class MessageBoard extends Vue {
+  // data
+  headerData: HeaderData = {
+    title: '留言板',
+    searchStatus: false,
+    isStatic: true
+  }
+  guestbook_list: any = []
 }
 </script>
 

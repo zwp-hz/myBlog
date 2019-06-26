@@ -83,128 +83,136 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
+<script lang='ts'>
+'use strict'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { State } from 'vuex-class'
 
-export default {
-  props: ['list', 'type'],
-  data() {
-    return {
-      avatar: '',
-      comment: {
-        content: '',
-        user_name: '',
-        email: ''
-      },
-      comment_msg_status: false, // 提示信息状态
-      request_status: false // 请求状态
-    }
-  },
-  computed: {
-    ...mapState(['AVATAR_IMGHOST', 'QN_POSTFIX'])
-  },
+@Component
+export default class Comment extends Vue {
+  @Prop(Array)
+  readonly list!: object[]
+  @Prop(String)
+  readonly type!: string
+
+  // data
+  @State('AVATAR_IMGHOST')
+  AVATAR_IMGHOST
+  @State('QN_POSTFIX')
+  QN_POSTFIX
+
+  avatar: string = ''
+  comment: any = {
+    content: '',
+    user_name: '',
+    email: ''
+  }
+  comment_msg_status: boolean = false // 提示信息状态
+  request_status: boolean = false // 请求状态
+
   mounted() {
     this.avatar = localStorage.avatar || ''
     this.comment.user_name = localStorage.user_name || ''
     this.comment.email = localStorage.email || ''
-  },
-  methods: {
-    /**
-     * 头像上传
-     */
-    avatarUpload() {
-      let formData = new FormData(),
-        file = this.$refs.upload.files[0]
+  }
 
-      formData.append('file', file)
+  /**
+   * 头像上传
+   */
+  avatarUpload() {
+    let that: any = this,
+      formData = new FormData(),
+      upload_obj: any = this.$refs.upload
 
-      this.$axios
-        .post('/api/avatarUpload', formData, { type: 'upload' })
+    formData.append('file', upload_obj.files[0])
+
+    that.$axios
+      .post('/api/avatarUpload', formData, { type: 'upload' })
+      .then(res => {
+        if (res.code === 0) {
+          that.avatar = res.data.avatar
+          that.$message({ type: 'success', title: '上传头像成功' })
+          localStorage.avatar = res.data.avatar
+        } else {
+          that.$message({ type: 'error', title: '上传头像失败' })
+        }
+      })
+  }
+  /**
+   * 发表评论
+   */
+  submit() {
+    let that: any = this,
+      { ...c } = that.comment
+
+    if (!c.content) {
+      that.$message({ type: 'info', title: '评论内容不能为空' })
+    } else if (!c.user_name) {
+      that.$message({ type: 'info', title: '昵称不能为空' })
+    } else {
+      let params: any = {
+        id: this.$route.query.id,
+        content: c.content,
+        user_name: c.user_name,
+        email: c.email,
+        city: (<any>window).returnCitySN.cname,
+        avatar: that.avatar
+      }
+
+      if (c.reply_id && c.content.indexOf(`@${c.reply_user}：`) !== -1) {
+        params.id = c.reply_id
+        params.content = c.content.replace(`@${c.reply_user}：`, '')
+        params.reply_user = c.reply_user
+      }
+
+      that.request_status = true
+      that.$axios
+        .post(
+          that.type === 'guestbook' ? 'api/addGuestbook' : 'api/addComment',
+          params
+        )
         .then(res => {
           if (res.code === 0) {
-            this.avatar = res.data.avatar
-            this.$message({ type: 'success', title: '上传头像成功' })
-            localStorage.avatar = res.data.avatar
+            // 记录用户昵称
+            localStorage.user_name = c.user_name || ''
+            localStorage.email = c.email || ''
+            that.comment.content = ''
+            if (params.reply_user) {
+              that.list[c.reply_index].replys.push(res.data)
+            } else {
+              that.list.unshift(res.data)
+            }
+
+            that.$message({ type: 'success', title: res.message })
           } else {
-            this.$message({ type: 'error', title: '上传头像失败' })
+            that.$message({ type: 'error', title: res.message })
           }
         })
-    },
-    /**
-     * 发表评论
-     */
-    submit() {
-      let { ...c } = this.comment
-
-      if (!c.content) {
-        this.$message({ type: 'info', title: '评论内容不能为空' })
-      } else if (!c.user_name) {
-        this.$message({ type: 'info', title: '昵称不能为空' })
-      } else {
-        let params = {
-          id: this.$route.query.id,
-          content: c.content,
-          user_name: c.user_name,
-          email: c.email,
-          city: returnCitySN.cname,
-          avatar: this.avatar
-        }
-
-        if (c.reply_id && c.content.indexOf(`@${c.reply_user}：`) !== -1) {
-          params.id = c.reply_id
-          params.content = c.content.replace(`@${c.reply_user}：`, '')
-          params.reply_user = c.reply_user
-        }
-
-        this.request_status = true
-        this.$axios
-          .post(
-            this.type === 'guestbook' ? 'api/addGuestbook' : 'api/addComment',
-            params
-          )
-          .then(res => {
-            if (res.code === 0) {
-              // 记录用户昵称
-              localStorage.user_name = c.user_name || ''
-              localStorage.email = c.email || ''
-              this.comment.content = ''
-              if (params.reply_user) {
-                this.list[c.reply_index].replys.push(res.data)
-              } else {
-                this.list.unshift(res.data)
-              }
-
-              this.$message({ type: 'success', title: res.message })
-            } else {
-              this.$message({ type: 'error', title: res.message })
-            }
-          })
-      }
-    },
-    /**
-     * 评论
-     * @param {Number} index - 评论下标
-     * @param {String} reply_id - 回复评论id
-     * @param {String} reply_user - 回复评论用户
-     */
-    reply(index, reply_id, reply_user) {
-      this.comment.reply_id = reply_id
-      this.comment.reply_user = reply_user
-      this.comment.reply_index = index
-      this.comment.content = `@${reply_user}：`
-
-      let scrollTop =
-          document.body.scrollTop || document.documentElement.scrollTop,
-        content = this.$refs.content
-
-      window.scrollSkip = true
-      setTimeout(() => {
-        window.scrollSkip = false
-      }, 50)
-      window.scrollTo(0, content.getBoundingClientRect().top + scrollTop - 50)
-
-      content.focus()
     }
+  }
+
+  /**
+   * 评论
+   * @param {Number} index - 评论下标
+   * @param {String} reply_id - 回复评论id
+   * @param {String} reply_user - 回复评论用户
+   */
+  reply(index: number, reply_id: string, reply_user: string): void {
+    this.comment.reply_id = reply_id
+    this.comment.reply_user = reply_user
+    this.comment.reply_index = index
+    this.comment.content = `@${reply_user}：`
+
+    let scrollTop =
+        document.body.scrollTop || document.documentElement.scrollTop,
+      content: any = this.$refs.content
+    ;(<any>window).scrollSkip = true
+    setTimeout(() => {
+      ;(<any>window).scrollSkip = false
+    }, 50)
+    window.scrollTo(0, content.getBoundingClientRect().top + scrollTop - 50)
+
+    content.focus()
   }
 }
 </script>

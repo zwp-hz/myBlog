@@ -54,7 +54,9 @@ export function number_to_chinese(data) {
     data = data.slice(1)
   }
 
-  return (result = data.length > 1 ? '十' + chinese[data[1]] : chinese[data[0]])
+  result = data.length > 1 ? '十' + chinese[data[1]] : chinese[data[0]]
+
+  return result
 }
 
 let filters = {

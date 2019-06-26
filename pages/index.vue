@@ -58,7 +58,8 @@
         data-2000="transform: translate3d(0, 40vh, 0) scale(1); opacity: 1;"
         data-2200="transform: translate3d(0, 40vh, 0) scale(1); opacity: 1;"
         data-3000="transform: translate3d(0, 40vh, 0) scale(0.5); opacity: 0;"
-      >博客效果图，
+      >
+        博客效果图，
         <br>不妨点点看~
       </p>
       <p
@@ -91,15 +92,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 'use strict'
-import { mapState } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
+import { State } from 'vuex-class'
+import { HeaderData, Device } from '~/types/common'
 import loading from '~/components/loading.vue'
 import headerBox from '~/components/header.vue'
 import footerBox from '~/components/footer.vue'
 import Weather from '~/components/weather.vue'
 
-export default {
+@Component({
   head: {
     title: '朱为鹏的个人网站'
   },
@@ -108,33 +111,30 @@ export default {
     headerBox,
     footerBox,
     Weather
-  },
-  data() {
-    return {
-      loadStatus: false, // 加载状态。false：加载中。true：加载完成。
-      isWebp: false, // 是否支持webp格式
-      headerData: {
-        searchStatus: false,
-        isStatic: false
-      },
-      biyingImg: {}
-    }
-  },
-  computed: {
-    ...mapState(['IMGHOST', 'device'])
-  },
+  }
+})
+export default class Index extends Vue {
+  @State('device')
+  device: Device
+
+  // data
+  loadStatus: boolean = false // 加载状态。false：加载中。true：加载完成。
+  headerData: HeaderData = {
+    searchStatus: false,
+    isStatic: false
+  }
+  biyingImg: object = {}
+
   mounted() {
     let img = new Image()
-    this.isWebp = window.isWebp
-
     this.biyingImg = sessionStorage.biyingImg
       ? JSON.parse(sessionStorage.biyingImg)
       : {}
 
-    // 获取必应图片
+    // // 获取必应图片
     new Promise((resolve, reject) => {
       if (!sessionStorage.biyingImg) {
-        this.$axios.post('api/bing').then(res => {
+        ;(<any>this).$axios.post('api/bing').then(res => {
           if (res.code === 0) {
             this.biyingImg = res.data.images[0]
             sessionStorage.biyingImg = JSON.stringify(res.data.images[0])
@@ -148,27 +148,17 @@ export default {
     }).then(() => {
       this.loadStatus = true
       this.$nextTick(() => {
-        let p = this.$refs.p,
-          height = this.$refs.p.offsetHeight
+        let p: any = this.$refs.p,
+          height = p.offsetHeight
 
         p.style.boxShadow = `0 ${height +
           50}px 100px -100px rgba(0, 0, 0, 0.5) inset`
       })
     })
-  },
+  }
+
   beforeDestroy() {
     document.onmousemove = null
-  },
-  methods: {
-    searchList(text) {
-      let data = {}
-
-      data[text.type] = text.text
-      this.$router.push({
-        path: '/searchResult',
-        query: data
-      })
-    }
   }
 }
 </script>

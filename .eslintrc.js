@@ -4,12 +4,13 @@ module.exports = {
     browser: true,
     node: true
   },
+  plugins: ['@typescript-eslint'],
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@typescript-eslint/parser'
   },
-  extends: ['plugin:vue/recommended', 'plugin:prettier/recommended'],
-  plugins: ['vue', 'prettier'],
+  extends: ['@nuxtjs'],
   rules: {
+    '@typescript-eslint/no-unused-vars': 'error',
     'vue/require-prop-types': 'off',
     'vue/attributes-order': 'off',
     'vue/max-attributes-per-line': 'off',

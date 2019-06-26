@@ -70,13 +70,17 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-import headerBox from '~/components/header'
-import footerBox from '~/components/footer'
+<script lang='ts'>
+'use strict'
+import { Vue, Component, Watch } from 'vue-property-decorator'
+import { HeaderData } from '~/types/common'
+import { State } from 'vuex-class'
+import headerBox from '~/components/header.vue'
+import footerBox from '~/components/footer.vue'
 import { lazyload } from '~/assets/js/utils'
+import { Stats } from 'fs'
 
-let list = [
+let list: any = [
   {
     title: '活动大转盘',
     describe: '可自定义转盘速度、数量、方向、角度...',
@@ -97,64 +101,57 @@ let list = [
   }
 ]
 
-export default {
+@Component({
   head: {
     title: '实验室-朱为鹏的个人网站'
   },
   components: {
     headerBox,
     footerBox
-  },
-  data() {
-    return {
-      headerData: {
-        title: '实验室',
-        searchStatus: false,
-        isStatic: true
-      },
-      list: [],
-      categories: ['全部', '动画', '页面效果'],
-      categoriesName: this.$route.query.categories || '全部'
-    }
-  },
-  computed: {
-    ...mapState(['IMGHOST', 'QN_POSTFIX'])
-  },
-  watch: {
-    categoriesName(val) {
-      this.list = this.listFilter(val)
-    }
-  },
-  created() {
-    this.list = this.listFilter(this.categoriesName)
-  },
-  mounted() {},
-  methods: {
-    /**
-     * 列表过滤
-     * @param {String} val - 分类
-     */
-    listFilter(val) {
-      this.$nextTick(() => {
-        new lazyload().init()
-      })
+  }
+})
+export default class Laboratory extends Vue {
+  @State('IMGHOST')
+  IMGHOST: string
+  @State('QN_POSTFIX')
+  QN_POSTFIX: string
 
-      return val === '全部'
+  // data
+  headerData: HeaderData = {
+    title: '实验室',
+    searchStatus: false,
+    isStatic: true
+  }
+  list: any = []
+  categories: string[] = ['全部', '动画', '页面效果']
+  categoriesName: string | string[] = ''
+
+  @Watch('categoriesName')
+  onChanged(val: string) {
+    this.listFilter(val)
+  }
+
+  created() {
+    this.categoriesName = this.$route.query.categories || '全部'
+  }
+
+  listFilter(val: string | string[]) {
+    this.$nextTick(() => {
+      new lazyload().init()
+    })
+
+    this.list =
+      val === '全部'
         ? list
         : list.filter(item => {
             if (item.categories.join(',').indexOf(val) != -1) {
               return item
             }
           })
-    },
-    /**
-     * 图片加载
-     * @param {Number} index - 图片下标
-     * @param {String} type - 加载类型  load: 成功  error: 加载失败
-     */
-    imgLoad(index, type) {
-      this.list[index].image_status = type == 'load' ? 1 : 2
-    }
+  }
+
+  imgLoad(index: number, type: string) {
+    this.list[index].image_status = type == 'load' ? 1 : 2
   }
 }
 </script>

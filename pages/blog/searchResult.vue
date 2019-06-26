@@ -21,17 +21,20 @@
       </div>
     </div>
     <article-list :search-cnt="search"/>
-    <footer-box :blog-page="true"/>
+    <footer-box/>
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-import headerBox from '~/components/header'
-import footerBox from '~/components/footer'
-import articleList from '~/components/articleList'
+<script lang='ts'>
+'use strict'
+import { Vue, Component } from 'vue-property-decorator'
+import { State } from 'vuex-class'
+import { HeaderData } from '~/types/common'
+import headerBox from '~/components/header.vue'
+import footerBox from '~/components/footer.vue'
+import articleList from '~/components/articleList.vue'
 
-export default {
+@Component({
   head: {
     title: '搜索-朱为鹏的个人网站'
   },
@@ -39,21 +42,20 @@ export default {
     headerBox,
     footerBox,
     articleList
-  },
-  data() {
-    return {
-      headerData: {
-        title: 'Search Result',
-        searchStatus: true,
-        isStatic: true,
-        type: 'blog'
-      },
-      routeQuery: {}
-    }
-  },
-  computed: {
-    ...mapState(['search'])
-  },
+  }
+})
+export default class SearchResult extends Vue {
+  // data
+  @State('search')
+  search
+  headerData: HeaderData = {
+    title: 'Search Result',
+    searchStatus: true,
+    isStatic: true,
+    type: 'blog'
+  }
+  routeQuery: any = {}
+
   mounted() {
     // 判断 搜索记录是否存在
     if (!this.search.text) {

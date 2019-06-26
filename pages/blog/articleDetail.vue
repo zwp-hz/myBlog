@@ -52,21 +52,24 @@
         <comment :list="articleDetail.comments"></comment>
       </div>
     </template>
-    <footer-box :blog-page="true" :hots="hots"/>
+    <footer-box :hots="hots"/>
   </div>
 </template>
 
-<script>
-import loading from '~/components/loading'
-import headerBox from '~/components/header'
-import footerBox from '~/components/footer'
-import comment from '~/components/comment'
+<script lang='ts'>
+'use strict'
+import { Vue, Component } from 'vue-property-decorator'
+import { HeaderData } from '~/types/common'
+import loading from '~/components/loading.vue'
+import headerBox from '~/components/header.vue'
+import footerBox from '~/components/footer.vue'
+import comment from '~/components/comment.vue'
 
 const Remarkable = require('remarkable')
 const md = new Remarkable()
 
-export default {
-  async asyncData(app) {
+@Component({
+  async asyncData(app: any) {
     let data = await app.$axios
       .post('api/getArticlesDetail', {
         _id: app.query.id,
@@ -82,196 +85,195 @@ export default {
       hots: data.hots
     }
   },
-  head() {
-    return {
-      title: this.title
-    }
-  },
   components: {
     loading,
     headerBox,
     footerBox,
     comment
-  },
-  data() {
-    return {
-      title: this.$route.query.title,
-      loadStatus: false, // 加载状态。false：加载中。true：加载完成。
-      showStatus: false, // 判断动画是否执行
-      headerData: {
-        title: '',
-        searchStatus: true,
-        isStatic: true,
-        type: 'article',
-        image: {}
-      },
-      scrollTopStatus: false, // 滚动条置顶显示状态
-      articleDetail: {}, // 文章详情
-      hots: [], // 热门文章列表
-      catalog_fixed: true, // 固定浮动状态
-      markDownCatalog: [], // 文章标题目录
-      catalog_index: 0 // 当前目录下标
-    }
-  },
+  }
+})
+export default class ArticleContent extends Vue {
+  // data
+  loadStatus: boolean = false // 加载状态。false：加载中。true：加载完成。
+  showStatus: boolean = false // 判断动画是否执行
+  headerData: HeaderData = {
+    title: '',
+    searchStatus: true,
+    isStatic: true,
+    type: 'article',
+    image: {}
+  }
+  scrollTopStatus: boolean = false // 滚动条置顶显示状态
+  articleDetail: any = {} // 文章详情
+  hots: any[] = [] // 热门文章列表
+  catalog_fixed: boolean = true // 固定浮动状态
+  markDownCatalog: any[] = [] // 文章标题目录
+  catalog_index: number = 0 // 当前目录下标
+
   created() {
     this.getArticleDetail()
-  },
+  }
+
   mounted() {
+    ;(<any>document).title = this.$route.query.title
     document.addEventListener('scroll', this.seeScroll, false)
-  },
+  }
+
   beforeDestroy() {
     document.removeEventListener('scroll', this.seeScroll, false)
-  },
-  methods: {
-    /**
-     * 滚动到指定位置
-     * @param {Number} number - 位置
-     */
-    scrollToPosition(number) {
-      window.scrollSkip = true // 用于记录滚动方式  true：不触发up滚动浮动
-      window.scrollTo(0, number)
-      setTimeout(() => {
-        window.scrollSkip = false
-      }, 50)
-    },
-    /**
-     * 获取文章详情
-     */
-    getArticleDetail() {
-      let param = this.articleDetail
+  }
 
-      this.headerData.image = {
-        src: param.image_src,
-        status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
-      }
+  /**
+   * 滚动到指定位置
+   * @param {Number} number - 位置
+   */
+  scrollToPosition(number: number): void {
+    ;(<any>window).scrollSkip = true // 用于记录滚动方式  true：不触发up滚动浮动
+    window.scrollTo(0, number)
+    setTimeout(() => {
+      ;(<any>window).scrollSkip = false
+    }, 50)
+  }
 
-      setTimeout(() => {
-        this.loadStatus = true
-        param.content = md.render(param.content)
+  /**
+   * 获取文章详情
+   */
+  getArticleDetail() {
+    let param = this.articleDetail
 
-        this.$nextTick(() => {
-          // 生成文章目录
-          let catalog = [],
-            markDown = this.$refs.markDown
-
-          for (let i of markDown.getElementsByTagName('*')) {
-            let tag = i.tagName,
-              text = i.innerHTML
-
-            if (/h2|h3|h4/i.test(i.tagName)) {
-              i.setAttribute('id', text)
-              catalog.push({ tag: tag, text: text })
-            }
-          }
-
-          this.markDownCatalog = catalog
-
-          // 如果路由存在标坐标 直接跳到对应位置
-          setTimeout(() => {
-            let path = this.$route.fullPath,
-              index = path.indexOf('#')
-
-            if (index !== -1) {
-              this.cagatogSkip(decodeURI(path.slice(index + 1)), 'init')
-            }
-          }, 0)
-        })
-      }, 0)
-      setTimeout(() => {
-        this.showStatus = true
-      }, this.$store.state.first_load ? 500 : 0)
-    },
-    /**
-     * 目录跳转
-     * @param {title} 标题
-     * @param {String} type - 跳转类型  init：初始化
-     */
-    cagatogSkip(title, type) {
-      let parent_top = 458,
-        offsetTop = document.getElementById(title).offsetTop
-
-      this.scrollToPosition(parent_top + offsetTop)
-
-      for (let i = 0, list = this.markDownCatalog; list.length > i; i++) {
-        if (list[i].text === title) {
-          this.catalog_index = i
-          break
-        }
-      }
-
-      this.$router.push({
-        path: `${this.$route.fullPath.replace(/\#(\S|\s)*/, '')}#${title}`
-      })
-
-      // 文章目录列表 初始化
-      if (type === 'init') {
-        setTimeout(() => {
-          let offsetHeight = document.documentElement.offsetHeight,
-            clientHeight = document.documentElement.clientHeight,
-            footer_height = document.getElementById('footer').offsetHeight,
-            scrollTop =
-              document.documentElement.scrollTop || document.body.scrollTop
-
-          this.catalog_fixed = !(
-            offsetHeight - clientHeight - footer_height <
-            scrollTop
-          )
-          this.scrollTopStatus = true
-        }, 500)
-      }
-    },
-    /**
-     * 滚动侦听
-     */
-    seeScroll() {
-      if (document.documentElement.clientWidth < 1100) {
-        return false
-      }
-
-      let index = this.catalog_index,
-        text = this.markDownCatalog[this.catalog_index].text,
-        footer_height = document.getElementById('footer').offsetHeight,
-        ref_top = document.getElementById(text).offsetTop,
-        offsetHeight = document.documentElement.offsetHeight,
-        clientHeight = document.documentElement.clientHeight,
-        parent_top = 458,
-        scrollTop =
-          document.documentElement.scrollTop || document.body.scrollTop
-
-      this.scrollTopStatus = scrollTop > 0
-
-      this.catalog_fixed = !(
-        offsetHeight - clientHeight - footer_height <
-        scrollTop
-      )
-
-      // 滚动条大于当前目录位置 且 大于下一个目录位置
-      if (scrollTop >= parent_top + ref_top) {
-        if (index < this.markDownCatalog.length - 1) {
-          let after_top = document.getElementById(
-            this.markDownCatalog[index + 1].text
-          ).offsetTop
-
-          if (scrollTop >= parent_top + after_top) {
-            this.catalog_index = ++index
-          }
-        }
-      } else if (index >= 1 && scrollTop < parent_top + ref_top) {
-        this.catalog_index = --index
-      }
-    },
-    /** 标签搜索
-     * @param {data}  搜索参数
-     */
-    search(data) {
-      this.$store.commit('searchChange', data)
-      this.$router.push({
-        path: '/blog/searchResult',
-        query: {
-          Category: data.text
-        }
-      })
+    this.headerData.image = {
+      src: param.image_src,
+      status: 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
     }
+
+    setTimeout(() => {
+      this.loadStatus = true
+      param.content = md.render(param.content)
+
+      this.$nextTick(() => {
+        // 生成文章目录
+        let catalog = [],
+          markDown: any = this.$refs.markDown
+
+        for (let i of markDown.getElementsByTagName('*')) {
+          let tag = i.tagName,
+            text = i.innerHTML
+
+          if (/h2|h3|h4/i.test(i.tagName)) {
+            i.setAttribute('id', text)
+            catalog.push({ tag: tag, text: text })
+          }
+        }
+
+        this.markDownCatalog = catalog
+
+        // 如果路由存在标坐标 直接跳到对应位置
+        setTimeout(() => {
+          let path = this.$route.fullPath,
+            index = path.indexOf('#')
+
+          if (index !== -1) {
+            this.cagatogSkip(decodeURI(path.slice(index + 1)), 'init')
+          }
+        }, 0)
+      })
+    }, 0)
+    setTimeout(() => {
+      this.showStatus = true
+    }, this.$store.state.first_load ? 500 : 0)
+  }
+
+  /**
+   * 目录跳转
+   * @param {title} 标题
+   * @param {String} type - 跳转类型  init：初始化
+   */
+  cagatogSkip(title: string, type: string) {
+    let parent_top = 458,
+      offsetTop = document.getElementById(title).offsetTop
+
+    this.scrollToPosition(parent_top + offsetTop)
+
+    for (let i = 0, list = this.markDownCatalog; list.length > i; i++) {
+      if (list[i].text === title) {
+        this.catalog_index = i
+        break
+      }
+    }
+
+    this.$router.push({
+      path: `${this.$route.fullPath.replace(/\#(\S|\s)*/, '')}#${title}`
+    })
+
+    // 文章目录列表 初始化
+    if (type === 'init') {
+      setTimeout(() => {
+        let offsetHeight = document.documentElement.offsetHeight,
+          clientHeight = document.documentElement.clientHeight,
+          footer_height = document.getElementById('footer').offsetHeight,
+          scrollTop =
+            document.documentElement.scrollTop || document.body.scrollTop
+
+        this.catalog_fixed = !(
+          offsetHeight - clientHeight - footer_height <
+          scrollTop
+        )
+        this.scrollTopStatus = true
+      }, 500)
+    }
+  }
+
+  /**
+   * 滚动侦听
+   */
+  seeScroll() {
+    if (document.documentElement.clientWidth < 1100) {
+      return false
+    }
+
+    let index = this.catalog_index,
+      text = this.markDownCatalog[this.catalog_index].text,
+      footer_height = document.getElementById('footer').offsetHeight,
+      ref_top = document.getElementById(text).offsetTop,
+      offsetHeight = document.documentElement.offsetHeight,
+      clientHeight = document.documentElement.clientHeight,
+      parent_top = 458,
+      scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+
+    this.scrollTopStatus = scrollTop > 0
+
+    this.catalog_fixed = !(
+      offsetHeight - clientHeight - footer_height <
+      scrollTop
+    )
+
+    // 滚动条大于当前目录位置 且 大于下一个目录位置
+    if (scrollTop >= parent_top + ref_top) {
+      if (index < this.markDownCatalog.length - 1) {
+        let after_top = document.getElementById(
+          this.markDownCatalog[index + 1].text
+        ).offsetTop
+
+        if (scrollTop >= parent_top + after_top) {
+          this.catalog_index = ++index
+        }
+      }
+    } else if (index >= 1 && scrollTop < parent_top + ref_top) {
+      this.catalog_index = --index
+    }
+  }
+
+  /** 标签搜索
+   * @param {data}  搜索参数
+   */
+  search(data) {
+    this.$store.commit('searchChange', data)
+    this.$router.push({
+      path: '/blog/searchResult',
+      query: {
+        Category: data.text
+      }
+    })
   }
 }
 </script>

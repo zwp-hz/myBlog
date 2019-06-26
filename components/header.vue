@@ -98,64 +98,79 @@
         v-if="headerData.image.status == 0"
         @load="imgLoad('load');"
         @error="imgLoad('error');"
-        :src="IMGHOST+headerData.image.src+QN_POSTFIX+'100'"
+        :src="IMGHOST + headerData.image.src + QN_POSTFIX + '100'"
         alt
       >
       <img
         v-if="headerData.image.status == 1"
-        :src="IMGHOST+headerData.image.src+QN_POSTFIX+'500'"
+        :src="IMGHOST + headerData.image.src + QN_POSTFIX + '500'"
         alt
       >
     </div>
   </header>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-export default {
-  props: ['headerData'],
-  data() {
-    return {
-      menuSwitch: false,
-      navArray: [
-        {
-          route: '/',
-          name: 'index',
-          title: '首页'
-        },
-        {
-          route: '/blog',
-          name: 'blog',
-          title: '博客'
-        },
-        {
-          route: '/laboratory',
-          name: 'laboratory',
-          title: '实验室'
-        },
-        {
-          route: '/photos',
-          name: 'photos',
-          title: '照片墙'
-        },
-        {
-          route: '/messageBoard',
-          name: 'messageBoard',
-          title: '留言板'
-        }
-      ],
-      scrollStatus: '',
-      curRoute: this.$route.name,
-      searchCnt: ''
+<script lang='ts'>
+'use strict'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { HeaderData, Device } from '~/types/common'
+import { State } from 'vuex-class'
+
+@Component
+export default class Header extends Vue {
+  @Prop({})
+  readonly headerData!: HeaderData
+
+  @State('device')
+  device: Device
+  @State('search')
+  search: any
+  @State('IMGHOST')
+  IMGHOST: string
+  @State('QN_POSTFIX')
+  QN_POSTFIX: string
+
+  // data
+  menuSwitch: boolean = false
+  scrollStatus: string = ''
+  curRoute: string = ''
+  searchCnt: string = ''
+  navArray: object[] = [
+    {
+      route: '/',
+      name: 'index',
+      title: '首页'
+    },
+    {
+      route: '/blog',
+      name: 'blog',
+      title: '博客'
+    },
+    {
+      route: '/laboratory',
+      name: 'laboratory',
+      title: '实验室'
+    },
+    {
+      route: '/photos',
+      name: 'photos',
+      title: '照片墙'
+    },
+    {
+      route: '/messageBoard',
+      name: 'messageBoard',
+      title: '留言板'
     }
-  },
-  computed: {
-    ...mapState(['device', 'search', 'IMGHOST', 'QN_POSTFIX'])
-  },
+  ]
+
+  created() {
+    this.curRoute = this.$route.name
+  }
+
   mounted() {
     this.$nextTick(() => {
       if (!this.device.isMobile) {
-        skrollr.init({
+        ;(<any>window).skrollr.init({
           smoothScrollingDuration: 200
         })
       }
@@ -169,83 +184,71 @@ export default {
       document.documentElement.scrollTop || document.body.scrollTop > 50
         ? 'down'
         : ''
-  },
-  methods: {
-    /**
-     * 导航跳转
-     * @param {route} 路由地址
-     */
-    navJump(route) {
-      if (route !== this.$route.path) {
-        this.$router.push({
-          path: route
-        })
+  }
+
+  navJump(route) {
+    if (route !== this.$route.path) {
+      this.$router.push({
+        path: route
+      })
+    }
+  }
+
+  searchFn() {
+    if (this.searchCnt && this.searchCnt != this.search.text) {
+      let data = {
+        type: '_s',
+        text: this.searchCnt
       }
-    },
-    /**
-     * 搜索
-     */
-    searchFn() {
-      if (this.searchCnt && this.searchCnt != this.search.text) {
-        let data = {
-          type: '_s',
-          text: this.searchCnt
+
+      this.$store.commit('searchChange', data)
+      this.$router.push({
+        path: '/blog/searchResult',
+        query: {
+          _s: this.searchCnt
         }
+      })
+    }
+  }
 
-        this.$store.commit('searchChange', data)
-        this.$router.push({
-          path: '/blog/searchResult',
-          query: {
-            _s: this.searchCnt
-          }
-        })
-      }
-    },
-    /**
-     * 滚动侦听
-     */
-    handleScroll(e) {
-      let beforeScrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop
+  handleScroll() {
+    let beforeScrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop
 
-      window.addEventListener(
-        'scroll',
-        () => {
-          // h5滚动的时候隐藏菜单
-          if (this.menuSwitch) this.menuSwitch = false
+    window.addEventListener(
+      'scroll',
+      () => {
+        // h5滚动的时候隐藏菜单
+        if (this.menuSwitch) this.menuSwitch = false
 
-          let afterScrollTop =
-              document.documentElement.scrollTop || document.body.scrollTop,
-            delta = afterScrollTop - beforeScrollTop
+        let afterScrollTop =
+            document.documentElement.scrollTop || document.body.scrollTop,
+          delta = afterScrollTop - beforeScrollTop
 
-          beforeScrollTop = afterScrollTop
+        beforeScrollTop = afterScrollTop
 
-          if (afterScrollTop <= 50) {
-            this.scrollStatus = ''
-          } else {
-            if (delta > 0 || delta <= -3) {
-              if (!window.scrollSkip) {
-                let type = delta > 0 ? 'down' : 'up'
+        if (afterScrollTop <= 50) {
+          this.scrollStatus = ''
+        } else {
+          if (delta > 0 || delta <= -3) {
+            if (!(<any>window).scrollSkip) {
+              let type = delta > 0 ? 'down' : 'up'
 
-                if (this.scrollStatus !== type) {
-                  this.scrollStatus = type
-                }
-              } else {
-                this.scrollStatus = 'down'
+              if (this.scrollStatus !== type) {
+                this.scrollStatus = type
               }
+            } else {
+              this.scrollStatus = 'down'
             }
           }
-        },
-        false
-      )
-    },
-    /**
-     * 图片加载
-     * @param {type}    load：加载成功  error：加载失败
-     */
-    imgLoad(type) {
-      this.headerData.image.status = type == 'load' ? 1 : 0
-    }
+        }
+      },
+      false
+    )
+  }
+
+  imgLoad(type) {
+    this.headerData.image.status = type == 'load' ? 1 : 0
   }
 }
 </script>

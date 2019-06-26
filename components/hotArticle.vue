@@ -1,5 +1,5 @@
 <template>
-  <div class="recent_posts">
+  <div class="recent_posts g-box">
     <h3>最新动态</h3>
     <div class="article g-r-center" v-for="(item,index) in a_hots" :key="index">
       <a
@@ -57,61 +57,53 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-export default {
-  props: ['hots'],
-  data() {
-    return {
-      a_hots: []
-    }
-  },
-  computed: {
-    ...mapState(['IMGHOST', 'QN_POSTFIX', 'article_hots'])
-  },
-  watch: {
-    article_hots(val) {
-      this.a_hots = val
-    }
-  },
+<script lang='ts'>
+'use strict'
+import { State } from 'vuex-class'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class HotArticle extends Vue {
+  @Prop(Array)
+  readonly hots!: object[]
+
+  @State('article_hots')
+  article_hots
+  @State('IMGHOST')
+  IMGHOST
+  @State('QN_POSTFIX')
+  QN_POSTFIX
+
+  // data
+  a_hots: any[]
+
   created() {
     this.a_hots = this.hots || this.article_hots || []
-  },
-  methods: {
-    /**
-     * 图片加载
-     * @param {Number} indext - 下标
-     * @param {String}  type - 'load' 加载成功  'error' 加载失败
-     */
-    imgLoad(index, type) {
-      this.$set(this.a_hots[index], 'image_status', type == 'load' ? 1 : 2)
-    },
-    /**
-     * 标签搜索
-     * @param {Object} data - 搜索参数
-     */
-    search(data) {
-      this.$store.commit('searchChange', data)
-      this.$router.push({
-        path: '/blog/searchResult',
-        query: {
-          Category: data.text
-        }
-      })
-    },
-    /**
-     * 跳转详情页
-     * @param {Object} data - 文章参数
-     */
-    toArticleDetail(data) {
-      location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`
-    }
+  }
+
+  imgLoad(index, type) {
+    // this.$set(this.a_hots[index], 'image_status', type == 'load' ? 1 : 2)
+  }
+
+  search(data) {
+    this.$store.commit('searchChange', data)
+    this.$router.push({
+      path: '/blog/searchResult',
+      query: {
+        Category: data.text
+      }
+    })
+  }
+
+  toArticleDetail(data) {
+    location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .recent_posts {
+  flex: 1;
   h3 {
     margin-bottom: 15px;
     font-size: 20px;

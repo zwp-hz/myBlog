@@ -100,46 +100,53 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
+<script lang="ts">
+'use strict'
+import { Vue, Component } from 'vue-property-decorator'
+import { State } from 'vuex-class'
+import { HeaderData, Device } from '~/types/common'
 import loading from '~/components/loading.vue'
 import headerBox from '~/components/header.vue'
 
-export default {
+@Component({
   head: {
     title: '照片墙-朱为鹏的个人网站'
   },
   components: {
     loading,
     headerBox
-  },
-  data() {
-    return {
-      loadStatus: false, // 加载状态。false：加载中。true：加载完成。
-      headerData: {
-        searchStatus: false,
-        isStatic: true,
-        type: 'photoWall'
-      },
-      imgs: [
-        {
-          prefix: '点滴',
-          list: []
-        },
-        {
-          prefix: '风景',
-          list: []
-        },
-        {
-          prefix: '猫咪',
-          list: []
-        }
-      ]
+  }
+})
+export default class Photos extends Vue {
+  @State('device')
+  device: Device
+  @State('IMGHOST')
+  IMGHOST: string
+  @State('M_QN_POSTFIX')
+  M_QN_POSTFIX: string
+
+  // data
+  loadStatus: boolean = false // 加载状态。false：加载中。true：加载完成。
+  headerData: HeaderData = {
+    searchStatus: false,
+    isStatic: true,
+    type: 'photoWall'
+  }
+  imgs: any = [
+    {
+      prefix: '点滴',
+      list: []
+    },
+    {
+      prefix: '风景',
+      list: []
+    },
+    {
+      prefix: '猫咪',
+      list: []
     }
-  },
-  computed: {
-    ...mapState(['IMGHOST', 'M_QN_POSTFIX', 'device'])
-  },
+  ]
+
   mounted() {
     this.$nextTick(() => {
       document.body.style.cssText = `height: ${
@@ -148,8 +155,8 @@ export default {
     })
 
     // 获取对应相册3条数据
-    this.imgs.forEach((item, index) => {
-      this.$axios
+    this.imgs.forEach((item: any, index: number) => {
+      ;(<any>this).$axios
         .post('api/getQiniuList', {
           prefix: item.prefix + ':',
           limit: 3

@@ -1,5 +1,4 @@
-import Vuex from 'vuex'
-import mutations from './mutations'
+import actions from './mutations'
 
 /**
  * @var {Object}
@@ -17,7 +16,7 @@ import mutations from './mutations'
  * @property {Array} article_hots - 热门文章列表
  * @property {Array} tags - 文章标签
  */
-let state = {
+const data = {
   device: {
     isMobile: false,
     browser: '',
@@ -34,11 +33,5 @@ let state = {
   tags: []
 }
 
-const createStore = () => {
-  return new Vuex.Store({
-    state: state,
-    mutations
-  })
-}
-
-export default createStore
+export const state = () => data
+export const mutations = actions

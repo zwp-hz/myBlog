@@ -63,66 +63,65 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-import loading from '~/components/loading'
-import headerBox from '~/components/header'
+<script lang='ts'>
+'use strict'
+import { Vue, Component } from 'vue-property-decorator'
+import { State } from 'vuex-class'
+import { HeaderData } from '~/types/common'
+import loading from '~/components/loading.vue'
+import headerBox from '~/components/header.vue'
 import { lazyload } from '~/assets/js/utils'
 
 let timer
 
-export default {
-  head() {
-    return {
-      title: this.title + '-朱为鹏的个人网站'
-    }
-  },
+@Component({
   components: {
     loading,
     headerBox
-  },
-  data() {
-    return {
-      title: this.$route.query.prefix,
-      loadStatus: false, // 加载状态。false：加载中。true：加载完成。
-      headerData: {
-        // 头部配置
-        searchStatus: false,
-        isStatic: true,
-        type: 'static'
-      },
-      qn_resource: {
-        // 七牛资源
-        list: [],
-        number: 0
-      },
-      scrollTopStatus: false, // 滚动条置顶显示状态
-      imgList: {}, // 显示的图片列表
-      modal: {
-        // 弹出层样式、信息
-        html: '',
-        status: false,
-        move_status: 0,
-        load_status: false,
-        style: {}
-      },
-      befoer_modal: {
-        // 记录之前的弹出层样式
-        top: '',
-        height: ''
-      }
-    }
-  },
-  computed: {
-    ...mapState(['IMGHOST', 'M_QN_POSTFIX'])
-  },
+  }
+})
+export default class PhotoList extends Vue {
+  @State('IMGHOST')
+  IMGHOST: string
+  @State('M_QN_POSTFIX')
+  M_QN_POSTFIX: string
+
+  // data
+  title: string | string[] = ''
+  loadStatus: boolean = false // 加载状态。false：加载中。true：加载完成。
+  scrollTopStatus: boolean = false // 滚动条置顶显示状态
+  headerData: HeaderData = {
+    searchStatus: false,
+    isStatic: true,
+    type: 'static'
+  }
+  qn_resource: { list: any; number: number } = {
+    list: [],
+    number: 0
+  }
+  imgList: any = {}
+  modal: any = {
+    html: '',
+    status: false,
+    move_status: 0,
+    load_status: false,
+    style: {}
+  }
+  befoer_modal: { top: string; height: string } = {
+    top: '',
+    height: ''
+  }
+
   mounted() {
-    let prefix = this.$route.query.prefix
+    const prefix = this.$route.query.prefix
+
+    this.title = prefix
+    document.title = `${prefix}-朱为鹏的个人网站`
 
     // 获取对应相册列表
-    this.$axios
+    ;(<any>this).$axios
       .post('api/getQiniuList', {
-        prefix: prefix + ':'
+        prefix: this.title + ':'
       })
       .then(res => {
         if (res.code === 0) {
@@ -132,220 +131,204 @@ export default {
           document.addEventListener('scroll', this.seeScroll, false)
         }
       })
-  },
-  methods: {
-    /**
-     * 图片弹出层
-     * @param {event}   元素属性
-     * @param {src}     图片地址
-     * @param {type}    显示隐藏状态。 默认：show。 可选 hide
-     */
-    img_modal(event, src, type) {
-      let scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop
+  }
 
-      if (type === 'hide') {
-        if (this.modal.move_status !== 2) return false
+  img_modal(event: any = '', src: string = '', type: string = ''): void {
+    let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop
 
+    if (type === 'hide') {
+      if (this.modal.move_status === 2) {
         this.modal.move_status = 0
         this.modal.style.top = this.befoer_modal.top
         this.modal.style.height = this.befoer_modal.height
+      }
+      setTimeout(() => {
+        document.body.style.overflow = 'auto'
+        this.modal.status = false
+      }, 500)
+    } else {
+      let obj = event.path
+          ? event.path[0].tagName === 'A'
+            ? event.path[0]
+            : event.path[1]
+          : event.target,
+        src_1080 = src.replace(/w\/(.*)/g, 'w/1080'),
+        $img = new Image()
 
+      document.body.style.overflow = 'hidden'
+
+      // 设置modal 样式
+      this.modal.status = true
+      this.befoer_modal = {
+        top: obj.offsetTop - scrollTop + 'px',
+        height: obj.clientHeight + 'px'
+      }
+      this.modal.style = {
+        width: obj.clientWidth + 'px',
+        height: obj.clientHeight + 'px',
+        top: obj.offsetTop - scrollTop + 'px',
+        left: obj.offsetLeft + 'px'
+      }
+
+      // 根据图片尺寸获取弹出层的top值
+      let clientWidth = document.documentElement.clientWidth,
+        clientHeight = document.documentElement.clientHeight,
+        ratio = clientWidth >= 1110 ? 0.4 : clientWidth <= 700 ? 0.8 : 0.5,
+        img_header =
+          (clientWidth * ratio) / (obj.clientWidth / obj.clientHeight)
+
+      setTimeout(() => {
+        this.modal.html = obj.innerHTML
         setTimeout(() => {
-          document.body.style.overflow = 'auto'
-          this.modal.status = false
-        }, 500)
-      } else {
-        let obj = event.path
-            ? event.path[0].tagName === 'A'
-              ? event.path[0]
-              : event.path[1]
-            : event.target,
-          src_1080 = src.replace(/w\/(.*)/g, 'w/1080'),
-          $img = new Image()
+          this.modal.move_status = 1
+          this.modal.style.top =
+            clientHeight - img_header <= 0
+              ? '1vh'
+              : (clientHeight - img_header) / 2 + 'px'
+          this.modal.style.height = img_header + 'px'
+        }, 99)
+      }, 1)
 
-        document.body.style.overflow = 'hidden'
-
-        // 设置modal 样式
-        this.modal.status = true
-        this.befoer_modal = {
-          top: obj.offsetTop - scrollTop + 'px',
-          height: obj.clientHeight + 'px'
-        }
-        this.modal.style = {
-          width: obj.clientWidth + 'px',
-          height: obj.clientHeight + 'px',
-          top: obj.offsetTop - scrollTop + 'px',
-          left: obj.offsetLeft + 'px'
-        }
-
-        // 根据图片尺寸获取弹出层的top值
-        let clientWidth = document.documentElement.clientWidth,
-          clientHeight = document.documentElement.clientHeight,
-          ratio = clientWidth >= 1110 ? 0.4 : clientWidth <= 700 ? 0.8 : 0.5,
-          img_header =
-            (clientWidth * ratio) / (obj.clientWidth / obj.clientHeight)
-
-        setTimeout(() => {
-          this.modal.html = obj.innerHTML
-          setTimeout(() => {
-            this.modal.move_status = 1
-            this.modal.style.top =
-              clientHeight - img_header <= 0
-                ? '1vh'
-                : (clientHeight - img_header) / 2 + 'px'
-            this.modal.style.height = img_header + 'px'
-          }, 99)
-        }, 1)
-
-        // 加载1080p图片资源
-        setTimeout(() => {
-          this.modal.move_status = 2
-          this.modal.load_status = true
-          $img.src = src_1080
-          $img.onload = e => {
-            if (e.type === 'load') {
-              document
-                .getElementById('modal')
-                .getElementsByTagName('img')[0].src = src_1080
-              this.modal.load_status = false
-            }
+      // 加载1080p图片资源
+      setTimeout(() => {
+        this.modal.move_status = 2
+        this.modal.load_status = true
+        $img.src = src_1080
+        $img.onload = e => {
+          if (e.type === 'load') {
+            document
+              .getElementById('modal')
+              .getElementsByTagName('img')[0].src = src_1080
+            this.modal.load_status = false
           }
-        }, 600)
-      }
-    },
-    /**
-     * 滚动侦听
-     */
-    seeScroll(e) {
-      let scrollTop =
-          document.documentElement.scrollTop || document.body.scrollTop, // 滚动条距离顶部高度
-        scrollHeight = document.documentElement.scrollHeight, // 内容高度
-        seeHeight = document.documentElement.clientHeight // 可见区域高度
+        }
+      }, 600)
+    }
+  }
 
-      this.scrollTopStatus = scrollTop > 0
+  seeScroll(e): void {
+    let scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop, // 滚动条距离顶部高度
+      scrollHeight = document.documentElement.scrollHeight, // 内容高度
+      seeHeight = document.documentElement.clientHeight // 可见区域高度
 
-      if (scrollTop >= scrollHeight - seeHeight - 100) {
-        clearTimeout(timer)
-        timer = setTimeout(() => {
-          this.laodImgs()
-        }, 50)
-      }
-    },
-    /**
-     * 加载图片
-     * @param {type}    判断是否第一次加载
-     */
-    laodImgs(type) {
-      // 初始化数据
-      let { IMGHOST, M_QN_POSTFIX } = this,
-        { list, number } = this.qn_resource, // 七牛图片数据
-        row_size = document.documentElement.clientWidth > 900 ? 4 : 2, // 每行个数
-        img_json = {}, // 记录图片数据
-        img_time = '',
-        img_number = 0,
-        time_number = 0
+    this.scrollTopStatus = scrollTop > 0
 
-      // 加载完成  中止运行
-      if (list.slice(number).length <= 0) {
-        document.removeEventListener('scroll', this.seeScroll, false)
-      }
+    if (scrollTop >= scrollHeight - seeHeight - 100) {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        this.laodImgs()
+      }, 50)
+    }
+  }
 
-      for (let item of list.slice(number)) {
-        let img_array = item.img_name.match(/.*?(:|-|\.|，)/g),
-          time_string = img_array[0] + img_array[1] + img_array[2],
-          clientWidth = document.documentElement.clientWidth,
-          img_width = parseInt(
-            (clientWidth > 767 ? clientWidth / 3 : clientWidth / 2) * 0.8,
-            10
-          )
+  laodImgs(type: string = ''): void {
+    // 初始化数据
+    let { IMGHOST, M_QN_POSTFIX } = this,
+      { list, number } = this.qn_resource, // 七牛图片数据
+      row_size = document.documentElement.clientWidth > 900 ? 4 : 2, // 每行个数
+      img_json: any = {}, // 记录图片数据
+      img_time: string = '',
+      img_number: number = 0,
+      time_number: number = 0
 
-        // 记录数量
-        time_number = time_string !== img_time ? ++time_number : time_number
+    // 加载完成  中止运行
+    if (list.slice(number).length <= 0) {
+      document.removeEventListener('scroll', this.seeScroll, false)
+    }
 
-        // 中断数据遍历
-        if (type !== 'first') {
-          if (time_number > 1 || img_number >= row_size) {
-            break
-          }
-        } else if (img_number >= 15 || time_number > 4) {
+    for (let item of list.slice(number)) {
+      let img_array: any = item.img_name.match(/.*?(:|-|\.|，)/g),
+        time_string: any = img_array[0] + img_array[1] + img_array[2],
+        clientWidth: number = document.documentElement.clientWidth,
+        img_width: number =
+          (clientWidth > 767 ? clientWidth / 3 : clientWidth / 2) * 0.8
+
+      // 记录数量
+      time_number = time_string !== img_time ? ++time_number : time_number
+
+      // 中断数据遍历
+      if (type !== 'first') {
+        if (time_number > 1 || img_number >= row_size) {
           break
         }
-
-        // 数据分割
-        img_array.forEach((val, index) => {
-          if (index === 0 && !img_json[val]) {
-            img_json[val] = {}
-          } else if (index === 1 && !img_json[img_array[0]][val]) {
-            img_json[img_array[0]][val] = {}
-          } else if (
-            index === 2 &&
-            !img_json[img_array[0]][img_array[1]][val]
-          ) {
-            img_json[img_array[0]][img_array[1]][val] = []
-          } else if (index === 3) {
-            img_json[img_array[0]][img_array[1]][img_array[2]].push({
-              key: [img_array[0], img_array[1], img_array[2]],
-              city:
-                img_array[3].replace(/-/g, '') +
-                ' ' +
-                img_array[4].replace(/，/g, ''),
-              title: img_array[5].replace(/\./g, ''),
-              src: IMGHOST + item.key + M_QN_POSTFIX + img_width,
-              src_small: IMGHOST + item.key + M_QN_POSTFIX + 60,
-              status: 0
-            })
-          }
-        })
-
-        // 记录图片信息
-        this.qn_resource.number++
-        img_number++
-        img_time = time_string
+      } else if (img_number >= 15 || time_number > 4) {
+        break
       }
 
-      if (type === 'first') {
-        this.imgList = img_json
-        this.loadStatus = true
-      } else {
-        // 数据组合
-        let factorical = data => {
-          if (Array.isArray(data)) {
-            for (let i of data) {
-              i.key.forEach((key, index) => {
-                if (index === 0 && !this.imgList[key]) {
-                  this.imgList[key] = {}
-                } else if (index === 1 && !this.imgList[i.key[0]][key]) {
-                  this.imgList[i.key[0]][key] = {}
-                } else if (
-                  index === 2 &&
-                  !this.imgList[i.key[0]][i.key[1]][key]
-                ) {
-                  this.imgList[i.key[0]][i.key[1]][key] = []
-                }
-              })
-              this.imgList[i.key[0]][i.key[1]][i.key[2]].push(i)
-            }
-          } else if (typeof data === 'object') {
-            for (let i in data) {
-              factorical(data[i])
-            }
+      // 数据分割
+      img_array.forEach((val, index) => {
+        if (index === 0 && !img_json[val]) {
+          img_json[val] = {}
+        } else if (index === 1 && !img_json[img_array[0]][val]) {
+          img_json[img_array[0]][val] = {}
+        } else if (index === 2 && !img_json[img_array[0]][img_array[1]][val]) {
+          img_json[img_array[0]][img_array[1]][val] = []
+        } else if (index === 3) {
+          img_json[img_array[0]][img_array[1]][img_array[2]].push({
+            key: [img_array[0], img_array[1], img_array[2]],
+            city:
+              img_array[3].replace(/-/g, '') +
+              ' ' +
+              img_array[4].replace(/，/g, ''),
+            title: img_array[5].replace(/\./g, ''),
+            src: IMGHOST + item.key + M_QN_POSTFIX + img_width,
+            src_small: IMGHOST + item.key + M_QN_POSTFIX + 60,
+            status: 0
+          })
+        }
+      })
+
+      // 记录图片信息
+      this.qn_resource.number++
+      img_number++
+      img_time = time_string
+    }
+
+    if (type === 'first') {
+      this.imgList = img_json
+      this.loadStatus = true
+    } else {
+      // 数据组合
+      let factorical = data => {
+        if (Array.isArray(data)) {
+          for (let i of data) {
+            i.key.forEach((key, index) => {
+              if (index === 0 && !this.imgList[key]) {
+                this.imgList[key] = {}
+              } else if (index === 1 && !this.imgList[i.key[0]][key]) {
+                this.imgList[i.key[0]][key] = {}
+              } else if (
+                index === 2 &&
+                !this.imgList[i.key[0]][i.key[1]][key]
+              ) {
+                this.imgList[i.key[0]][i.key[1]][key] = []
+              }
+            })
+            this.imgList[i.key[0]][i.key[1]][i.key[2]].push(i)
+          }
+        } else if (typeof data === 'object') {
+          for (let i in data) {
+            factorical(data[i])
           }
         }
-
-        factorical(img_json)
       }
 
-      // 重定向数据
-      this.imgList = Object.assign({}, this.imgList)
-      // DOM渲染完成
-      this.$nextTick(() => {
-        new lazyload().init()
-        document.documentElement.scrollToPositionp = document.body.scrollToPositionp =
-          (document.documentElement.scrollToPositionp ||
-            document.body.scrollToPositionp) - 1
-      })
+      factorical(img_json)
     }
+
+    // 重定向数据
+    this.imgList = Object.assign({}, this.imgList)
+    // DOM渲染完成
+    this.$nextTick(() => {
+      new lazyload().init()
+
+      const scroll =
+        document.documentElement.scrollTop || document.body.scrollTop
+
+      window.scrollTo(0, scroll - 1)
+    })
   }
 }
 </script>

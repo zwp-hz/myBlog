@@ -14,24 +14,25 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
+<script lang='ts'>
+'use strict'
+import { Vue, Component } from 'vue-property-decorator'
+import { State } from 'vuex-class'
+import { Device } from '~/types/common'
 import jsonp from 'jsonp'
 
-export default {
-  data() {
-    return {
-      weather_ifno: {},
-      sunlightStatus: null
-    }
-  },
-  computed: {
-    ...mapState(['device'])
-  },
+@Component
+export default class Weather extends Vue {
+  @State('device')
+  device: Device
+
+  // data
+  weather_ifno: Object = {}
+
   mounted() {
     jsonp(
       `http://api.map.baidu.com/telematics/v3/weather?location=${
-        returnCitySN.cname
+        (<any>window).returnCitySN.cname
       }&output=json&ak=cgLTnAd8d2q50s2vAM32yyXsfqchIAix`,
       {},
       (err, data) => {

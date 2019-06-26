@@ -1,6 +1,6 @@
 <template>
-  <footer id="footer" :class="[type]">
-    <div v-if="blogPage">
+  <footer id="footer">
+    <div v-if="$route.path.indexOf('blog') !== -1">
       <div class="g-bolang">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -15,14 +15,8 @@
         </svg>
       </div>
       <div class="container g-r-center">
-        <hot-article
-          class="hotArticle"
-          :class="'g-box'"
-          style="flex: 1;"
-          :hots="hots"
-          @searchCnt="searchList"
-        />
-        <tags :class="'g-box'" style="flex: 1;" class="tags" @searchCnt="searchList"/>
+        <hot-article :hots="hots"/>
+        <tags/>
       </div>
     </div>
     <div class="put-on-record g-c-center">
@@ -46,24 +40,18 @@
   </footer>
 </template>
 
-<script>
-import hotArticle from './hotArticle.vue'
-import tags from './tags.vue'
+<script lang='ts'>
+'use strict'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import hotArticle from '~/components/hotArticle.vue'
+import tags from '~/components/tags.vue'
 
-export default {
-  components: {
-    hotArticle,
-    tags
-  },
-  props: ['type', 'blogPage', 'hots'],
-  data() {
-    return {}
-  },
-  methods: {
-    searchList(text) {
-      this.$emit('searchCnt', text)
-    }
-  }
+@Component({
+  components: { hotArticle, tags }
+})
+export default class Footer extends Vue {
+  @Prop(Array)
+  readonly hots!: object[]
 }
 </script>
 

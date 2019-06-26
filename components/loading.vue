@@ -7,23 +7,26 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['loadStatus'],
-  data() {
-    return {}
-  },
-  watch: {
-    loadStatus(val) {
-      if (val) {
-        document.body.style.overflow = 'auto'
+<script lang='ts'>
+'use strict'
+import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
 
-        setTimeout(() => {
-          this.$store.commit('loadChange')
-        }, 1000)
-      }
+@Component
+export default class Loading extends Vue {
+  @Prop(Boolean)
+  readonly loadStatus!: Boolean
+
+  @Watch('loadStatus')
+  onLoadChanged(val: Boolean) {
+    if (val) {
+      document.body.style.overflow = 'auto'
+
+      setTimeout(() => {
+        this.$store.commit('loadChange')
+      }, 1000)
     }
-  },
+  }
+
   mounted() {
     document.body.style.overflow = 'hidden'
   }

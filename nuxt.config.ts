@@ -60,20 +60,13 @@ module.exports = {
   ],
   modules: ['@nuxtjs/axios'],
   build: {
-    extend(
-      config,
-      {
-        isDev,
-        isClient,
-        loaders: { imgUrl }
-      }
-    ) {
+    extend(config, { isDev, isClient, loaders: { imgUrl } }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
+          exclude: /(node_modules||assets)/
         })
       }
       imgUrl.limit = 5000
