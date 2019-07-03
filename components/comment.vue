@@ -16,11 +16,22 @@
           maxlength="200"
           placeholder="说点什么吧..."
           ref="content"
-          required
         />
-        <input class="input user-name" type="text" v-model="comment.user_name" placeholder="昵称（必填）">
+        <input
+          class="input user-name"
+          type="text"
+          v-model="comment.user_name"
+          ref="user_name"
+          placeholder="昵称（必填）"
+        >
         <div class="g-r-center">
-          <input class="input" type="email" v-model="comment.email" placeholder="填写邮箱订阅动态（选填）">
+          <input
+            class="input"
+            type="email"
+            v-model="comment.email"
+            ref="email"
+            placeholder="填写邮箱订阅动态（必填）"
+          >
           <button
             class="g-button u_transition_300"
             :class="{active: comment.content && comment.user_name}"
@@ -45,13 +56,13 @@
           </div>
           <div class="box">
             <div class="comment-info">
-              <strong>{{ item.user_name || '匿名' }}</strong>
+              <strong>{{ item.user_name }}</strong>
               <i>{{ item.city }}</i>
               <span>{{ item.creation_at | dateFormat('YYYY-MM-DD hh:mm') }}</span>
             </div>
             <div class="comment-centent">
               {{ item.content }}
-              <div class="btn u_transition_300" @click="reply(index, item._id, item.user_name)">
+              <div class="btn u_transition_300" @click="reply(index, item)">
                 <i class="iconfont icon-huifu1"/>
                 <span>回复</span>
               </div>
@@ -65,13 +76,13 @@
           </div>
           <div class="box">
             <div class="comment-info">
-              <strong>{{ data.reply_user ? (data.user_name || '匿名') + ' @ ' + data.reply_user : '匿名' }}</strong>
+              <strong>{{data.user_name + ' @ ' + data.reply_user}}</strong>
               <i>{{ data.city }}</i>
               <span>{{ data.creation_at | dateFormat('YYYY-MM-DD hh:mm') }}</span>
             </div>
             <div class="comment-centent">
               {{ data.content }}
-              <div class="btn u_transition_300" @click="reply(index, item._id, data.user_name)">
+              <div class="btn u_transition_300" @click="reply(index, data, item._id)">
                 <i class="iconfont icon-huifu1"/>
                 <span>回复</span>
               </div>
@@ -146,9 +157,23 @@ export default class Comment extends Vue {
       { ...c } = that.comment
 
     if (!c.content) {
+      const content: any = this.$refs.content
+      content.focus()
       that.$message({ type: 'info', title: '评论内容不能为空' })
     } else if (!c.user_name) {
+      const user_name: any = this.$refs.user_name
+      user_name.focus()
       that.$message({ type: 'info', title: '昵称不能为空' })
+    } else if (!c.email) {
+      const email: any = this.$refs.email
+      email.focus()
+      that.$message({ type: 'info', title: '邮箱不能为空' })
+    } else if (
+      !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(c.email)
+    ) {
+      const email: any = this.$refs.email
+      email.focus()
+      that.$message({ type: 'info', title: '邮箱格式不正确' })
     } else {
       let params: any = {
         id: this.$route.query.id,
@@ -156,13 +181,20 @@ export default class Comment extends Vue {
         user_name: c.user_name,
         email: c.email,
         city: (<any>window).returnCitySN.cname,
-        avatar: that.avatar
+        avatar: that.avatar,
+        url: location.href
       }
 
+      if (that.type !== 'guestbook') {
+        params.acticle_title = that.$route.query.title
+      }
+
+      // 设置回复信息
       if (c.reply_id && c.content.indexOf(`@${c.reply_user}：`) !== -1) {
         params.id = c.reply_id
         params.content = c.content.replace(`@${c.reply_user}：`, '')
         params.reply_user = c.reply_user
+        params.reply_email = c.reply_email
       }
 
       that.request_status = true
@@ -194,14 +226,15 @@ export default class Comment extends Vue {
   /**
    * 评论
    * @param {Number} index - 评论下标
-   * @param {String} reply_id - 回复评论id
-   * @param {String} reply_user - 回复评论用户
+   * @param {Object} data - 回复的用户信息
+   * @param {Object} id - 回复id
    */
-  reply(index: number, reply_id: string, reply_user: string): void {
-    this.comment.reply_id = reply_id
-    this.comment.reply_user = reply_user
+  reply(index: number, data: any, id: string): void {
+    this.comment.reply_id = id || data._id
+    this.comment.reply_user = data.user_name
+    this.comment.reply_email = data.email
     this.comment.reply_index = index
-    this.comment.content = `@${reply_user}：`
+    this.comment.content = `@${data.user_name}：`
 
     let scrollTop =
         document.body.scrollTop || document.documentElement.scrollTop,
