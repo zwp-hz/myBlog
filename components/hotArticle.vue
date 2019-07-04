@@ -51,7 +51,8 @@
 <script lang='ts'>
 'use strict'
 import { State } from 'vuex-class'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { setTimeout } from 'timers'
 
 @Component
 export default class HotArticle extends Vue {
@@ -68,12 +69,13 @@ export default class HotArticle extends Vue {
   // data
   a_hots: any[]
 
-  created() {
-    this.a_hots = this.hots || this.article_hots || []
+  @Watch('article_hots')
+  hotsArticleChange(data) {
+    this.a_hots = data
   }
 
-  imgLoad(index, type) {
-    // this.$set(this.a_hots[index], 'image_status', type == 'load' ? 1 : 2)
+  created() {
+    this.a_hots = this.hots || this.article_hots
   }
 
   search(data) {

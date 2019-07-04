@@ -20,14 +20,14 @@
         </p>
       </div>
     </div>
-    <article-list :search-cnt="search"/>
+    <article-list :init-list="article_info"/>
     <footer-box/>
   </div>
 </template>
 
 <script lang='ts'>
 'use strict'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State } from 'vuex-class'
 import { HeaderData } from '~/types/common'
 import headerBox from '~/components/header.vue'
@@ -35,6 +35,26 @@ import footerBox from '~/components/footer.vue'
 import articleList from '~/components/articleList.vue'
 
 @Component({
+  async asyncData(app: any) {
+    let query = app.query,
+      data = await app.$axios
+        .post('api/getArticlesList', {
+          page: Number(query.page) || 1,
+          release: true,
+          ...(query._s && { type: '_s', text: query._s }),
+          ...(query.Tag && { type: 'Tag', text: query.Tag }),
+          ...(query.Category && { type: 'Category', text: query.Category })
+        })
+        .then(res => {
+          if (res.code === 0) {
+            return res.data
+          }
+        })
+
+    return {
+      article_info: data
+    }
+  },
   head: {
     title: '搜索-朱为鹏的个人网站'
   },
@@ -48,12 +68,14 @@ export default class SearchResult extends Vue {
   // data
   @State('search')
   search
+
   headerData: HeaderData = {
     title: 'Search Result',
     searchStatus: true,
     isStatic: true,
     type: 'blog'
   }
+  article_info: any = {}
   routeQuery: any = {}
 
   mounted() {

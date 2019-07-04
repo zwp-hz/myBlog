@@ -115,6 +115,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { HeaderData, Device } from '~/types/common'
 import { State } from 'vuex-class'
+import { constants } from 'fs';
 
 @Component
 export default class Header extends Vue {

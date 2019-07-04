@@ -27,7 +27,7 @@ export default class tags extends Vue {
         if (res.code == 0) {
           this.$store.commit('setFooterData', {
             type: 'tags',
-            data: []
+            data: res.data
           })
         }
       })

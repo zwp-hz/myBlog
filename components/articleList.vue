@@ -133,12 +133,14 @@ export default class ArticleList extends Vue {
     }
   }
 
+  @State('search')
+  searchCnt
   @State('IMGHOST')
   IMGHOST
   @State('QN_POSTFIX')
   QN_POSTFIX
   @State('article_hots')
-  article_hots: any
+  article_hots
 
   @Watch('categoriesName')
   categoriesChange() {
@@ -150,30 +152,11 @@ export default class ArticleList extends Vue {
   }
 
   mounted() {
-    // 如果有初始数据就初始化状态否则请求文章列表
-    if (this.initList) {
-      this.listFormat(this.initList, true)
-      this.loadStatus = true
-      this.$nextTick(() => {
-        new lazyload().init()
-      })
-    } else {
-      let query = this.$route.query,
-        _s = query._s,
-        Tag = query.Tag,
-        Category = query.Category
-
-      this.getArticlesList(
-        Number(query.page) || 1,
-        _s
-          ? { type: '_s', text: _s }
-          : Tag
-            ? { type: 'Tag', text: Tag }
-            : Category
-              ? { type: 'Category', text: Category }
-              : {}
-      )
-    }
+    this.listFormat(this.initList, true)
+    this.loadStatus = true
+    this.$nextTick(() => {
+      new lazyload().init()
+    })
   }
 
   /**
@@ -195,7 +178,6 @@ export default class ArticleList extends Vue {
     for (let item of list) {
       item.image_status = 0 // 0：图片未加载  1：图片加载成功  2：图片加载失败
     }
-
 
     this.articleList = data
 
