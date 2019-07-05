@@ -21,7 +21,7 @@
       </div>
     </div>
     <article-list :init-list="article_info"/>
-    <footer-box/>
+    <footer-box :hots="article_info.data.hots"/>
   </div>
 </template>
 
@@ -41,9 +41,9 @@ import articleList from '~/components/articleList.vue'
         .post('api/getArticlesList', {
           page: Number(query.page) || 1,
           release: true,
-          ...(query._s && { type: '_s', text: query._s }),
-          ...(query.Tag && { type: 'Tag', text: query.Tag }),
-          ...(query.Category && { type: 'Category', text: query.Category })
+          ...(query._s && { '_s': query._s }),
+          ...(query.Tag && { 'Tag': query.Tag }),
+          ...(query.Category && { 'Category': query.Category })
         })
         .then(res => {
           if (res.code === 0) {
