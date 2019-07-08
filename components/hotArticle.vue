@@ -167,7 +167,7 @@ export default class HotArticle extends Vue {
       display: -webkit-box;
       font-size: 16px;
       font-weight: 700;
-      -webkit-box-orient: vertical;
+     /* autoprefixer: off */     -webkit-box-orient: vertical;     /* autoprefixer: on */
       -webkit-line-clamp: 2;
       word-break: break-all;
       overflow: hidden;
