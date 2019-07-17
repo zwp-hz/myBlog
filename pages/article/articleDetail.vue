@@ -59,7 +59,6 @@
 <script lang='ts'>
 'use strict'
 import { Vue, Component } from 'vue-property-decorator'
-import { HeaderData } from '~/types/common'
 import loading from '~/components/loading.vue'
 import headerBox from '~/components/header.vue'
 import footerBox from '~/components/footer.vue'
@@ -128,10 +127,10 @@ export default class ArticleContent extends Vue {
    * @param {Number} number - 位置
    */
   scrollToPosition(number: number): void {
-    ;(<any>window).scrollSkip = true // 用于记录滚动方式  true：不触发up滚动浮动
+    window.scrollSkip = true // 用于记录滚动方式  true：不触发up滚动浮动
     window.scrollTo(0, number)
     setTimeout(() => {
-      ;(<any>window).scrollSkip = false
+      window.scrollSkip = false
     }, 50)
   }
 
@@ -269,7 +268,7 @@ export default class ArticleContent extends Vue {
   search(data) {
     this.$store.commit('searchChange', data)
     this.$router.push({
-      path: '/blog/searchResult',
+      path: '/article/searchResult',
       query: {
         Category: data.text
       }

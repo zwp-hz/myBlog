@@ -1,6 +1,6 @@
 <template>
   <footer id="footer">
-    <div v-if="$route.path.indexOf('blog') !== -1">
+    <div v-if="$route.path.indexOf('article') !== -1">
       <div class="g-bolang">
         <svg
           xmlns="http://www.w3.org/2000/svg"

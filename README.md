@@ -20,8 +20,8 @@
     |-- layouts                           // 默认布局
     |-- middleware
     |-- pages
-    |   |-- about                        // 个人页面
-    |   |-- blog                          // 博客页面
+    |   |-- about                         // 个人页面
+    |   |-- article                       // 文章页面
     |   |-- photos                        // 相册页面
     |-- plugins
     |   |-- axios.js                      // axios 过滤器
@@ -48,15 +48,15 @@
 #### 首页
 
 <p>
-    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_h5.gif" width="30%"/>
-    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/index_pc.gif" width="60%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/article-markdown-photos/master/README/index_h5.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/article-markdown-photos/master/README/index_pc.gif" width="60%"/>
 </p>
 
 #### 照片墙
 
 <p>
-    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_h5.gif" width="30%"/>
-    <img src="https://raw.githubusercontent.com/zwp-hz/blog-markdown-photos/master/README/photo_pc.gif" width="60%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/article-markdown-photos/master/README/photo_h5.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/zwp-hz/article-markdown-photos/master/README/photo_pc.gif" width="60%"/>
 </p>
 
 ### 如何通过 axios 请求接口？

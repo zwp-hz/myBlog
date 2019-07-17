@@ -65,30 +65,19 @@ export class $turntable {
     let rotaryNum = this.$duration / 50, //转动次数
       rotarySpeed =
         ((this.$rotary_direction == 2 ? -1800 : 1800) - angle) / rotaryNum, // 转动速度
-      ratio = [
-        1.9,
-        1.8,
-        1.7,
-        1.6,
-        1.5,
-        1.4,
-        1.3,
-        1.2,
-        1.1,
-        1,
-        1,
-        0.9,
-        0.8,
-        0.7,
-        0.6,
-        0.5,
-        0.4,
-        0.3,
-        0.2,
-        0.1
-      ], //转动速率比例
+      ratio = (() => {
+        let array = []
+        for (let i = 1; i < 20; i++) {
+          array.push((20 - i) / 10)
+        }
+        array.splice(10, 0, 1)
+
+        return array
+      })(), //转动速率比例
       total = 0, //用于存储当前位置
       curRotaryNum = 0 //记录当前转动次数
+
+      console.log(ratio)
 
     let timer = setInterval(() => {
       let ration = ratio[Math.floor(curRotaryNum / (rotaryNum / ratio.length))] //设置速率

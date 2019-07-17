@@ -353,7 +353,6 @@ let imgLoad = (src, callback) => {
 <script lang='ts'>
 'use strict'
 import { Vue, Component } from 'vue-property-decorator'
-import { HeaderData } from '~/types/common'
 import { State } from 'vuex-class'
 import headerBox from '~/components/header.vue'
 import footerBox from '~/components/footer.vue'

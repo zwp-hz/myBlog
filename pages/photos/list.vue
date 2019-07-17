@@ -67,7 +67,6 @@
 'use strict'
 import { Vue, Component } from 'vue-property-decorator'
 import { State } from 'vuex-class'
-import { HeaderData } from '~/types/common'
 import loading from '~/components/loading.vue'
 import headerBox from '~/components/header.vue'
 import { lazyload } from '~/assets/js/utils'
@@ -123,7 +122,7 @@ export default class PhotoList extends Vue {
       .post('api/getQiniuList', {
         prefix: this.title + ':'
       })
-      .then(res => {
+      .then((res: any) => {
         if (res.code === 0) {
           this.qn_resource.list = res.data.items
           this.laodImgs('first')

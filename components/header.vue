@@ -113,7 +113,6 @@
 <script lang='ts'>
 'use strict'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { HeaderData, Device } from '~/types/common'
 import { State } from 'vuex-class'
 import { constants } from 'fs';
 
@@ -143,9 +142,9 @@ export default class Header extends Vue {
       title: '首页'
     },
     {
-      route: '/blog',
-      name: 'blog',
-      title: '博客'
+      route: '/article',
+      name: 'article',
+      title: '文章'
     },
     {
       route: '/laboratory',
@@ -171,7 +170,7 @@ export default class Header extends Vue {
   mounted() {
     this.$nextTick(() => {
       if (!this.device.isMobile) {
-        ;(<any>window).skrollr.init({
+        window.skrollr.init({
           smoothScrollingDuration: 200
         })
       }
@@ -204,7 +203,7 @@ export default class Header extends Vue {
 
       this.$store.commit('searchChange', data)
       this.$router.push({
-        path: '/blog/searchResult',
+        path: '/article/searchResult',
         query: {
           _s: this.searchCnt
         }
@@ -232,7 +231,7 @@ export default class Header extends Vue {
           this.scrollStatus = ''
         } else {
           if (delta > 0 || delta <= -3) {
-            if (!(<any>window).scrollSkip) {
+            if (!window.scrollSkip) {
               let type = delta > 0 ? 'down' : 'up'
 
               if (this.scrollStatus !== type) {

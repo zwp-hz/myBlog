@@ -81,7 +81,7 @@ export default class HotArticle extends Vue {
   search(data) {
     this.$store.commit('searchChange', data)
     this.$router.push({
-      path: '/blog/searchResult',
+      path: '/article/searchResult',
       query: {
         Category: data.text
       }
@@ -89,7 +89,7 @@ export default class HotArticle extends Vue {
   }
 
   toArticleDetail(data) {
-    location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`
+    location.href = `/article/articleDetail?id=${data._id}&title=${data.title}`
   }
 }
 </script>
@@ -167,7 +167,8 @@ export default class HotArticle extends Vue {
       display: -webkit-box;
       font-size: 16px;
       font-weight: 700;
-     /* autoprefixer: off */     -webkit-box-orient: vertical;     /* autoprefixer: on */
+      /*! autoprefixer: ignore next */
+      -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       word-break: break-all;
       overflow: hidden;

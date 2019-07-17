@@ -15,7 +15,6 @@
 <script lang='ts'>
 'use strict'
 import { Vue, Component } from "vue-property-decorator";
-import { HeaderData } from "~/types/common";
 import headerBox from '~/components/header.vue'
 import comment from '~/components/comment.vue'
 import footerBox from '~/components/footer.vue'

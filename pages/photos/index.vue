@@ -92,7 +92,6 @@
 'use strict'
 import { Vue, Component } from 'vue-property-decorator'
 import { State } from 'vuex-class'
-import { HeaderData, Device } from '~/types/common'
 import loading from '~/components/loading.vue'
 import headerBox from '~/components/header.vue'
 
@@ -149,7 +148,7 @@ export default class Photos extends Vue {
           prefix: item.prefix + ':',
           limit: 3
         })
-        .then(res => {
+        .then((res: any) => {
           if (res.code === 0) {
             let items = res.data.items
 

@@ -55,7 +55,7 @@ module.exports = {
     '@/plugins/axios',
     '@/plugins/filters',
     { src: '@/plugins/base', ssr: false },
-    { src: '@/assets/js/statistics', ssr: false },
+    { src: '@/assets/js/statistics.ts', ssr: false },
     { src: '@/assets/js/skrollr.min.js', ssr: false }
   ],
   modules: ['@nuxtjs/axios'],

@@ -11,7 +11,7 @@
           (search.type || routeQuery.type) }}：{{ search.text || routeQuery.text }}
         </h1>
         <p class="breadcrumbs">
-          <nuxt-link class="u_transition_300 u_hover_active" :to="{path: '/blog'}">博客</nuxt-link>
+          <nuxt-link class="u_transition_300 u_hover_active" :to="{path: '/article'}">博客</nuxt-link>
           <span>&gt;</span>
           <strong
             v-if="(search.type || routeQuery.type) == '_s'"
@@ -29,7 +29,6 @@
 'use strict'
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { State } from 'vuex-class'
-import { HeaderData } from '~/types/common'
 import headerBox from '~/components/header.vue'
 import footerBox from '~/components/footer.vue'
 import articleList from '~/components/articleList.vue'
@@ -73,7 +72,7 @@ export default class SearchResult extends Vue {
     title: 'Search Result',
     searchStatus: true,
     isStatic: true,
-    type: 'blog'
+    type: 'article'
   }
   article_info: any = {}
   routeQuery: any = {}

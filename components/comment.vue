@@ -102,7 +102,7 @@ import { State } from 'vuex-class'
 @Component
 export default class Comment extends Vue {
   @Prop(Array)
-  readonly list!: object[]
+  readonly list!: any
   @Prop(String)
   readonly type!: string
 
@@ -131,21 +131,19 @@ export default class Comment extends Vue {
    * 头像上传
    */
   avatarUpload() {
-    let that: any = this,
-      formData = new FormData(),
+    let formData = new FormData(),
       upload_obj: any = this.$refs.upload
 
     formData.append('file', upload_obj.files[0])
-
-    that.$axios
+    ;(<any>this).$axios
       .post('/api/avatarUpload', formData, { type: 'upload' })
       .then(res => {
         if (res.code === 0) {
-          that.avatar = res.data.avatar
-          that.$message({ type: 'success', title: '上传头像成功' })
+          this.avatar = res.data.avatar
+          this.$message({ type: 'success', title: '上传头像成功' })
           localStorage.avatar = res.data.avatar
         } else {
-          that.$message({ type: 'error', title: '上传头像失败' })
+          this.$message({ type: 'error', title: '上传头像失败' })
         }
       })
   }
@@ -153,74 +151,82 @@ export default class Comment extends Vue {
    * 发表评论
    */
   submit() {
-    let that: any = this,
-      { ...c } = that.comment
-
-    if (!c.content) {
-      const content: any = this.$refs.content
-      content.focus()
-      that.$message({ type: 'info', title: '评论内容不能为空' })
-    } else if (!c.user_name) {
-      const user_name: any = this.$refs.user_name
-      user_name.focus()
-      that.$message({ type: 'info', title: '昵称不能为空' })
-    } else if (!c.email) {
-      const email: any = this.$refs.email
-      email.focus()
-      that.$message({ type: 'info', title: '邮箱不能为空' })
-    } else if (
-      !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(c.email)
-    ) {
-      const email: any = this.$refs.email
-      email.focus()
-      that.$message({ type: 'info', title: '邮箱格式不正确' })
-    } else {
-      let params: any = {
-        id: this.$route.query.id,
-        content: c.content,
-        user_name: c.user_name,
-        email: c.email,
-        city: (<any>window).returnCitySN.cname,
-        avatar: that.avatar,
-        url: location.href
+    let comment = this.comment,
+      verification = {
+        content: '评论内容不能为空',
+        user_name: '昵称不能为空',
+        email: '邮箱不能为空'
       }
 
-      if (that.type !== 'guestbook') {
-        params.acticle_title = that.$route.query.title
-      }
+    for (let i in verification) {
+      let object = this.$refs[i] as HTMLInputElement
 
-      // 设置回复信息
-      if (c.reply_id && c.content.indexOf(`@${c.reply_user}：`) !== -1) {
-        params.id = c.reply_id
-        params.content = c.content.replace(`@${c.reply_user}：`, '')
-        params.reply_user = c.reply_user
-        params.reply_email = c.reply_email
-      }
+      if (!comment[i]) {
+        object.focus()
+        this.$message({ type: 'info', title: verification[i] })
 
-      that.request_status = true
-      that.$axios
-        .post(
-          that.type === 'guestbook' ? 'api/addGuestbook' : 'api/addComment',
-          params
+        return
+      } else if (
+        i === 'email' &&
+        !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(
+          comment[i]
         )
-        .then(res => {
-          if (res.code === 0) {
-            // 记录用户昵称
-            localStorage.user_name = c.user_name || ''
-            localStorage.email = c.email || ''
-            that.comment.content = ''
-            if (params.reply_user) {
-              that.list[c.reply_index].replys.push(res.data)
-            } else {
-              that.list.unshift(res.data)
-            }
+      ) {
+        object.focus()
+        this.$message({ type: 'info', title: '邮箱格式不正确' })
 
-            that.$message({ type: 'success', title: res.message })
-          } else {
-            that.$message({ type: 'error', title: res.message })
-          }
-        })
+        return
+      }
     }
+
+    let params: any = {
+      id: this.$route.query.id,
+      content: comment.content,
+      user_name: comment.user_name,
+      email: comment.email,
+      city: window.returnCitySN.cname,
+      avatar: this.avatar,
+      url: location.href
+    }
+
+    if (this.type !== 'guestbook') {
+      params.acticle_title = this.$route.query.title
+    }
+
+    // 设置回复信息
+    if (
+      comment.reply_id &&
+      comment.content.indexOf(`@${comment.reply_user}：`) !== -1
+    ) {
+      params.id = comment.reply_id
+      params.content = comment.content.replace(`@${comment.reply_user}：`, '')
+      params.reply_user = comment.reply_user
+      params.reply_email = comment.reply_email
+    }
+
+    this.request_status = true
+    ;(<any>this).$axios
+      .post(
+        this.type === 'guestbook' ? 'api/addGuestbook' : 'api/addComment',
+        params
+      )
+      .then(res => {
+        if (res.code === 0) {
+          // 记录用户昵称
+          localStorage.user_name = comment.user_name || ''
+          localStorage.email = comment.email || ''
+          this.comment.content = ''
+          if (params.reply_user) {
+            this.list[comment.reply_index].replys.push(res.data)
+          } else {
+            this.list.unshift(res.data)
+          }
+
+          this.$message({ type: 'success', title: res.message })
+        } else {
+          this.$message({ type: 'error', title: res.message })
+        }
+      })
   }
 
   /**
@@ -230,18 +236,21 @@ export default class Comment extends Vue {
    * @param {Object} id - 回复id
    */
   reply(index: number, data: any, id: string): void {
-    this.comment.reply_id = id || data._id
-    this.comment.reply_user = data.user_name
-    this.comment.reply_email = data.email
-    this.comment.reply_index = index
-    this.comment.content = `@${data.user_name}：`
+    this.comment = Object.assign(this.comment, {
+      reply_id: id || data._id,
+      reply_user: data.user_name,
+      reply_email: data.email,
+      reply_index: index,
+      content: '@' + data.user_name
+    })
 
     let scrollTop =
         document.body.scrollTop || document.documentElement.scrollTop,
-      content: any = this.$refs.content
-    ;(<any>window).scrollSkip = true
+      content = this.$refs.content as HTMLInputElement
+
+    window.scrollSkip = true
     setTimeout(() => {
-      ;(<any>window).scrollSkip = false
+      window.scrollSkip = false
     }, 50)
     window.scrollTo(0, content.getBoundingClientRect().top + scrollTop - 50)
 

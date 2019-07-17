@@ -11,7 +11,7 @@
           <div class="box">
             <nuxt-link
               class="image"
-              :to="{ path: '/blog/articleDetail', query: {id: item._id, title: item.title} }"
+              :to="{ path: '/article/articleDetail', query: {id: item._id, title: item.title} }"
             >
               <div
                 class="progressive not-loaded"
@@ -37,7 +37,7 @@
                 <nuxt-link
                   class="u_transition_300 u_hover_active"
                   href="javaScript: void(0);"
-                  :to="{ path: '/blog/articleDetail', query: {id: item._id, title: item.title} }"
+                  :to="{ path: '/article/articleDetail', query: {id: item._id, title: item.title} }"
                 >{{ item.title }}</nuxt-link>
               </h2>
               <strong>{{ item.describe }}</strong>
@@ -54,7 +54,7 @@
                 <nuxt-link
                   class="review u_transition_300 u_hover_active_bg"
                   href="javaScript: void(0);"
-                  :to="{ path: '/blog/articleDetail', query: {id: item._id, title: item.title} }"
+                  :to="{ path: '/article/articleDetail', query: {id: item._id, title: item.title} }"
                 >
                   <i class="iconfont icon-huifu"/>
                   <span class="cy_cmt_count">{{ item.comments.length }}</span>
@@ -219,7 +219,7 @@ export default class ArticleList extends Vue {
           data
         )
       )
-      .then(res => {
+      .then((res: any) => {
         this.loadStatus = true
         if (res.code == 0) {
           this.listFormat(res.data)
@@ -247,7 +247,7 @@ export default class ArticleList extends Vue {
   search(data: any): void {
     this.$store.commit('searchChange', data)
     this.$router.push({
-      path: '/blog/searchResult',
+      path: '/article/searchResult',
       query: {
         Category: data.text
       }
@@ -268,7 +268,7 @@ export default class ArticleList extends Vue {
    * @param {Object}  data - 文章参数
    */
   toArticleDetail(data: any): void {
-    location.href = `/blog/articleDetail?id=${data._id}&title=${data.title}`
+    location.href = `/article/articleDetail?id=${data._id}&title=${data.title}`
   }
 }
 </script>

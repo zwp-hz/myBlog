@@ -23,7 +23,7 @@ export default class tags extends Vue {
   mounted() {
     if (this.tags.length === 0) {
       //获取标签列表
-      ;(<any>this).$axios.post('api/getTagsList').then(res => {
+      ;(<any>this).$axios.post('api/getTagsList').then((res: any) => {
         if (res.code == 0) {
           this.$store.commit('setFooterData', {
             type: 'tags',
@@ -37,7 +37,7 @@ export default class tags extends Vue {
   search(data) {
     this.$store.commit('searchChange', data)
     this.$router.push({
-      path: '/blog/searchResult',
+      path: '/article/searchResult',
       query: {
         Tag: data.text
       }

@@ -15,7 +15,7 @@
         data-2200="transform: translate3d(0, 15vh, 0) scale(1); opacity: 1; display: block;"
         data-3000="transform: translate3d(0, 15vh, 0) scale(0.8); opacity: 0; display: block;"
         data-3001="display: none;"
-        :to="{path: '/blog'}"
+        :to="{path: '/article'}"
       >
         <img src="~assets/images/pc_blog.jpg" alt>
       </nuxt-link>
@@ -31,7 +31,7 @@
         <img class="iphone-frame" src="~assets/images/iphoneX.png" alt>
         <div class="iphone-viewport">
           <nuxt-link
-            :to="{path: '/blog'}"
+            :to="{path: '/article'}"
             class="medium-profile-iphone"
             data-0="transform: translate3d(0%, 0, 0) scale(1);"
             data-2200="transform: translate3d(0%, 0, 0) scale(1);"
@@ -96,7 +96,6 @@
 'use strict'
 import { Vue, Component } from 'vue-property-decorator'
 import { State } from 'vuex-class'
-import { HeaderData, Device } from '~/types/common'
 import loading from '~/components/loading.vue'
 import headerBox from '~/components/header.vue'
 import footerBox from '~/components/footer.vue'
@@ -134,7 +133,7 @@ export default class Index extends Vue {
     // // 获取必应图片
     new Promise((resolve, reject) => {
       if (!sessionStorage.biyingImg) {
-        ;(<any>this).$axios.post('api/bing').then(res => {
+        (<any>this).$axios.post('api/bing').then((res: any) => {
           if (res.code === 0) {
             this.biyingImg = res.data.images[0]
             sessionStorage.biyingImg = JSON.stringify(res.data.images[0])

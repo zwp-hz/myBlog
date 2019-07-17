@@ -1,21 +1,21 @@
 <template>
-  <div id="blog">
+  <div id="article">
     <header-box :header-data="headerData"/>
-    <div id="blogMain" class="g-r-center">
+    <div id="main" class="g-r-center">
       <div class="container">
         <ul class="categories g-r-center">
           <li @click="categoriesName = '全部'">
             <nuxt-link
               class="u_transition_300 u_hover_active_bg"
               :class="{cur: categoriesName === '全部'}"
-              :to="{path: '/blog'}"
+              :to="{path: '/article'}"
             >全部</nuxt-link>
           </li>
           <li @click="categoriesName = item.name" v-for="(item, index) in categories" :key="index">
             <nuxt-link
               class="u_transition_300 u_hover_active_bg"
               :class="{cur: categoriesName === item.name}"
-              :to="{path: '/blog', query: {categories: item.name}}"
+              :to="{path: '/article', query: {categories: item.name}}"
             >{{ item.name }}</nuxt-link>
           </li>
         </ul>
@@ -29,7 +29,6 @@
 <script lang='ts'>
 'use strict'
 import { Vue, Component } from 'vue-property-decorator'
-import { HeaderData } from '~/types/common'
 import headerBox from '~/components/header.vue'
 import footerBox from '~/components/footer.vue'
 import articleList from '~/components/articleList.vue'
@@ -61,10 +60,10 @@ import articleList from '~/components/articleList.vue'
     articleList
   }
 })
-export default class Blog extends Vue {
+export default class Article extends Vue {
   // data
   headerData: HeaderData = {
-    title: 'Blog',
+    title: '文章',
     searchStatus: true,
     isStatic: true
   }
@@ -77,7 +76,7 @@ export default class Blog extends Vue {
   }
 
   mounted() {
-    ;(<any>this).$axios.post('api/getCategoryList').then(res => {
+    ;(<any>this).$axios.post('api/getCategoryList').then((res: any) => {
       if (res.code === 0) {
         this.categories = res.data
       }
@@ -87,7 +86,7 @@ export default class Blog extends Vue {
 </script>
 
 <style lang="scss" scoped>
-#blogMain {
+#main {
   position: relative;
   top: -1px;
   background: #fff;
