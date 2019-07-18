@@ -98,12 +98,12 @@
         v-if="headerData.image.status == 0"
         @load="imgLoad('load');"
         @error="imgLoad('error');"
-        :src="IMGHOST + headerData.image.src + QN_POSTFIX + '100'"
+        :src="ARTICLE_IMGHOST + headerData.image.src + QN_POSTFIX + '100'"
         alt
       >
       <img
         v-if="headerData.image.status == 1"
-        :src="IMGHOST + headerData.image.src + QN_POSTFIX + '500'"
+        :src="ARTICLE_IMGHOST + headerData.image.src + QN_POSTFIX + '500'"
         alt
       >
     </div>
@@ -125,8 +125,8 @@ export default class Header extends Vue {
   device: Device
   @State('search')
   search: any
-  @State('IMGHOST')
-  IMGHOST: string
+  @State('ARTICLE_IMGHOST')
+  ARTICLE_IMGHOST: string
   @State('QN_POSTFIX')
   QN_POSTFIX: string
 

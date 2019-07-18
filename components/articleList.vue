@@ -15,15 +15,15 @@
             >
               <div
                 class="progressive not-loaded"
-                :data-url="IMGHOST+item.image_src+QN_POSTFIX+'500'"
-                :style="item.image_status === 2 ? '' : 'background: url('+IMGHOST+item.image_src+QN_POSTFIX+'100)' "
+                :data-url="ARTICLE_IMGHOST+item.image_src+QN_POSTFIX+'500'"
+                :style="item.image_status === 2 ? '' : 'background: url('+ARTICLE_IMGHOST+item.image_src+QN_POSTFIX+'100)' "
               >
                 <img
                   v-if="item.image_status == 0"
                   style="opacity: 0;"
                   @load="imgLoad(index,'load');"
                   @error="imgLoad(index,'error');"
-                  :src="IMGHOST+item.image_src+QN_POSTFIX+'100'"
+                  :src="ARTICLE_IMGHOST+item.image_src+QN_POSTFIX+'100'"
                   alt
                 >
                 <i
@@ -135,8 +135,8 @@ export default class ArticleList extends Vue {
 
   @State('search')
   searchCnt
-  @State('IMGHOST')
-  IMGHOST
+  @State('ARTICLE_IMGHOST')
+  ARTICLE_IMGHOST
   @State('QN_POSTFIX')
   QN_POSTFIX
   @State('article_hots')

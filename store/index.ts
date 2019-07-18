@@ -26,6 +26,7 @@ const data = {
     'http://flashfish.oss-cn-hangzhou.aliyuncs.com/CDN/Images/avator/mrtx.png',
   QN_POSTFIX: '?imageView2/2/interlace/1/format/jpg/w/',
   IMGHOST: 'http://image.zhuweipeng.top/',
+  ARTICLE_IMGHOST: 'http://article.zhuweipeng.top/',
   AVATAR_IMGHOST: 'http://avatar.zhuweipeng.top/',
   search: {},
   first_load: true,

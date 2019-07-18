@@ -132,9 +132,10 @@ export default class Comment extends Vue {
    */
   avatarUpload() {
     let formData = new FormData(),
-      upload_obj: any = this.$refs.upload
+      upload_obj = this.$refs.upload as HTMLInputElement
 
     formData.append('file', upload_obj.files[0])
+
     ;(<any>this).$axios
       .post('/api/avatarUpload', formData, { type: 'upload' })
       .then(res => {
