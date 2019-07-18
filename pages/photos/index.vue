@@ -35,7 +35,7 @@
           <div class="row">
             <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[0].prefix}}">
               <span class="layer" v-for="(item,index) in imgs[0].list" :key="index">
-                <img :src="item.key+'200'">
+                <img :src="item+QN_POSTFIX+'200'">
               </span>
               <b class="prefix">{{ imgs[0].prefix }}</b>
             </nuxt-link>
@@ -50,7 +50,7 @@
           <div class="row">
             <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[1].prefix}}">
               <span class="layer" v-for="(item,index) in imgs[1].list" :key="index">
-                <img :src="item.key+'200'">
+                <img style="height: 100%;" :src="item+QN_POSTFIX+'200'">
               </span>
               <b class="prefix">{{ imgs[1].prefix }}</b>
             </nuxt-link>
@@ -65,7 +65,7 @@
           <div class="row">
             <nuxt-link class="set" :to="{path: '/photos/list',query: {prefix: imgs[2].prefix}}">
               <span class="layer" v-for="(item,index) in imgs[2].list" :key="index">
-                <img :src="item.key+'200'">
+                <img :src="item+QN_POSTFIX+'200'">
               </span>
               <b class="prefix">{{ imgs[2].prefix }}</b>
             </nuxt-link>
@@ -76,11 +76,11 @@
     </div>
     <div class="m-view" v-else>
       <template v-for="(item, index) in imgs">
-        <section :key="index" v-if="item.list[1]">
+        <section :key="index" v-if="item.list[0]">
           <nuxt-link
             class="g-c-center"
             :to="{path: '/photos/list',query: {prefix: item.prefix}}"
-            :style="'background: url('+item.list[1].key+'750)'"
+            :style="'background: url('+item.list[0]+QN_POSTFIX+'750)'"
           >{{ item.prefix.replace(/:/g,'') }}</nuxt-link>
         </section>
       </template>
@@ -94,6 +94,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { State } from 'vuex-class'
 import loading from '~/components/loading.vue'
 import headerBox from '~/components/header.vue'
+import { setTimeout } from 'timers'
 
 @Component({
   head: {
@@ -109,8 +110,8 @@ export default class Photos extends Vue {
   device: Device
   @State('IMGHOST')
   IMGHOST: string
-  @State('M_QN_POSTFIX')
-  M_QN_POSTFIX: string
+  @State('QN_POSTFIX')
+  QN_POSTFIX: string
 
   // data
   loadStatus: boolean = false // 加载状态。false：加载中。true：加载完成。
@@ -122,44 +123,41 @@ export default class Photos extends Vue {
   imgs: any = [
     {
       prefix: '点滴',
-      list: []
+      list: [
+        'http://image.zhuweipeng.top/%E7%82%B9%E6%BB%B4:2018:09-22:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E4%BD%99%E6%9D%AD%E5%8C%BA%EF%BC%8C%E6%AF%8F%E5%91%A8%E4%B8%80%E8%8A%B1%E4%B9%8B%E7%AC%AC%E4%BA%8C%E5%91%A8.jpg',
+        'http://image.zhuweipeng.top/%E7%82%B9%E6%BB%B4:2018:09-22:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E4%BD%99%E6%9D%AD%E5%8C%BA%EF%BC%8C%E6%AF%8F%E5%91%A8%E4%B8%80%E8%8A%B1%E4%B9%8B%E7%AC%AC%E4%B8%89%E5%91%A8.jpg',
+        'http://image.zhuweipeng.top/%E7%82%B9%E6%BB%B4:2018:09-22:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E4%BD%99%E6%9D%AD%E5%8C%BA%EF%BC%8C%E6%AF%8F%E5%91%A8%E4%B8%80%E8%8A%B1%E4%B9%8B%E7%AC%AC%E4%B8%80%E5%91%A8.jpg'
+      ]
     },
     {
       prefix: '风景',
-      list: []
+      list: [
+        'http://image.zhuweipeng.top/%E9%A3%8E%E6%99%AF:2018:01-27:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E8%A5%BF%E6%B9%96%E5%8C%BA%EF%BC%8C%E4%B8%AD%E5%B1%B1%E5%85%AC%E5%9B%AD4.jpg',
+        'http://image.zhuweipeng.top/%E9%A3%8E%E6%99%AF:2018:01-27:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E8%A5%BF%E6%B9%96%E5%8C%BA%EF%BC%8C%E4%B8%AD%E5%B1%B1%E5%85%AC%E5%9B%AD6.jpg',
+        'http://image.zhuweipeng.top/%E9%A3%8E%E6%99%AF:2018:01-27:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E8%A5%BF%E6%B9%96%E5%8C%BA%EF%BC%8C%E6%A4%8D%E7%89%A9%E5%9B%AD%E5%A4%96%E5%9B%B41.jpg'
+      ]
     },
     {
       prefix: '猫咪',
-      list: []
+      list: [
+        'http://image.zhuweipeng.top/%E7%8C%AB%E5%92%AA:2019:07-16:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E5%88%9B%E5%AE%A2%E7%A9%BA%E9%97%B4%EF%BC%8C%E6%87%92%E4%BA%BA%E6%B2%99%E5%8F%91%E4%B8%8A%E7%9A%84%E6%83%AC%E6%84%8F_1.jpg',
+        'http://image.zhuweipeng.top/%E7%8C%AB%E5%92%AA:2019:06-24:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E5%88%9B%E5%AE%A2%E7%A9%BA%E9%97%B4%EF%BC%8C%E7%8C%AB%E5%92%AA%E7%BB%88%E4%BA%8E%E6%8E%A5%E5%9B%9E%E6%9D%A5%E4%BA%86.jpg',
+        'http://image.zhuweipeng.top/%E7%8C%AB%E5%92%AA:2019:07-13:%E6%9D%AD%E5%B7%9E%E5%B8%82-%E5%88%9B%E5%AE%A2%E7%A9%BA%E9%97%B4%EF%BC%8C%E7%94%B7%E5%AD%90%E6%B1%89%E7%9D%A1%E8%A7%89%E5%B0%B1%E8%A6%81%E8%BF%99%E4%B9%88%E8%B1%AA%E6%94%BE%EF%BC%9F.jpg'
+      ]
     }
   ]
+
+  created() {
+    setTimeout(() => {
+      this.loadStatus = true
+    }, 1000)
+  }
 
   mounted() {
     this.$nextTick(() => {
       document.body.style.cssText = `height: ${
         document.body.style.height
       } !important`
-    })
-
-    // 获取对应相册3条数据
-    this.imgs.forEach((item: any, index: number) => {
-      ;(<any>this).$axios
-        .post('api/getQiniuList', {
-          prefix: item.prefix + ':',
-          limit: 3
-        })
-        .then((res: any) => {
-          if (res.code === 0) {
-            let items = res.data.items
-
-            for (let item of items) {
-              item.key = this.IMGHOST + item.key + this.M_QN_POSTFIX
-            }
-
-            this.imgs[index].list = items
-            this.loadStatus = true
-          }
-        })
     })
   }
 }
@@ -246,7 +244,6 @@ export default class Photos extends Vue {
           background: #000;
           img {
             width: 100%;
-            height: 100%;
             display: block;
             opacity: 0.5;
             transition: opacity 0.5s;
@@ -278,6 +275,7 @@ export default class Photos extends Vue {
             box-shadow: 0 0 4px 0 #000;
             transition: all 0.5s;
             text-align: left;
+            overflow: hidden;
             &:nth-child(1) {
               transform: translateZ(6px);
             }
