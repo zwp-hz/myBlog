@@ -68,6 +68,11 @@ const Remarkable = require('remarkable')
 const md = new Remarkable()
 
 @Component({
+  head() {
+    return {
+      title: this.$route.query.title as string
+    }
+  },
   async asyncData(app: any) {
     let data = await app.$axios
       .post('api/getArticlesDetail', {
@@ -114,7 +119,7 @@ export default class ArticleContent extends Vue {
   }
 
   mounted() {
-    ;(<any>document).title = this.$route.query.title
+    // ;(<any>document).title = this.$route.query.title
     document.addEventListener('scroll', this.seeScroll, false)
   }
 

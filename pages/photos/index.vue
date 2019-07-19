@@ -150,7 +150,7 @@ export default class Photos extends Vue {
   created() {
     setTimeout(() => {
       this.loadStatus = true
-    }, 1000)
+    }, 500)
   }
 
   mounted() {

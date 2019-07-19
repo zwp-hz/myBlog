@@ -7,7 +7,7 @@
         ondragstart="return false;"
         class="images"
         href="javaScript: void();"
-        :style="`background-image: url('${IMGHOST+item.image_src+QN_POSTFIX+100}')`"
+        :style="`background-image: url('${ARTICLE_IMGHOST+item.image_src+QN_POSTFIX+100}')`"
         @click="toArticleDetail(item)"
       >
         <span class="cy_cmt_count">{{ item.comments.length }}</span>
@@ -61,8 +61,8 @@ export default class HotArticle extends Vue {
 
   @State('article_hots')
   article_hots
-  @State('IMGHOST')
-  IMGHOST
+  @State('ARTICLE_IMGHOST')
+  ARTICLE_IMGHOST
   @State('QN_POSTFIX')
   QN_POSTFIX
 

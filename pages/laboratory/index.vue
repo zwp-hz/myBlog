@@ -77,7 +77,6 @@ import { State } from 'vuex-class'
 import headerBox from '~/components/header.vue'
 import footerBox from '~/components/footer.vue'
 import { lazyload } from '~/assets/js/utils'
-import { Stats } from 'fs'
 
 let list: any = [
   {
