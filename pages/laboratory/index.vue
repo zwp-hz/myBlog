@@ -45,13 +45,12 @@
                 <strong>{{ item.describe }}</strong>
                 <p>
                   <b class="article_categories">
-                    <span v-for="(value,index) in item.categories" :key="index">
-                      {{ index == 0 ? '':', ' }}
-                      <a
-                        @click="categoriesName = value"
-                        class="u_transition_300 u_hover_active"
-                      >{{ value }}</a>
-                    </span>
+                    <a
+                      v-for="(value,index) in item.categories"
+                      :key="index"
+                      @click="categoriesName = value"
+                      class="u_transition_300 u_hover_active"
+                    >{{ value }}</a>
                   </b>
                   <time class="g-c-center">
                     <span class="g-r-center">
