@@ -124,6 +124,12 @@ export default class Index extends Vue {
   }
   biyingImg: object = {}
 
+  created() {
+    setTimeout(() => {
+      this.loadStatus = true
+    }, 1000)
+  }
+
   mounted() {
     let img = new Image()
     this.biyingImg = sessionStorage.biyingImg
@@ -133,7 +139,7 @@ export default class Index extends Vue {
     // // 获取必应图片
     new Promise((resolve, reject) => {
       if (!sessionStorage.biyingImg) {
-        (<any>this).$axios.post('api/bing').then((res: any) => {
+        ;(<any>this).$axios.post('api/bing').then((res: any) => {
           if (res.code === 0) {
             this.biyingImg = res.data.images[0]
             sessionStorage.biyingImg = JSON.stringify(res.data.images[0])
@@ -145,7 +151,6 @@ export default class Index extends Vue {
         resolve()
       }
     }).then(() => {
-      this.loadStatus = true
       this.$nextTick(() => {
         let p: any = this.$refs.p,
           height = p.offsetHeight
