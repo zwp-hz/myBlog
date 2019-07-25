@@ -71,7 +71,7 @@
         </div>
         <section class="reply g-r-center" v-for="(data, i) in item.replys" :key="i">
           <div class="portrait">
-            <img v-if="item.avatar" :src="AVATAR_IMGHOST + data.avatar + QN_POSTFIX + 100" alt>
+            <img v-if="data.avatar" :src="AVATAR_IMGHOST + data.avatar + QN_POSTFIX + 100" alt>
             <i v-else class="iconfont icon-codestore"/>
           </div>
           <div class="box">
