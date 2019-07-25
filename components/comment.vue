@@ -242,7 +242,7 @@ export default class Comment extends Vue {
       reply_user: data.user_name,
       reply_email: data.email,
       reply_index: index,
-      content: '@' + data.user_name
+      content: `@${data.user_name}：`
     })
 
     let scrollTop =
