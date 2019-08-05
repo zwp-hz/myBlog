@@ -60,6 +60,7 @@ module.exports = {
   ],
   modules: ['@nuxtjs/axios'],
   build: {
+    extractCSS: { allChunks: true },
     extend(config, { isDev, isClient, loaders: { imgUrl } }) {
       if (isDev && isClient) {
         config.module.rules.push({
