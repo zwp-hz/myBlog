@@ -16,7 +16,7 @@
     "@nuxtjs/axios": "^5.3.6",
     "cross-env": "^5.2.0",
     "highlight.js": "^9.15.6",
-    "nuxt": "^2.2.0",
+    "nuxt": "^2.15.8",
     "remarkable": "^1.7.1",
     "ts-node": "^8.2.0",
     "vue-property-decorator": "^8.1.1",
